@@ -1,0 +1,56 @@
+# ── Compiled Java class files ─────────────────────────────────────────────────
+bin/
+*.class
+
+# ── Build artifacts ───────────────────────────────────────────────────────────
+*.jar
+*.war
+*.ear
+
+# ── IDE project files ─────────────────────────────────────────────────────────
+# IntelliJ IDEA
+.idea/
+*.iml
+*.iws
+out/
+
+# Eclipse
+.classpath
+.project
+.settings/
+
+# NetBeans
+nbproject/
+nbbuild/
+dist/
+nbdist/
+.nb-gradle/
+
+# VS Code
+.vscode/
+*.code-workspace
+
+# ── OS generated files ────────────────────────────────────────────────────────
+# Windows
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+$RECYCLE.BIN/
+
+# macOS
+.DS_Store
+.AppleDouble
+.LSOverride
+._*
+
+# Linux
+*~
+
+# ── User-specific application data ───────────────────────────────────────────
+# The app creates ~/.atelier-arithmetic/ for config and session history.
+# That folder lives in the user home directory and is NOT part of this repo.
+
+# ── Logs and temp files ───────────────────────────────────────────────────────
+*.log
+*.tmp
+*.temp
