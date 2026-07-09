@@ -182,7 +182,7 @@ public class AchievementsPanel extends JPanel {
                             if (t instanceof JLabel) {
                                 JLabel label = (JLabel) t;
                                 // Restore original logic color based on current theme state
-                                if (label.getText().startsWith("<html>")) {
+                                if (label.getText() != null && label.getText().startsWith("<html>")) {
                                     label.setForeground(AppTheme.getTextMuted());
                                 } else {
                                     // Title text

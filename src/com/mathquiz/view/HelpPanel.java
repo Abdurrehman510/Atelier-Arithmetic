@@ -288,7 +288,7 @@ public class HelpPanel extends JPanel {
                 } else if (lbl.getFont().getSize() > 11) {
                     lbl.setForeground(AppTheme.getAccentGold());
                 } else {
-                    if (lbl.getText().startsWith("<html>")) {
+                    if (lbl.getText() != null && lbl.getText().startsWith("<html>")) {
                         String colorHex = AppTheme.isDarkMode() ? "#aaa" : "#555";
                         String textClean = lbl.getText().replaceAll("color:#[0-9a-fA-F]+", "color:" + colorHex);
                         lbl.setText(textClean);
