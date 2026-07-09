@@ -110,19 +110,26 @@ public class AnalyticsPanel extends JPanel {
     private void build() {
         add(buildHeader(), BorderLayout.NORTH);
 
-        JPanel body = new JPanel();
+        JPanel body = new JPanel(new GridBagLayout());
         body.setOpaque(false);
-        body.setLayout(new BoxLayout(body, BoxLayout.Y_AXIS));
         body.setBorder(new EmptyBorder(0, 30, 30, 30));
 
+        GridBagConstraints rowC = new GridBagConstraints();
+        rowC.fill = GridBagConstraints.HORIZONTAL;
+        rowC.weightx = 1.0;
+        rowC.gridx = 0;
+
         // 1. Stat cards row
+        rowC.gridy = 0;
+        rowC.insets = new Insets(0, 0, 18, 0);
         statCardsHolder = new JPanel(new GridLayout(1, 4, 14, 0));
         statCardsHolder.setOpaque(false);
         statCardsHolder.setMaximumSize(new Dimension(Integer.MAX_VALUE, 96));
-        body.add(statCardsHolder);
-        body.add(Box.createVerticalStrut(18));
+        body.add(statCardsHolder, rowC);
 
         // 2. Chart row (Enlarged for better charts readability)
+        rowC.gridy = 1;
+        rowC.insets = new Insets(0, 0, 18, 0);
         JPanel chartRow = new JPanel(new GridLayout(1, 2, 20, 0));
         chartRow.setOpaque(false);
         chartRow.setMaximumSize(new Dimension(Integer.MAX_VALUE, 330));
@@ -132,10 +139,11 @@ public class AnalyticsPanel extends JPanel {
 
         chartRow.add(wrapCard(lineChart,  "Accuracy Trend  (last 20 sessions)"));
         chartRow.add(wrapCard(radarChart, "Category Radar  (average accuracy)"));
-        body.add(chartRow);
-        body.add(Box.createVerticalStrut(18));
+        body.add(chartRow, rowC);
 
         // 3. Learning Insights & Heatmap row
+        rowC.gridy = 2;
+        rowC.insets = new Insets(0, 0, 18, 0);
         JPanel insightsRow = new JPanel(new GridLayout(1, 2, 20, 0));
         insightsRow.setOpaque(false);
         insightsRow.setMaximumSize(new Dimension(Integer.MAX_VALUE, 200));
@@ -182,10 +190,11 @@ public class AnalyticsPanel extends JPanel {
         strengthsPanel.setOpaque(false);
         strengthsPanel.setLayout(new BoxLayout(strengthsPanel, BoxLayout.Y_AXIS));
         insightsRow.add(wrapCard(strengthsPanel, "⚖️ Topic Mastery: Strengths & Weaknesses"));
-        body.add(insightsRow);
-        body.add(Box.createVerticalStrut(18));
+        body.add(insightsRow, rowC);
 
         // 4. Recent history & Actions Row
+        rowC.gridy = 3;
+        rowC.insets = new Insets(0, 0, 0, 0);
         JPanel historyRow = new JPanel(new GridLayout(1, 2, 20, 0));
         historyRow.setOpaque(false);
         historyRow.setMaximumSize(new Dimension(Integer.MAX_VALUE, 200));
@@ -199,7 +208,7 @@ public class AnalyticsPanel extends JPanel {
         goalsPanel.setOpaque(false);
         goalsPanel.setLayout(new BoxLayout(goalsPanel, BoxLayout.Y_AXIS));
         historyRow.add(wrapCard(goalsPanel, "🚀 Learning Goals & Quick Actions"));
-        body.add(historyRow);
+        body.add(historyRow, rowC);
 
         // Scroll wrap (Forced vertical-only scrolling to prevent horizontal bar)
         JScrollPane scroll = new JScrollPane(body);
