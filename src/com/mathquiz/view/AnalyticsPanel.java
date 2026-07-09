@@ -214,8 +214,7 @@ public class AnalyticsPanel extends JPanel {
         JScrollPane scroll = new JScrollPane(body);
         scroll.setBorder(BorderFactory.createEmptyBorder());
         scroll.setViewportBorder(BorderFactory.createEmptyBorder());
-        scroll.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
-        scroll.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
+        scroll.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_AS_NEEDED);
         scroll.getVerticalScrollBar().setUnitIncrement(16);
         scroll.setOpaque(false);
         scroll.getViewport().setOpaque(false);
