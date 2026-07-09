@@ -271,6 +271,161 @@ public class AnalyticsService {
         return new java.util.Date(year - 1900, month - 1, day).getTime();
     }
 
+    /** Total questions solved across all history. */
+    public int getTotalQuestionsSolved() {
+        int total = 0;
+        for (Map<String, Object> s : repository.loadRaw()) {
+            Object tq = s.get("totalQuestions");
+            if (tq instanceof Number) {
+                total += ((Number) tq).intValue();
+            }
+        }
+        return total;
+    }
+
+    /** Total practice time in seconds. */
+    public double getTotalPracticeTimeSec() {
+        long totalMs = 0;
+        for (Map<String, Object> s : repository.loadRaw()) {
+            Object dur = s.get("durationMs");
+            if (dur instanceof Number) {
+                totalMs += ((Number) dur).longValue();
+            }
+        }
+        return totalMs / 1000.0;
+    }
+
+    /** Average response time in seconds per question. */
+    public double getAverageResponseTimeSec() {
+        long totalMs = 0;
+        int count = 0;
+        for (Map<String, Object> s : repository.loadRaw()) {
+            Object qListObj = s.get("questions");
+            if (qListObj instanceof List) {
+                List<?> qList = (List<?>) qListObj;
+                for (Object qObj : qList) {
+                    if (qObj instanceof Map) {
+                        Map<?, ?> q = (Map<?, ?>) qObj;
+                        Object timeVal = q.get("timeMs");
+                        if (timeVal instanceof Number) {
+                            totalMs += ((Number) timeVal).longValue();
+                            count++;
+                        }
+                    }
+                }
+            }
+        }
+        if (count == 0) return 0.0;
+        return (totalMs / 1000.0) / count;
+    }
+
+    /** Fastest correct answer in seconds. */
+    public double getFastestAnswerSec() {
+        long fastestMs = Long.MAX_VALUE;
+        for (Map<String, Object> s : repository.loadRaw()) {
+            Object qListObj = s.get("questions");
+            if (qListObj instanceof List) {
+                List<?> qList = (List<?>) qListObj;
+                for (Object qObj : qList) {
+                    if (qObj instanceof Map) {
+                        Map<?, ?> q = (Map<?, ?>) qObj;
+                        Object correctVal = q.get("correct");
+                        Object timeVal = q.get("timeMs");
+                        if (Boolean.TRUE.equals(correctVal) && timeVal instanceof Number) {
+                            long ms = ((Number) timeVal).longValue();
+                            if (ms > 100 && ms < fastestMs) {
+                                fastestMs = ms;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        if (fastestMs == Long.MAX_VALUE) return 0.0;
+        return fastestMs / 1000.0;
+    }
+
+    /** Returns current streak in days. */
+    public int getCurrentStreak() {
+        Set<String> days = new TreeSet<>();
+        for (Map<String, Object> s : repository.loadRaw()) {
+            String ts = (String) s.get("timestamp");
+            if (ts != null && ts.length() >= 10) {
+                days.add(ts.substring(0, 10));
+            }
+        }
+        if (days.isEmpty()) return 0;
+
+        List<String> sorted = new ArrayList<>(days);
+        Collections.sort(sorted);
+
+        java.text.SimpleDateFormat sdf = new java.text.SimpleDateFormat("yyyy-MM-dd");
+        String today = sdf.format(new java.util.Date());
+        int lastIndex = sorted.size() - 1;
+        String lastPlayed = sorted.get(lastIndex);
+
+        long diffFromToday = dayDiff(lastPlayed, today);
+        if (diffFromToday > 1) return 0;
+
+        int streak = 1;
+        for (int i = lastIndex; i > 0; i--) {
+            if (dayDiff(sorted.get(i - 1), sorted.get(i)) == 1) {
+                streak++;
+            } else {
+                break;
+            }
+        }
+        return streak;
+    }
+
+    /** Returns a list of mastered categories (average accuracy >= 90%). */
+    public List<String> getMasteredCategories() {
+        List<String> mastered = new ArrayList<>();
+        Map<String, Double> categoryAccuracy = getCategoryAccuracy();
+        Map<String, Integer> counts = getCategoryCounts();
+        for (Map.Entry<String, Double> e : categoryAccuracy.entrySet()) {
+            if (counts.getOrDefault(e.getKey(), 0) > 0 && e.getValue() >= 90.0) {
+                mastered.add(e.getKey());
+            }
+        }
+        return mastered;
+    }
+
+    /** Returns the practice heatmap as a boolean array representing activity over the last 28 days. */
+    public boolean[] getPracticeHeatmap28Days() {
+        boolean[] heatmap = new boolean[28];
+        Set<String> playedDays = new HashSet<>();
+        for (Map<String, Object> s : repository.loadRaw()) {
+            String ts = (String) s.get("timestamp");
+            if (ts != null && ts.length() >= 10) {
+                playedDays.add(ts.substring(0, 10));
+            }
+        }
+
+        java.text.SimpleDateFormat sdf = new java.text.SimpleDateFormat("yyyy-MM-dd");
+        java.util.Calendar cal = java.util.Calendar.getInstance();
+        for (int i = 0; i < 28; i++) {
+            String dateStr = sdf.format(cal.getTime());
+            if (playedDays.contains(dateStr)) {
+                heatmap[i] = true;
+            }
+            cal.add(java.util.Calendar.DAY_OF_YEAR, -1);
+        }
+        return heatmap;
+    }
+
+    /** Returns count of completed daily challenges. */
+    public int getDailyChallengesCompleted() {
+        int count = 0;
+        for (Map<String, Object> s : repository.loadRaw()) {
+            String cat = (String) s.get("category");
+            if (cat != null && cat.equalsIgnoreCase("Daily Challenge")) {
+                count++;
+            }
+        }
+        return count;
+    }
+
     /** Clears the session history in the repository. */
     public void clearHistory() {
         repository.clear();

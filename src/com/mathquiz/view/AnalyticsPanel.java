@@ -1,27 +1,30 @@
 package com.mathquiz.view;
 
 import com.mathquiz.service.AnalyticsService;
+import com.mathquiz.service.SessionRepository;
 
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import java.awt.*;
 import java.awt.geom.*;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import com.mathquiz.config.AppTheme;
 
-
 /**
- * Analytics Dashboard — Phase 2 Intelligence Layer.
+ * Redesigned Premium Analytics Dashboard.
  *
- * A full-screen panel containing three custom Java2D visualisations:
- *
- *   1. Accuracy Line Chart  — bezier-smoothed trend of last 20 sessions (gold fill)
- *   2. Category Radar Chart — hexagonal radar of per-category average accuracy
- *   3. Summary Stat Cards   — Total Sessions · Best Score · Avg Score · Longest Streak
- *
- * Navigation: reached via the "📊 Analytics" button on WelcomePanel.
- *             "← Back" returns to the welcome screen via QuizNavigator.
+ * Replaces the basic statistics grid with a comprehensive learning metrics dashboard:
+ *   1. Stat cards with detailed KPIs (Overall Accuracy, Solved counts, Speed, Streaks)
+ *   2. Smooth bezier Accuracy Trend Chart
+ *   3. 10-Spoke Category Radar Chart
+ *   4. Practice Heatmap (Activity Grid of last 28 days)
+ *   5. Smart Archie speech bubble recommendations
+ *   6. Strengths vs Weaknesses breakdown (highest vs lowest topics)
+ *   7. Recent quiz sessions history log
+ *   8. Interactive goals checklist and quick actions panel
  */
 public class AnalyticsPanel extends JPanel {
 
@@ -33,30 +36,31 @@ public class AnalyticsPanel extends JPanel {
     private static final Color TEXT_DARK    = new Color(28, 25, 23);
     private static final Color TEXT_MUTED   = new Color(120, 113, 108);
     private static final Color BORDER_CLR   = new Color(230, 227, 220);
-    private static final Color GRID_COLOR   = new Color(235, 232, 225);
+    private static final Color SUCCESS_GREEN = new Color(34, 197, 94);
+    private static final Color ERROR_RED     = new Color(239, 68, 68);
 
     private static final String[] CATEGORY_LABELS = {
             "Addition", "Difference", "Multiplication", "Division", "Mixed", "Special",
             "Fractions", "Patterns", "Algebra", "Measurement"
     };
     private static final Color[] CATEGORY_COLORS  = {
-        new Color(99, 179, 237),   // blue (Addition)
-        new Color(154, 205, 50),   // yellow-green (Difference)
-        new Color(255, 153, 51),   // orange (Multiplication)
-        new Color(218, 112, 214),  // orchid (Division)
-        new Color(64, 224, 208),   // turquoise (Mixed)
-        new Color(255, 99, 132),   // pink-red (Special)
-        new Color(147, 112, 219),  // medium purple (Fractions)
-        new Color(255, 215, 0),    // gold (Patterns)
-        new Color(72, 209, 204),   // medium turquoise (Algebra)
-        new Color(255, 127, 80)    // coral (Measurement)
+        new Color(99, 179, 237),
+        new Color(154, 205, 50),
+        new Color(255, 153, 51),
+        new Color(218, 112, 214),
+        new Color(64, 224, 208),
+        new Color(255, 99, 132),
+        new Color(147, 112, 219),
+        new Color(255, 215, 0),
+        new Color(72, 209, 204),
+        new Color(255, 127, 80)
     };
 
     // ── State ─────────────────────────────────────────────────────────────────
     private final QuizNavigator    nav;
     private final AnalyticsService analytics;
 
-    // Cached data (populated on showPanel())
+    // Cached data
     private List<Double>         trendData;
     private Map<String, Double>  categoryAccuracy;
     private int     totalSessions;
@@ -64,9 +68,15 @@ public class AnalyticsPanel extends JPanel {
     private double  avgScore;
     private int     longestStreak;
 
-    // ── Sub-panels (inner classes) ────────────────────────────────────────────
+    // ── Visual components ─────────────────────────────────────────────────────
     private LineChartPanel  lineChart;
     private RadarChartPanel radarChart;
+    private JPanel statCardsHolder;
+    private JPanel heatmapPanel;
+    private JLabel recommendationLabel;
+    private JPanel strengthsPanel;
+    private JPanel recentSessionsPanel;
+    private JPanel goalsPanel;
 
     public AnalyticsPanel(QuizNavigator nav, AnalyticsService analytics) {
         this.nav       = nav;
@@ -79,9 +89,7 @@ public class AnalyticsPanel extends JPanel {
     public LineChartPanel getLineChart() { return lineChart; }
     public RadarChartPanel getRadarChart() { return radarChart; }
 
-    // ── Called by QuizFrame before showing this card ──────────────────────────
-
-    /** Refresh data and repaint all charts. */
+    /** Refresh data and repaint all components. */
     public void refresh() {
         trendData        = analytics.getAccuracyTrend(20);
         categoryAccuracy = analytics.getCategoryAccuracy();
@@ -92,15 +100,13 @@ public class AnalyticsPanel extends JPanel {
 
         lineChart.setData(trendData);
         radarChart.setData(categoryAccuracy);
-        rebuildStatCards();
+
+        populateDashboard();
         revalidate();
         repaint();
     }
 
     // ── UI construction ───────────────────────────────────────────────────────
-
-    private JPanel statCardsHolder;
-
     private void build() {
         add(buildHeader(), BorderLayout.NORTH);
 
@@ -109,27 +115,93 @@ public class AnalyticsPanel extends JPanel {
         body.setLayout(new BoxLayout(body, BoxLayout.Y_AXIS));
         body.setBorder(new EmptyBorder(0, 30, 30, 30));
 
-        // Stat cards row
+        // 1. Stat cards row
         statCardsHolder = new JPanel(new GridLayout(1, 4, 14, 0));
         statCardsHolder.setOpaque(false);
-        statCardsHolder.setMaximumSize(new Dimension(Integer.MAX_VALUE, 100));
+        statCardsHolder.setMaximumSize(new Dimension(Integer.MAX_VALUE, 96));
         body.add(statCardsHolder);
-        body.add(Box.createVerticalStrut(20));
+        body.add(Box.createVerticalStrut(18));
 
-        // Chart row
+        // 2. Chart row
         JPanel chartRow = new JPanel(new GridLayout(1, 2, 20, 0));
         chartRow.setOpaque(false);
-        chartRow.setMaximumSize(new Dimension(Integer.MAX_VALUE, 290));
+        chartRow.setMaximumSize(new Dimension(Integer.MAX_VALUE, 280));
 
         lineChart  = new LineChartPanel();
         radarChart = new RadarChartPanel();
 
         chartRow.add(wrapCard(lineChart,  "Accuracy Trend  (last 20 sessions)"));
         chartRow.add(wrapCard(radarChart, "Category Radar  (average accuracy)"));
-
         body.add(chartRow);
+        body.add(Box.createVerticalStrut(18));
 
-        // Scrollable in case window is small
+        // 3. Learning Insights & Heatmap row
+        JPanel insightsRow = new JPanel(new GridLayout(1, 2, 20, 0));
+        insightsRow.setOpaque(false);
+        insightsRow.setMaximumSize(new Dimension(Integer.MAX_VALUE, 200));
+
+        // Insights Left Card: Heatmap & Recommendations
+        JPanel insightsLeft = new JPanel(new GridBagLayout());
+        insightsLeft.setOpaque(false);
+        GridBagConstraints c = new GridBagConstraints();
+        c.fill = GridBagConstraints.BOTH;
+        c.weightx = 1.0;
+        c.gridx = 0;
+
+        c.gridy = 0; c.weighty = 0.5;
+        c.insets = new Insets(0, 0, 10, 0);
+        heatmapPanel = new JPanel(new FlowLayout(FlowLayout.LEFT, 8, 4));
+        heatmapPanel.setOpaque(false);
+        insightsLeft.add(heatmapPanel, c);
+
+        c.gridy = 1; c.weighty = 0.5;
+        c.insets = new Insets(0, 0, 0, 0);
+        JPanel recCard = new JPanel(new BorderLayout(10, 0));
+        recCard.setOpaque(false);
+
+        // Mascot Icon
+        try {
+            java.net.URL logoUrl = AnalyticsPanel.class.getResource("/com/mathquiz/resources/logo.png");
+            if (logoUrl != null) {
+                ImageIcon icon = new ImageIcon(logoUrl);
+                Image img = icon.getImage().getScaledInstance(32, 32, Image.SCALE_SMOOTH);
+                recCard.add(new JLabel(new ImageIcon(img)), BorderLayout.WEST);
+            }
+        } catch (Exception e) {}
+
+        recommendationLabel = new JLabel("<html><body>Archie says: loading recommendations...</body></html>");
+        recommendationLabel.setFont(new Font("SansSerif", Font.PLAIN, 11));
+        recommendationLabel.setForeground(TEXT_MUTED);
+        recCard.add(recommendationLabel, BorderLayout.CENTER);
+        insightsLeft.add(recCard, c);
+
+        insightsRow.add(wrapCard(insightsLeft, "📅 Practice Activity & Recommendations"));
+
+        // Insights Right Card: Strengths vs Weaknesses
+        strengthsPanel = new JPanel();
+        strengthsPanel.setOpaque(false);
+        strengthsPanel.setLayout(new BoxLayout(strengthsPanel, BoxLayout.Y_AXIS));
+        insightsRow.add(wrapCard(strengthsPanel, "⚖️ Topic Mastery: Strengths & Weaknesses"));
+        body.add(insightsRow);
+        body.add(Box.createVerticalStrut(18));
+
+        // 4. Recent history & Actions Row
+        JPanel historyRow = new JPanel(new GridLayout(1, 2, 20, 0));
+        historyRow.setOpaque(false);
+        historyRow.setMaximumSize(new Dimension(Integer.MAX_VALUE, 200));
+
+        recentSessionsPanel = new JPanel();
+        recentSessionsPanel.setOpaque(false);
+        recentSessionsPanel.setLayout(new BoxLayout(recentSessionsPanel, BoxLayout.Y_AXIS));
+        historyRow.add(wrapCard(recentSessionsPanel, " Recent Quiz History"));
+
+        goalsPanel = new JPanel();
+        goalsPanel.setOpaque(false);
+        goalsPanel.setLayout(new BoxLayout(goalsPanel, BoxLayout.Y_AXIS));
+        historyRow.add(wrapCard(goalsPanel, "🚀 Learning Goals & Quick Actions"));
+        body.add(historyRow);
+
+        // Scroll wrap
         JScrollPane scroll = new JScrollPane(body);
         scroll.setBorder(BorderFactory.createEmptyBorder());
         scroll.setViewportBorder(BorderFactory.createEmptyBorder());
@@ -142,7 +214,7 @@ public class AnalyticsPanel extends JPanel {
     private JPanel buildHeader() {
         JPanel panel = new JPanel(new BorderLayout());
         panel.setOpaque(false);
-        panel.setBorder(new EmptyBorder(28, 32, 16, 32));
+        panel.setBorder(new EmptyBorder(22, 32, 14, 32));
 
         JPanel left = new JPanel();
         left.setOpaque(false);
@@ -154,20 +226,20 @@ public class AnalyticsPanel extends JPanel {
         left.add(sub);
 
         JLabel title = new JLabel("Performance Dashboard");
-        title.setFont(new Font("Serif", Font.PLAIN, 26));
+        title.setFont(new Font("Serif", Font.PLAIN, 24));
         title.setForeground(TEXT_DARK);
         left.add(title);
 
         panel.add(left, BorderLayout.WEST);
 
-        // Right panel for buttons
+        // Buttons
         JPanel right = new JPanel(new FlowLayout(FlowLayout.RIGHT, 10, 0));
         right.setOpaque(false);
 
         JButton reset = new JButton("🗑 Reset History");
         reset.setFont(new Font("SansSerif", Font.PLAIN, 12));
         reset.setBackground(BG_CARD);
-        reset.setForeground(new Color(239, 68, 68)); // red color for delete
+        reset.setForeground(ERROR_RED);
         reset.setFocusPainted(false);
         reset.setBorder(BorderFactory.createCompoundBorder(
                 BorderFactory.createLineBorder(BORDER_CLR, 1),
@@ -189,7 +261,6 @@ public class AnalyticsPanel extends JPanel {
         right.add(back);
 
         panel.add(right, BorderLayout.EAST);
-
         return panel;
     }
 
@@ -207,13 +278,13 @@ public class AnalyticsPanel extends JPanel {
         }
     }
 
-
     private JPanel wrapCard(JPanel content, String title) {
         JPanel card = new JPanel(new BorderLayout(0, 8));
         card.setBackground(BG_CARD);
+        card.setOpaque(true);
         card.setBorder(BorderFactory.createCompoundBorder(
                 BorderFactory.createLineBorder(BORDER_CLR, 1),
-                new EmptyBorder(16, 16, 16, 16)));
+                new EmptyBorder(12, 16, 12, 16)));
 
         JLabel lbl = new JLabel(title);
         lbl.setFont(new Font("SansSerif", Font.BOLD, 11));
@@ -223,39 +294,233 @@ public class AnalyticsPanel extends JPanel {
         return card;
     }
 
-    private void rebuildStatCards() {
+    // =========================================================================
+    // Dynamic content populator
+    // =========================================================================
+    private void populateDashboard() {
+        // 1. Stat Cards
         statCardsHolder.removeAll();
-        statCardsHolder.add(makeStatCard("Total Sessions", String.valueOf(totalSessions), "📚"));
-        statCardsHolder.add(makeStatCard("Best Score",     fmt(bestScore) + "%",          "🏆"));
-        statCardsHolder.add(makeStatCard("Average Score",  fmt(avgScore) + "%",            "📈"));
-        statCardsHolder.add(makeStatCard("Longest Streak", longestStreak + " day" + (longestStreak == 1 ? "" : "s"), "🔥"));
+        
+        int totalQuestions = analytics.getTotalQuestionsSolved();
+        double totalSecs = analytics.getTotalPracticeTimeSec();
+        double avgSpeed = analytics.getAverageResponseTimeSec();
+        double fastestSpeed = analytics.getFastestAnswerSec();
+        int currentStreak = analytics.getCurrentStreak();
+
+        String accuracySubtitle = "Best score: " + fmt(bestScore) + "%";
+        statCardsHolder.add(makeStatCard("Overall Accuracy", fmt(avgScore) + "%", accuracySubtitle, "📈"));
+
+        String countSubtitle = "Practice: " + formatTime(totalSecs);
+        statCardsHolder.add(makeStatCard("Questions Solved", String.valueOf(totalQuestions), countSubtitle, "🧩"));
+
+        String speedSubtitle = "Fastest correct: " + (fastestSpeed == 0.0 ? "N/A" : fmt(fastestSpeed) + "s");
+        statCardsHolder.add(makeStatCard("Average Speed", (avgSpeed == 0.0 ? "N/A" : fmt(avgSpeed) + "s"), speedSubtitle, "⏱"));
+
+        String streakSubtitle = "Longest: " + longestStreak + "d";
+        statCardsHolder.add(makeStatCard("Practice Streak", currentStreak + "d", streakSubtitle, "🔥"));
+
+        // 2. Heatmap
+        heatmapPanel.removeAll();
+        boolean[] heatmap = analytics.getPracticeHeatmap28Days();
+        
+        JLabel titleLbl = new JLabel("Heatmap (Last 28 Days): ");
+        titleLbl.setFont(new Font("SansSerif", Font.PLAIN, 11));
+        titleLbl.setForeground(TEXT_MUTED);
+        heatmapPanel.add(titleLbl);
+
+        JPanel grid = new JPanel(new GridLayout(4, 7, 5, 5));
+        grid.setOpaque(false);
+        // Show oldest first (left-to-right)
+        for (int i = 27; i >= 0; i--) {
+            JPanel dot = new JPanel();
+            dot.setPreferredSize(new Dimension(12, 12));
+            dot.setBackground(heatmap[i] ? ACCENT_GOLD : BORDER_CLR);
+            dot.setBorder(BorderFactory.createLineBorder(new Color(0, 0, 0, 10), 1));
+            grid.add(dot);
+        }
+        heatmapPanel.add(grid);
+
+        // 3. Recommendation
+        if (totalSessions == 0) {
+            recommendationLabel.setText("<html><body>🦉 <b>Archie says:</b> \"Welcome! Complete a math quiz to see your learning recommendations!\"</body></html>");
+        } else {
+            String weakCat = analytics.getWeakestCategory();
+            String weakDiff = analytics.getWeakestDifficulty();
+            recommendationLabel.setText("<html><body>🦉 <b>Archie says:</b> \"To boost your math skills, try a Practice run focusing on <b>" + weakCat + "</b> on <b>" + weakDiff + "</b>!\"</body></html>");
+        }
+
+        // 4. Strengths & Weaknesses
+        strengthsPanel.removeAll();
+        Map<String, Double> acc = analytics.getCategoryAccuracy();
+        java.util.List<Map.Entry<String, Double>> sortedAcc = new ArrayList<>(acc.entrySet());
+        // Sort highest accuracy first
+        Collections.sort(sortedAcc, (a, b) -> Double.compare(b.getValue(), a.getValue()));
+
+        // Filter played categories vs unplayed
+        List<Map.Entry<String, Double>> played = new ArrayList<>();
+        for (Map.Entry<String, Double> e : sortedAcc) {
+            if (e.getValue() > 0) played.add(e);
+        }
+
+        if (played.isEmpty()) {
+            JLabel lbl = new JLabel("Play sessions to view topic strengths!");
+            lbl.setFont(new Font("SansSerif", Font.PLAIN, 12));
+            lbl.setForeground(TEXT_MUTED);
+            strengthsPanel.add(lbl);
+        } else {
+            // Strengths: top 2
+            int shownStr = 0;
+            for (int i = 0; i < played.size() && shownStr < 2; i++) {
+                Map.Entry<String, Double> e = played.get(i);
+                JLabel item = new JLabel(" ✅  " + e.getKey() + ": " + fmt(e.getValue()) + "% Accuracy");
+                item.setFont(new Font("SansSerif", Font.BOLD, 12));
+                item.setForeground(SUCCESS_GREEN);
+                strengthsPanel.add(item);
+                shownStr++;
+            }
+            strengthsPanel.add(Box.createVerticalStrut(10));
+            // Weaknesses: bottom 2
+            int shownWeak = 0;
+            for (int i = played.size() - 1; i >= 0 && shownWeak < 2; i--) {
+                Map.Entry<String, Double> e = played.get(i);
+                if (e.getValue() >= 90.0) continue; // don't list mastered as weaknesses
+                JLabel item = new JLabel(" ⚠️  " + e.getKey() + ": " + fmt(e.getValue()) + "% accuracy");
+                item.setFont(new Font("SansSerif", Font.PLAIN, 12));
+                item.setForeground(TEXT_DARK);
+                strengthsPanel.add(item);
+                shownWeak++;
+            }
+            if (shownWeak == 0) {
+                JLabel item = new JLabel(" 🎉 Outstanding! All categories mastered!");
+                item.setFont(new Font("SansSerif", Font.BOLD, 12));
+                item.setForeground(ACCENT_GOLD);
+                strengthsPanel.add(item);
+            }
+        }
+
+        // 5. Recent Sessions
+        recentSessionsPanel.removeAll();
+        SessionRepository repo = new SessionRepository();
+        List<Map<String, Object>> recentRaw = repo.loadRaw();
+        if (recentRaw.isEmpty()) {
+            JLabel lbl = new JLabel("No sessions played yet!");
+            lbl.setFont(new Font("SansSerif", Font.PLAIN, 12));
+            lbl.setForeground(TEXT_MUTED);
+            recentSessionsPanel.add(lbl);
+        } else {
+            int displayedCount = 0;
+            for (int i = 0; i < recentRaw.size() && displayedCount < 4; i++) {
+                Map<String, Object> sess = recentRaw.get(i);
+                String cat = (String) sess.get("category");
+                String diff = (String) sess.get("difficulty");
+                double pct = (double) sess.get("percentage");
+                long durMs = (long) sess.get("durationMs");
+                int questions = (int) sess.get("totalQuestions");
+                double speed = (durMs / 1000.0) / questions;
+                
+                String date = (String) sess.get("timestamp");
+                if (date != null && date.length() >= 10) {
+                    date = date.substring(5, 10).replace("-", "/"); // "MM/DD"
+                } else {
+                    date = "";
+                }
+
+                JLabel line = new JLabel(String.format(" 📄 %s (%s)  ·  %d%% Score  ·  %s/q  ·  %s", cat, diff, (int)pct, fmt(speed) + "s", date));
+                line.setFont(new Font("SansSerif", Font.PLAIN, 11));
+                line.setForeground(TEXT_DARK);
+                recentSessionsPanel.add(line);
+                recentSessionsPanel.add(Box.createVerticalStrut(4));
+                displayedCount++;
+            }
+        }
+
+        // 6. Goals & Quick Actions
+        goalsPanel.removeAll();
+        
+        // Goals Checklist
+        java.text.SimpleDateFormat daySdf = new java.text.SimpleDateFormat("yyyyMMdd");
+        String todayStr = daySdf.format(new java.util.Date());
+        boolean dailyChallengeDone = com.mathquiz.config.AppConfig.getInstance().getLastDailyChallengeDate().equals(todayStr);
+        boolean streakMaintained = currentStreak > 0 && heatmap[0];
+
+        JCheckBox dailyBox = new JCheckBox("Complete Daily Quest today", dailyChallengeDone);
+        dailyBox.setEnabled(false);
+        dailyBox.setFont(new Font("SansSerif", Font.PLAIN, 12));
+        dailyBox.setOpaque(false);
+        dailyBox.setForeground(TEXT_DARK);
+        goalsPanel.add(dailyBox);
+
+        JCheckBox streakBox = new JCheckBox("Keep practice streak alive", streakMaintained);
+        streakBox.setEnabled(false);
+        streakBox.setFont(new Font("SansSerif", Font.PLAIN, 12));
+        streakBox.setOpaque(false);
+        streakBox.setForeground(TEXT_DARK);
+        goalsPanel.add(streakBox);
+
+        goalsPanel.add(Box.createVerticalStrut(12));
+
+        // Quick Actions Row
+        JPanel btnRow = new JPanel(new FlowLayout(FlowLayout.LEFT, 10, 0));
+        btnRow.setOpaque(false);
+
+        JButton practiceBtn = new JButton("🎯 Smart Practice");
+        practiceBtn.setFont(new Font("SansSerif", Font.PLAIN, 12));
+        practiceBtn.setFocusPainted(false);
+        practiceBtn.setCursor(new Cursor(Cursor.HAND_CURSOR));
+        practiceBtn.addActionListener(e -> nav.startSmartPractice());
+        btnRow.add(practiceBtn);
+
+        JButton dailyBtn = new JButton("📅 Daily Challenge");
+        dailyBtn.setFont(new Font("SansSerif", Font.PLAIN, 12));
+        dailyBtn.setFocusPainted(false);
+        dailyBtn.setCursor(new Cursor(Cursor.HAND_CURSOR));
+        dailyBtn.addActionListener(e -> nav.startDailyChallenge());
+        btnRow.add(dailyBtn);
+
+        goalsPanel.add(btnRow);
     }
 
-    private JPanel makeStatCard(String label, String value, String icon) {
+    private JPanel makeStatCard(String label, String value, String subtitle, String icon) {
         JPanel card = new JPanel(new GridBagLayout());
         card.setBackground(BG_CARD);
+        card.setOpaque(true);
         card.setBorder(BorderFactory.createCompoundBorder(
                 BorderFactory.createLineBorder(BORDER_CLR, 1),
-                new EmptyBorder(14, 16, 14, 16)));
+                new EmptyBorder(8, 12, 8, 12)));
 
         GridBagConstraints c = new GridBagConstraints();
-        c.gridx = 0; c.gridy = 0;
+        c.gridx = 0; c.anchor = GridBagConstraints.WEST;
 
+        // Header line: icon & label side-by-side
+        JPanel head = new JPanel(new FlowLayout(FlowLayout.LEFT, 6, 0));
+        head.setOpaque(false);
         JLabel iconLbl = new JLabel(icon);
-        iconLbl.setFont(new Font("SansSerif", Font.PLAIN, 22));
-        card.add(iconLbl, c);
+        iconLbl.setFont(new Font("SansSerif", Font.PLAIN, 16));
+        head.add(iconLbl);
 
+        JLabel lblLbl = new JLabel(label);
+        lblLbl.setFont(new Font("SansSerif", Font.BOLD, 10));
+        lblLbl.setForeground(TEXT_MUTED);
+        head.add(lblLbl);
+
+        c.gridy = 0;
+        card.add(head, c);
+
+        // Big value
         c.gridy = 1;
+        c.insets = new Insets(4, 8, 2, 8);
         JLabel valLbl = new JLabel(value);
-        valLbl.setFont(new Font("Serif", Font.BOLD, 20));
+        valLbl.setFont(new Font("Serif", Font.BOLD, 22));
         valLbl.setForeground(TEXT_DARK);
         card.add(valLbl, c);
 
+        // Subtitle line
         c.gridy = 2;
-        JLabel lblLbl = new JLabel(label);
-        lblLbl.setFont(new Font("SansSerif", Font.PLAIN, 10));
-        lblLbl.setForeground(TEXT_MUTED);
-        card.add(lblLbl, c);
+        c.insets = new Insets(0, 8, 0, 8);
+        JLabel subLbl = new JLabel(subtitle);
+        subLbl.setFont(new Font("SansSerif", Font.PLAIN, 10));
+        subLbl.setForeground(TEXT_MUTED);
+        card.add(subLbl, c);
 
         return card;
     }
@@ -264,17 +529,23 @@ public class AnalyticsPanel extends JPanel {
         return String.format("%.1f", v);
     }
 
+    private String formatTime(double totalSeconds) {
+        if (totalSeconds < 60) {
+            return (int) totalSeconds + "s";
+        }
+        double mins = totalSeconds / 60.0;
+        return String.format("%.1f", mins) + " min";
+    }
+
     // =========================================================================
     // Inner panel — Accuracy Line Chart
     // =========================================================================
-
     private class LineChartPanel extends JPanel {
-
         private List<Double> data;
 
         LineChartPanel() {
             setOpaque(false);
-            setPreferredSize(new Dimension(300, 220));
+            setPreferredSize(new Dimension(300, 200));
         }
 
         void setData(List<Double> d) { this.data = d; repaint(); }
@@ -290,7 +561,6 @@ public class AnalyticsPanel extends JPanel {
             int chartW = w - padL - padR;
             int chartH = h - padT - padB;
 
-            // Empty state
             if (data == null || data.size() < 2) {
                 g2.setFont(new Font("SansSerif", Font.PLAIN, 12));
                 g2.setColor(TEXT_MUTED);
@@ -303,7 +573,7 @@ public class AnalyticsPanel extends JPanel {
                 return;
             }
 
-            // Draw grid lines at 0, 25, 50, 75, 100
+            // Grid lines
             g2.setStroke(new BasicStroke(1f));
             g2.setFont(new Font("SansSerif", Font.PLAIN, 9));
             for (int pct : new int[]{0, 25, 50, 75, 100}) {
@@ -314,7 +584,6 @@ public class AnalyticsPanel extends JPanel {
                 g2.drawString(pct + "%", 2, y + 4);
             }
 
-            // Build X / Y coordinates for each data point
             int n = data.size();
             float[] xs = new float[n];
             float[] ys = new float[n];
@@ -323,7 +592,7 @@ public class AnalyticsPanel extends JPanel {
                 ys[i] = padT + chartH - (float)(data.get(i) / 100.0 * chartH);
             }
 
-            // Gold gradient fill under the curve
+            // Fill
             GeneralPath fillPath = buildBezierPath(xs, ys, n);
             fillPath.lineTo(xs[n - 1], padT + chartH);
             fillPath.lineTo(xs[0],     padT + chartH);
@@ -334,12 +603,12 @@ public class AnalyticsPanel extends JPanel {
             g2.setPaint(grad);
             g2.fill(fillPath);
 
-            // Gold line
+            // Curve stroke
             g2.setColor(AppTheme.getAccentGold());
             g2.setStroke(new BasicStroke(2.5f, BasicStroke.CAP_ROUND, BasicStroke.JOIN_ROUND));
             g2.draw(buildBezierPath(xs, ys, n));
 
-            // Data-point dots
+            // Dots
             for (int i = 0; i < n; i++) {
                 g2.setColor(AppTheme.getBgCard());
                 g2.fillOval((int) xs[i] - 4, (int) ys[i] - 4, 8, 8);
@@ -348,7 +617,7 @@ public class AnalyticsPanel extends JPanel {
                 g2.drawOval((int) xs[i] - 4, (int) ys[i] - 4, 8, 8);
             }
 
-            // X axis labels: first, last, maybe middle
+            // X-axis labels
             g2.setColor(AppTheme.getTextMuted());
             g2.setFont(new Font("SansSerif", Font.PLAIN, 9));
             FontMetrics fm = g2.getFontMetrics();
@@ -360,7 +629,6 @@ public class AnalyticsPanel extends JPanel {
             }
 
             g2.dispose();
-
         }
 
         private GeneralPath buildBezierPath(float[] xs, float[] ys, int n) {
@@ -384,14 +652,12 @@ public class AnalyticsPanel extends JPanel {
     // =========================================================================
     // Inner panel — Category Radar Chart
     // =========================================================================
-
     private class RadarChartPanel extends JPanel {
-
         private Map<String, Double> data;
 
         RadarChartPanel() {
             setOpaque(false);
-            setPreferredSize(new Dimension(280, 220));
+            setPreferredSize(new Dimension(280, 200));
         }
 
         void setData(Map<String, Double> d) { this.data = d; repaint(); }
@@ -409,7 +675,6 @@ public class AnalyticsPanel extends JPanel {
 
             int n = CATEGORY_LABELS.length;
 
-            // Draw background concentric hexagons at 25, 50, 75, 100%
             g2.setFont(new Font("SansSerif", Font.PLAIN, 8));
             for (int ring : new int[]{25, 50, 75, 100}) {
                 float r = maxR * ring / 100f;
@@ -423,7 +688,7 @@ public class AnalyticsPanel extends JPanel {
                 }
             }
 
-            // Axis spokes
+            // Spokes
             g2.setColor(AppTheme.getBorderClr());
             g2.setStroke(new BasicStroke(1f));
             for (int i = 0; i < n; i++) {
@@ -433,7 +698,7 @@ public class AnalyticsPanel extends JPanel {
                             (int)(cy + maxR * Math.sin(angle)));
             }
 
-            // No data? draw empty state
+            // Empty state
             if (data == null || data.values().stream().allMatch(v -> v == 0.0)) {
                 g2.setColor(AppTheme.getTextMuted());
                 g2.setFont(new Font("SansSerif", Font.PLAIN, 11));
@@ -444,8 +709,6 @@ public class AnalyticsPanel extends JPanel {
                 return;
             }
 
-
-            // Data polygon
             float[] dataX = new float[n];
             float[] dataY = new float[n];
             String[] cats = AnalyticsService.ALL_CATEGORIES;
@@ -459,36 +722,29 @@ public class AnalyticsPanel extends JPanel {
                 dataY[i] = (float)(cy + r * Math.sin(angle));
             }
 
-            // Fill
             Polygon dataPoly = new Polygon();
             for (int i = 0; i < n; i++) dataPoly.addPoint((int) dataX[i], (int) dataY[i]);
             Color accentColor = AppTheme.getAccentGold();
             g2.setColor(new Color(accentColor.getRed(), accentColor.getGreen(), accentColor.getBlue(), 55));
             g2.fillPolygon(dataPoly);
 
-            // Stroke
             g2.setColor(AppTheme.getAccentGold());
             g2.setStroke(new BasicStroke(2f, BasicStroke.CAP_ROUND, BasicStroke.JOIN_ROUND));
             g2.drawPolygon(dataPoly);
 
-
-            // Vertex dots and labels
+            // Vertices
             g2.setFont(new Font("SansSerif", Font.PLAIN, 9));
             for (int i = 0; i < n; i++) {
-                // Dot at vertex
                 g2.setColor(CATEGORY_COLORS[i]);
                 g2.fillOval((int) dataX[i] - 4, (int) dataY[i] - 4, 8, 8);
 
-                // Label at spoke tip
                 double angle = -Math.PI / 2 + 2 * Math.PI * i / n;
                 float lx = (float)(cx + (maxR + 14) * Math.cos(angle));
                 float ly = (float)(cy + (maxR + 14) * Math.sin(angle));
                 String label = CATEGORY_LABELS[i];
                 FontMetrics fm = g2.getFontMetrics();
-                float textX = lx - fm.stringWidth(label) / 2f;
-                float textY = ly + 4;
                 g2.setColor(AppTheme.getTextMuted());
-                g2.drawString(label, textX, textY);
+                g2.drawString(label, lx - fm.stringWidth(label) / 2f, ly + 4);
             }
 
             g2.dispose();
@@ -539,13 +795,16 @@ public class AnalyticsPanel extends JPanel {
                 JButton btn = (JButton) c;
                 btn.setBackground(AppTheme.getBgCard());
                 if (btn.getText().contains("Reset")) {
-                    btn.setForeground(new Color(239, 68, 68));
+                    btn.setForeground(ERROR_RED);
                 } else {
                     btn.setForeground(AppTheme.getTextMuted());
                 }
                 btn.setBorder(BorderFactory.createCompoundBorder(
                         BorderFactory.createLineBorder(AppTheme.getBorderClr(), 1),
                         new EmptyBorder(8, 18, 8, 18)));
+            } else if (c instanceof JCheckBox) {
+                JCheckBox cb = (JCheckBox) c;
+                cb.setForeground(AppTheme.getTextDark());
             } else if (c instanceof JScrollPane) {
                 JScrollPane s = (JScrollPane) c;
                 s.getViewport().setBackground(AppTheme.getBgPrimary());
@@ -557,4 +816,3 @@ public class AnalyticsPanel extends JPanel {
         }
     }
 }
-
