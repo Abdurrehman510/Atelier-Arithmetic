@@ -9,5 +9,6 @@ if %errorlevel% neq 0 (
     pause
     exit /b %errorlevel%
 )
+xcopy /s /y /i src\com\mathquiz\resources bin\com\mathquiz\resources >nul 2>&1
 echo Launching Desktop Application...
 java -cp bin com.mathquiz.QuizApp

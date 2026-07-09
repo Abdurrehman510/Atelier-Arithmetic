@@ -9,6 +9,8 @@ import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 import java.awt.*;
 import java.util.List;
+import com.mathquiz.config.AppTheme;
+
 
 /**
  * Post-quiz answer review screen.
@@ -38,7 +40,9 @@ public class ReviewPanel extends JPanel {
 
     private final QuizNavigator  nav;
     private       DefaultTableModel tableModel;
+    private       JTable         table;
     private       String         returnScreen = "results";
+
 
     public ReviewPanel(QuizNavigator nav) {
         this.nav = nav;
@@ -47,7 +51,10 @@ public class ReviewPanel extends JPanel {
         build();
     }
 
+    public JTable getTable() { return table; }
+
     // ── Public API ────────────────────────────────────────────────────────────
+
 
     /** Populate the table from a completed session and record where to return. */
     public void populate(QuizSession session, String returnScreen) {
@@ -99,8 +106,9 @@ public class ReviewPanel extends JPanel {
             @Override public boolean isCellEditable(int r, int c) { return false; }
         };
 
-        JTable table = new JTable(tableModel);
+        table = new JTable(tableModel);
         table.setFont(new Font("SansSerif", Font.PLAIN, 13));
+
         table.setRowHeight(34);
         table.getTableHeader().setFont(new Font("SansSerif", Font.BOLD, 12));
         table.getTableHeader().setBackground(new Color(245, 244, 240));
@@ -125,9 +133,8 @@ public class ReviewPanel extends JPanel {
                     String result = (String) t.getValueAt(row, 4);
                     boolean correct = result != null && result.startsWith("✅");
                     boolean alt = (row % 2 == 0);
-                    c.setBackground(correct
-                            ? (alt ? ROW_CORRECT : ROW_CORRECT_D)
-                            : (alt ? ROW_WRONG   : ROW_WRONG_D));
+                    c.setBackground(getRowBg(correct, alt));
+                    c.setForeground(AppTheme.getTextDark());
                 }
                 return c;
             }
@@ -147,9 +154,8 @@ public class ReviewPanel extends JPanel {
                     String result = (String) t.getValueAt(row, 4);
                     boolean correct = result != null && result.startsWith("✅");
                     boolean alt = (row % 2 == 0);
-                    c.setBackground(correct
-                            ? (alt ? ROW_CORRECT : ROW_CORRECT_D)
-                            : (alt ? ROW_WRONG   : ROW_WRONG_D));
+                    c.setBackground(getRowBg(correct, alt));
+                    c.setForeground(AppTheme.getTextDark());
                 }
                 return c;
             }
@@ -157,10 +163,12 @@ public class ReviewPanel extends JPanel {
         leftAlign.setHorizontalAlignment(SwingConstants.LEFT);
         table.getColumnModel().getColumn(1).setCellRenderer(leftAlign);
 
+
         JScrollPane scroll = new JScrollPane(table);
         scroll.setBorder(BorderFactory.createCompoundBorder(
                 new EmptyBorder(6, 30, 6, 30),
                 BorderFactory.createLineBorder(BORDER_CLR, 1)));
+        scroll.setViewportBorder(BorderFactory.createEmptyBorder());
         scroll.getViewport().setBackground(BG_CARD);
         return scroll;
     }
@@ -194,4 +202,67 @@ public class ReviewPanel extends JPanel {
 
         return panel;
     }
+    public void applyTheme() {
+        setBackground(AppTheme.getBgPrimary());
+        recolorTree(this);
+    }
+
+    private void recolorTree(Container parent) {
+        for (Component c : parent.getComponents()) {
+            if (c instanceof JPanel) {
+                JPanel p = (JPanel) c;
+                p.setBackground(AppTheme.getBgPrimary());
+                recolorTree(p);
+            } else if (c instanceof JLabel) {
+                JLabel lbl = (JLabel) c;
+                if (lbl.getFont().getSize() > 20) {
+                    lbl.setForeground(AppTheme.getTextDark());
+                } else {
+                    lbl.setForeground(AppTheme.getTextMuted());
+                }
+            } else if (c instanceof JButton) {
+                JButton btn = (JButton) c;
+                if (btn.getText().contains("Back")) {
+                    btn.setBackground(AppTheme.getTextDark());
+                    btn.setForeground(AppTheme.getBgCard());
+                } else {
+                    btn.setBackground(AppTheme.getBgPrimary());
+                    btn.setForeground(AppTheme.getTextMuted());
+                }
+            } else if (c instanceof JScrollPane) {
+                JScrollPane s = (JScrollPane) c;
+                s.getViewport().setBackground(AppTheme.getBgCard());
+                s.setBorder(BorderFactory.createCompoundBorder(
+                        new EmptyBorder(6, 30, 6, 30),
+                        BorderFactory.createLineBorder(AppTheme.getBorderClr(), 1)));
+                Component view = s.getViewport().getView();
+                if (view instanceof JTable) {
+                    JTable t = (JTable) view;
+                    t.setBackground(AppTheme.getBgCard());
+                    t.setForeground(AppTheme.getTextDark());
+                    t.setGridColor(AppTheme.getBorderClr());
+                    t.getTableHeader().setBackground(AppTheme.getBgCard());
+                    t.getTableHeader().setForeground(AppTheme.getTextDark());
+                }
+            }
+        }
+    }
+
+    private Color getRowBg(boolean correct, boolean alt) {
+        if (AppTheme.isDarkMode()) {
+            if (correct) {
+                return alt ? new Color(20, 50, 32) : new Color(25, 60, 38);
+            } else {
+                return alt ? new Color(64, 24, 24) : new Color(74, 30, 30);
+            }
+        } else {
+            if (correct) {
+                return alt ? ROW_CORRECT : ROW_CORRECT_D;
+            } else {
+                return alt ? ROW_WRONG : ROW_WRONG_D;
+            }
+        }
+    }
 }
+
+

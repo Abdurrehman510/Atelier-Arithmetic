@@ -11,7 +11,7 @@ import java.util.List;
 public class QuizSession {
 
     private final int    totalQuestions;
-    private final String difficulty;
+    private String       difficulty;
     private final String category;
     private final long   sessionStartTime;
 
@@ -25,6 +25,7 @@ public class QuizSession {
         this.category         = category;
         this.sessionStartTime = System.currentTimeMillis();
     }
+
 
     // -------------------------------------------------------------------------
     // Mutation
@@ -46,7 +47,9 @@ public class QuizSession {
 
     public int    getTotalQuestions()       { return totalQuestions; }
     public String getDifficulty()           { return difficulty; }
+    public void   setDifficulty(String diff) { this.difficulty = diff; }
     public String getCategory()             { return category; }
+
     public int    getCurrentQuestionIndex() { return currentQuestionIndex; }
     public int    getCorrectAnswersCount()  { return correctAnswersCount; }
     public long   getSessionStartTime()     { return sessionStartTime; }

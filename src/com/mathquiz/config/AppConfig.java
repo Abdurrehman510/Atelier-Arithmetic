@@ -19,10 +19,20 @@ public class AppConfig {
 
     private final Properties props = new Properties();
 
+    private static AppConfig instance;
+
+    public static synchronized AppConfig getInstance() {
+        if (instance == null) {
+            instance = new AppConfig();
+        }
+        return instance;
+    }
+
     public AppConfig() {
         ensureDirectoryExists();
         load();
     }
+
 
     // -------------------------------------------------------------------------
     // Public API
@@ -45,6 +55,73 @@ public class AppConfig {
         props.setProperty("soundEnabled", Boolean.toString(enabled));
         save();
     }
+
+    public boolean isDarkMode() {
+        return Boolean.parseBoolean(props.getProperty("darkMode", "false"));
+    }
+
+    public void setDarkMode(boolean enabled) {
+        props.setProperty("darkMode", Boolean.toString(enabled));
+        save();
+    }
+
+    public String getLastDailyChallengeDate() {
+        return props.getProperty("lastDailyChallengeDate", "");
+    }
+
+    public void setLastDailyChallengeDate(String dateStr) {
+        props.setProperty("lastDailyChallengeDate", dateStr);
+        save();
+    }
+
+
+    public String getCurrentProfile() {
+        return props.getProperty("currentProfile", "Guest");
+    }
+
+    public void setCurrentProfile(String profile) {
+        props.setProperty("currentProfile", profile);
+        save();
+    }
+
+    public java.util.List<String> getProfiles() {
+        String raw = props.getProperty("profiles", "Guest");
+        String[] parts = raw.split(",");
+        java.util.List<String> list = new java.util.ArrayList<>();
+        for (String p : parts) {
+            String trimmed = p.trim();
+            if (!trimmed.isEmpty()) {
+                list.add(trimmed);
+            }
+        }
+        if (list.isEmpty()) {
+            list.add("Guest");
+        }
+        return list;
+    }
+
+    public void addProfile(String profile) {
+        java.util.List<String> list = getProfiles();
+        if (!list.contains(profile)) {
+            list.add(profile);
+            props.setProperty("profiles", String.join(",", list));
+            save();
+        }
+    }
+
+    public double getFontSizeScale() {
+        try {
+            return Double.parseDouble(props.getProperty("fontSizeScale", "1.25"));
+        } catch (NumberFormatException e) {
+            return 1.25;
+        }
+    }
+
+    public void setFontSizeScale(double scale) {
+        props.setProperty("fontSizeScale", Double.toString(scale));
+        save();
+    }
+
 
     // -------------------------------------------------------------------------
     // I/O helpers

@@ -21,11 +21,9 @@ import java.util.*;
  */
 public class SessionRepository {
 
-    private static final String HISTORY_FILE =
-            AppConfig.getAppDir() + File.separator + "history.json";
-
     private static final DateTimeFormatter TIMESTAMP_FMT =
             DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss");
+
 
     // -------------------------------------------------------------------------
     // Write
@@ -68,8 +66,9 @@ public class SessionRepository {
         // Prepend (newest first)
         all.add(0, s);
 
-        JsonHelper.writeFile(HISTORY_FILE, JsonHelper.buildSessionArray(all));
+        JsonHelper.writeFile(getHistoryFilePath(), JsonHelper.buildSessionArray(all));
     }
+
 
     // -------------------------------------------------------------------------
     // Read helpers (used by Phase 2 AnalyticsService)
@@ -77,8 +76,9 @@ public class SessionRepository {
 
     /** Returns the raw JSON object maps for all saved sessions. */
     public List<Map<String, Object>> loadRaw() {
-        String json = JsonHelper.readFile(HISTORY_FILE);
+        String json = JsonHelper.readFile(getHistoryFilePath());
         List<String> sessionBlocks = JsonHelper.splitArray(json);
+
 
         List<Map<String, Object>> result = new ArrayList<>();
         for (String block : sessionBlocks) {
@@ -91,10 +91,43 @@ public class SessionRepository {
             m.put("percentage",     JsonHelper.extractDouble(block,  "percentage"));
             m.put("grade",          JsonHelper.extractString(block, "grade"));
             m.put("durationMs",     JsonHelper.extractLong(block,   "durationMs"));
+            m.put("questions",      parseQuestions(block));
             result.add(m);
         }
         return result;
     }
+
+    private List<Map<String, Object>> parseQuestions(String block) {
+        List<Map<String, Object>> list = new ArrayList<>();
+        String search = "\"questions\": [";
+        int start = block.indexOf(search);
+        if (start < 0) return list;
+        start += search.length();
+        // find matching closing bracket for array
+        int depth = 1;
+        int end = start;
+        while (end < block.length() && depth > 0) {
+            char c = block.charAt(end);
+            if (c == '[') depth++;
+            else if (c == ']') depth--;
+            if (depth == 0) break;
+            end++;
+        }
+        if (end >= block.length()) return list;
+        String arrayContent = block.substring(start, end);
+        List<String> qBlocks = JsonHelper.splitArray(arrayContent);
+        for (String qb : qBlocks) {
+            Map<String, Object> q = new LinkedHashMap<>();
+            q.put("expression",    JsonHelper.extractString(qb, "expression"));
+            q.put("correctAnswer", JsonHelper.extractInt(qb,    "correctAnswer"));
+            q.put("userAnswer",    JsonHelper.extractInt(qb,    "userAnswer"));
+            q.put("correct",       JsonHelper.extractBoolean(qb, "correct"));
+            q.put("timeMs",        JsonHelper.extractLong(qb,   "timeMs"));
+            list.add(q);
+        }
+        return list;
+    }
+
 
     /** Returns the number of saved sessions. */
     public int getSessionCount() {
@@ -103,12 +136,27 @@ public class SessionRepository {
 
     /** Returns true if the history file exists and is non-empty. */
     public boolean hasHistory() {
-        File f = new File(HISTORY_FILE);
+        File f = new File(getHistoryFilePath());
         return f.exists() && f.length() > 2;
     }
 
-    /** Returns the path to the history file (for informational display). */
-    public static String getHistoryFilePath() {
-        return HISTORY_FILE;
+    /** Clears all saved sessions by truncating the history file to an empty array. */
+    public void clear() {
+        JsonHelper.writeFile(getHistoryFilePath(), "[]");
+    }
+
+    public String getHistoryFilePath() {
+        String profile = AppConfig.getInstance().getCurrentProfile();
+        if ("Guest".equalsIgnoreCase(profile)) {
+            return AppConfig.getAppDir() + File.separator + "history.json";
+        } else {
+            return AppConfig.getAppDir() + File.separator + "history_" + sanitizeFilename(profile) + ".json";
+        }
+    }
+
+    private String sanitizeFilename(String s) {
+        return s.replaceAll("[^a-zA-Z0-9_-]", "_");
     }
 }
+
+

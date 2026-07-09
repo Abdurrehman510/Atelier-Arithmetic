@@ -8,9 +8,20 @@ import java.util.Random;
  * (Easy, Medium, Hard) and category (Addition, Difference, Multiplication, Division, Mixed, Special).
  */
 public class QuestionGenerator {
-    private final Random random = new Random();
+    private Random random = new Random();
+
+    public Question generateSeeded(String difficulty, String category, long dateSeed, int questionIndex) {
+        Random oldRandom = this.random;
+        this.random = new Random(dateSeed * 100 + questionIndex);
+        try {
+            return generate(difficulty, category);
+        } finally {
+            this.random = oldRandom;
+        }
+    }
 
     public Question generate(String difficulty, String category) {
+
         String diffLower = difficulty.toLowerCase();
         String catLower = category.toLowerCase();
 
@@ -31,6 +42,14 @@ public class QuestionGenerator {
                 return generateDivision(diffLower);
             case "special":
                 return generateSpecial(diffLower);
+            case "fractions":
+                return generateFractions(diffLower);
+            case "patterns":
+                return generatePatterns(diffLower);
+            case "algebra":
+                return generateAlgebra(diffLower);
+            case "measurement":
+                return generateMeasurement(diffLower);
             default:
                 return generateAddition(diffLower);
         }
@@ -177,6 +196,98 @@ public class QuestionGenerator {
                 
                 return new Question("(" + a + " / " + b + ") - (" + c + " * " + d + ")", q1 - (c * d));
             }
+        }
+    }
+
+    private Question generateFractions(String diff) {
+        if (diff.equals("easy")) {
+            // Find 1/2 of an even integer
+            int val = (random.nextInt(30) + 5) * 2;
+            return new Question("1/2 of " + val, val / 2);
+        } else if (diff.equals("medium")) {
+            // Find 3/4 of a multiple of 4
+            int val = (random.nextInt(20) + 3) * 4;
+            return new Question("3/4 of " + val, (val / 4) * 3);
+        } else {
+            // Find 20% or 30% of a multiple of 10
+            int pctChoice = random.nextBoolean() ? 20 : 30;
+            int val = (random.nextInt(25) + 4) * 10;
+            int answer = (val * pctChoice) / 100;
+            return new Question(pctChoice + "% of " + val, answer);
+        }
+    }
+
+    private Question generatePatterns(String diff) {
+        if (diff.equals("easy")) {
+            // Arithmetic sequence
+            int start = random.nextInt(15) + 2;
+            int diffVal = random.nextInt(8) + 2;
+            int s1 = start;
+            int s2 = start + diffVal;
+            int s3 = start + 2 * diffVal;
+            int s4 = start + 3 * diffVal;
+            return new Question("Pattern: " + s1 + ", " + s2 + ", " + s3 + ", " + s4 + ", _", s4 + diffVal);
+        } else if (diff.equals("medium")) {
+            // Geometric sequence
+            int start = random.nextInt(5) + 2;
+            int ratio = random.nextInt(3) + 2;
+            int s1 = start;
+            int s2 = start * ratio;
+            int s3 = start * ratio * ratio;
+            return new Question("Pattern: " + s1 + ", " + s2 + ", " + s3 + ", _", s3 * ratio);
+        } else {
+            // Square numbers pattern
+            int offset = random.nextInt(5) + 1;
+            int s1 = (offset) * (offset);
+            int s2 = (offset + 1) * (offset + 1);
+            int s3 = (offset + 2) * (offset + 2);
+            int s4 = (offset + 3) * (offset + 3);
+            int next = (offset + 4) * (offset + 4);
+            return new Question("Pattern: " + s1 + ", " + s2 + ", " + s3 + ", " + s4 + ", _", next);
+        }
+    }
+
+    private Question generateAlgebra(String diff) {
+        if (diff.equals("easy")) {
+            // x + A = B
+            int x = random.nextInt(15) + 2;
+            int a = random.nextInt(25) + 2;
+            return new Question("Solve for x: x + " + a + " = " + (x + a), x);
+        } else if (diff.equals("medium")) {
+            // Ax - B = C
+            int x = random.nextInt(10) + 2;
+            int a = random.nextInt(6) + 2;
+            int b = random.nextInt(12) + 1;
+            int c = a * x - b;
+            return new Question("Solve for x: " + a + "x - " + b + " = " + c, x);
+        } else {
+            // Ax + B = Cx + D
+            int x = random.nextInt(8) + 2;
+            int c = random.nextInt(5) + 2;
+            int a = c + random.nextInt(4) + 1; // a > c
+            int d = random.nextInt(20) + 15;
+            int b = d - (a - c) * x;
+            if (b <= 0) {
+                // fallback to simpler hard equation
+                return new Question("Solve for x: 5x + 3 = 3x + 15", 6);
+            }
+            return new Question("Solve for x: " + a + "x + " + b + " = " + c + "x + " + d, x);
+        }
+    }
+
+    private Question generateMeasurement(String diff) {
+        if (diff.equals("easy")) {
+            // m to cm
+            int meters = random.nextInt(12) + 2;
+            return new Question("Convert " + meters + " meters to centimeters", meters * 100);
+        } else if (diff.equals("medium")) {
+            // hours to minutes
+            int hours = random.nextInt(5) + 2;
+            return new Question("Convert " + hours + " hours to minutes", hours * 60);
+        } else {
+            // liters to milliliters
+            int liters = random.nextInt(9) + 2;
+            return new Question("Convert " + liters + " liters to milliliters", liters * 1000);
         }
     }
 }

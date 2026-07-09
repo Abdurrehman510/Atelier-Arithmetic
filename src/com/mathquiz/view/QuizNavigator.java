@@ -46,6 +46,27 @@ public interface QuizNavigator {
      */
     void showHelp(String returnScreen);
 
+    /** Show the Analytics dashboard. */
+    void showAnalytics();
+
+    /** Show the Smart Practice setup and launcher screen. */
+    void startSmartPractice();
+
+    /** Show the Achievements screen. */
+    void showAchievements();
+
+    /** Start the daily seeded challenge quiz. */
+    void startDailyChallenge();
+
     /** (Re-)launch the interactive guided tour from the beginning. */
     void launchTour();
+
+    /** Show the Custom Quiz Builder screen. */
+    void showQuizBuilder();
+
+    /** Start a quiz session populated by custom author questions. */
+    void startCustomQuiz(String quizName, java.util.List<com.mathquiz.model.Question> questions);
+
+    /** Transition to card layout card dynamically during active guided tour. */
+    void showCardForTour(String screen);
 }

@@ -4,6 +4,11 @@ import com.mathquiz.model.Question;
 import com.mathquiz.model.QuestionResult;
 import com.mathquiz.model.QuizSession;
 import com.mathquiz.service.QuestionGenerator;
+import com.mathquiz.service.AdaptiveDifficultyEngine;
+import com.mathquiz.service.SoundService;
+import com.mathquiz.config.AppTheme;
+
+
 
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
@@ -41,27 +46,47 @@ public class GamePanel extends JPanel {
     private JLabel       feedbackLabel;
     private JButton      submitButton;
 
+    // Themed components references
+    private JPanel       playCard;
+    private JLabel       eqLabel;
+    private JButton      helpButton;
+    private JButton      hintButton;
+    private JLabel       hintLabel;
+
+
+
     // ── State ────────────────────────────────────────────────────────────────
     private final QuizNavigator    nav;
     private final QuestionGenerator generator;
+    private final AdaptiveDifficultyEngine difficultyEngine;
+    private final SoundService     sound;
+
+
 
     private QuizSession activeSession;
     private Question    currentQuestion;
     private long        questionStartTime;     // ms timestamp when question loaded
     private boolean     awaitingNext = false;  // true after answer submitted
+    private java.util.List<Question> customQuestions = null;
+
 
     // ── Timer (counts up every second per question) ───────────────────────────
     private javax.swing.Timer questionTimer;
     private int               elapsedSeconds;
 
-    public GamePanel(QuizNavigator nav) {
+    public GamePanel(QuizNavigator nav, SoundService sound) {
         this.nav       = nav;
+        this.sound     = sound;
         this.generator = new QuestionGenerator();
+        this.difficultyEngine = new AdaptiveDifficultyEngine();
         setBackground(BG_PRIMARY);
         setLayout(new BorderLayout());
         build();
         initTimer();
+        setupKeyBindings();
     }
+
+
 
     // ── Public accessors for TourManager ─────────────────────────────────────
 
@@ -70,16 +95,26 @@ public class GamePanel extends JPanel {
     public JButton      getSubmitButton()    { return submitButton;    }
     public JProgressBar getProgressBar()     { return progressBar;     }
     public JLabel       getFeedbackLabel()   { return feedbackLabel;   }
+    public JButton      getHintButton()      { return hintButton;      }
+    public JLabel       getTimerLabel()      { return timerLabel;      }
 
     // ── Session lifecycle ─────────────────────────────────────────────────────
 
     /** Called by QuizFrame whenever a new session begins. */
     public void startSession(QuizSession session) {
+        startSession(session, null);
+    }
+
+    public void startSession(QuizSession session, java.util.List<Question> customQuestions) {
         this.activeSession = session;
+        this.customQuestions = customQuestions;
+        difficultyEngine.reset();
         progressBar.setMaximum(session.getTotalQuestions());
         progressBar.setValue(0);
         loadNextQuestion();
     }
+
+
 
     // ── UI construction ───────────────────────────────────────────────────────
 
@@ -121,11 +156,12 @@ public class GamePanel extends JPanel {
         JPanel outer = new JPanel(new GridBagLayout());
         outer.setOpaque(false);
 
-        JPanel card = new JPanel(new GridBagLayout());
-        card.setBackground(BG_CARD);
-        card.setBorder(BorderFactory.createCompoundBorder(
+        playCard = new JPanel(new GridBagLayout());
+        playCard.setBackground(BG_CARD);
+        playCard.setBorder(BorderFactory.createCompoundBorder(
                 BorderFactory.createLineBorder(BORDER_CLR, 1),
                 new EmptyBorder(40, 55, 40, 55)));
+
 
         GridBagConstraints c = new GridBagConstraints();
         c.fill    = GridBagConstraints.HORIZONTAL;
@@ -138,21 +174,26 @@ public class GamePanel extends JPanel {
         expressionLabel = new JLabel("Loading…", SwingConstants.CENTER);
         expressionLabel.setFont(new Font("Serif", Font.PLAIN, 32));
         expressionLabel.setForeground(TEXT_DARK);
-        card.add(expressionLabel, c);
+        playCard.add(expressionLabel, c);
+
 
         // ── "Your Answer" label ───────────────────────────────────────────────
         c.gridy     = 1;
         c.gridwidth = 1;
         c.fill      = GridBagConstraints.NONE;
         c.anchor    = GridBagConstraints.EAST;
-        JLabel eqLabel = new JLabel("YOUR ANSWER: ");
+        eqLabel = new JLabel("YOUR ANSWER: ");
         eqLabel.setFont(new Font("SansSerif", Font.BOLD, 12));
         eqLabel.setForeground(TEXT_MUTED);
-        card.add(eqLabel, c);
+        playCard.add(eqLabel, c);
 
-        // ── Answer text field ─────────────────────────────────────────────────
+
+        // ── Answer text field with Hint Button ────────────────────────────────
         c.gridx  = 1;
         c.anchor = GridBagConstraints.WEST;
+        JPanel fieldRow = new JPanel(new FlowLayout(FlowLayout.LEFT, 10, 0));
+        fieldRow.setOpaque(false);
+
         answerField = new JTextField(8);
         answerField.setFont(new Font("SansSerif", Font.BOLD, 18));
         answerField.setBorder(BorderFactory.createCompoundBorder(
@@ -161,7 +202,28 @@ public class GamePanel extends JPanel {
         answerField.addActionListener(e -> {
             if (submitButton.isEnabled()) submitButton.doClick();
         });
-        card.add(answerField, c);
+        fieldRow.add(answerField);
+
+        hintButton = new JButton("💡 Hint");
+        hintButton.setFont(new Font("SansSerif", Font.PLAIN, 12));
+        hintButton.setFocusPainted(false);
+        hintButton.setCursor(new Cursor(Cursor.HAND_CURSOR));
+        hintButton.setBackground(BG_CARD);
+        hintButton.setForeground(TEXT_MUTED);
+        hintButton.setBorder(BorderFactory.createCompoundBorder(
+                BorderFactory.createLineBorder(BORDER_CLR, 1),
+                new EmptyBorder(6, 12, 6, 12)));
+        hintButton.addActionListener(e -> {
+            if (currentQuestion != null) {
+                String hint = com.mathquiz.service.HintService.generateHint(currentQuestion.getExpression());
+                hintLabel.setText(hint);
+            }
+        });
+        fieldRow.add(hintButton);
+
+        playCard.add(fieldRow, c);
+
+
 
         // ── Feedback label ────────────────────────────────────────────────────
         c.gridx     = 0;
@@ -172,10 +234,19 @@ public class GamePanel extends JPanel {
         feedbackLabel = new JLabel(" ", SwingConstants.CENTER);
         feedbackLabel.setFont(new Font("SansSerif", Font.BOLD, 13));
         feedbackLabel.setForeground(TEXT_MUTED);
-        card.add(feedbackLabel, c);
+        playCard.add(feedbackLabel, c);
 
-        outer.add(card);
+        // ── Hint label ────────────────────────────────────────────────────────
+        c.gridy     = 3;
+        hintLabel = new JLabel(" ", SwingConstants.CENTER);
+        hintLabel.setFont(new Font("SansSerif", Font.PLAIN, 11));
+        hintLabel.setForeground(TEXT_MUTED);
+        playCard.add(hintLabel, c);
+
+        outer.add(playCard);
         return outer;
+
+
     }
 
     private JPanel buildFooter() {
@@ -183,9 +254,10 @@ public class GamePanel extends JPanel {
         panel.setOpaque(false);
         panel.setBorder(new EmptyBorder(10, 10, 38, 10));
 
-        JButton helpBtn = makeSecondaryButton("❓ Guide");
-        helpBtn.addActionListener(e -> nav.showHelp("game"));
-        panel.add(helpBtn);
+        helpButton = makeSecondaryButton("❓ Guide");
+        helpButton.addActionListener(e -> nav.showHelp("game"));
+        panel.add(helpButton);
+
 
         submitButton = new JButton("SUBMIT ANSWER");
         submitButton.setFont(new Font("SansSerif", Font.BOLD, 13));
@@ -231,9 +303,24 @@ public class GamePanel extends JPanel {
         }
 
         // Generate question
-        currentQuestion = generator.generate(
-                activeSession.getDifficulty(),
-                activeSession.getCategory());
+        if (customQuestions != null) {
+            currentQuestion = customQuestions.get(activeSession.getCurrentQuestionIndex());
+        } else if (activeSession.getCategory().equalsIgnoreCase("Daily Challenge")) {
+            long seed = getTodaySeed();
+            currentQuestion = generator.generateSeeded(
+                    activeSession.getDifficulty(),
+                    "Mixed",
+                    seed,
+                    activeSession.getCurrentQuestionIndex()
+            );
+        } else {
+            currentQuestion = generator.generate(
+                    activeSession.getDifficulty(),
+                    activeSession.getCategory()
+            );
+        }
+
+
 
         // Reset UI
         expressionLabel.setText(currentQuestion.getExpression() + " = ?");
@@ -242,6 +329,10 @@ public class GamePanel extends JPanel {
         answerField.requestFocusInWindow();
         feedbackLabel.setText(" ");
         feedbackLabel.setForeground(TEXT_MUTED);
+        if (hintLabel != null) {
+            hintLabel.setText(" ");
+        }
+
 
         int idx   = activeSession.getCurrentQuestionIndex();
         int total = activeSession.getTotalQuestions();
@@ -292,15 +383,149 @@ public class GamePanel extends JPanel {
         if (correct) {
             feedbackLabel.setText("✅ Correct! Great job!");
             feedbackLabel.setForeground(SUCCESS_GREEN);
+            sound.playCorrect();
         } else {
             feedbackLabel.setText("❌ Wrong. The correct answer was: "
                     + currentQuestion.getCorrectAnswer());
             feedbackLabel.setForeground(ERROR_RED);
+            sound.playIncorrect();
         }
+
 
         submitButton.setText("NEXT QUESTION  →");
         awaitingNext = true;
+
+        // Evaluate adaptive difficulty suggestion
+        AdaptiveDifficultyEngine.Recommendation recommendation =
+                difficultyEngine.evaluate(activeSession.getResults(), activeSession.getDifficulty());
+        if (recommendation == AdaptiveDifficultyEngine.Recommendation.UPGRADE) {
+            SwingUtilities.invokeLater(this::proposeUpgrade);
+        } else if (recommendation == AdaptiveDifficultyEngine.Recommendation.DOWNGRADE) {
+            SwingUtilities.invokeLater(this::proposeDowngrade);
+        }
     }
+
+    private long getTodaySeed() {
+        java.text.SimpleDateFormat sdf = new java.text.SimpleDateFormat("yyyyMMdd");
+        String formatted = sdf.format(new java.util.Date());
+        return Long.parseLong(formatted);
+    }
+
+    public void applyTheme() {
+        setBackground(AppTheme.getBgPrimary());
+        if (progressLabel != null) progressLabel.setForeground(AppTheme.getTextDark());
+        if (timerLabel != null) timerLabel.setForeground(AppTheme.getTextMuted());
+        if (expressionLabel != null) expressionLabel.setForeground(AppTheme.getTextDark());
+        if (eqLabel != null) eqLabel.setForeground(AppTheme.getTextMuted());
+        if (feedbackLabel != null && awaitingNext) {
+            // If showing wrong, keep red, else success or dark/muted
+            if (!feedbackLabel.getForeground().equals(SUCCESS_GREEN) && !feedbackLabel.getForeground().equals(ERROR_RED)) {
+                feedbackLabel.setForeground(AppTheme.getTextMuted());
+            }
+        }
+        if (playCard != null) {
+            playCard.setBackground(AppTheme.getBgCard());
+            playCard.setBorder(BorderFactory.createCompoundBorder(
+                    BorderFactory.createLineBorder(AppTheme.getBorderClr(), 1),
+                    new EmptyBorder(40, 55, 40, 55)));
+        }
+        if (answerField != null) {
+            answerField.setBackground(AppTheme.getBgCard());
+            answerField.setForeground(AppTheme.getTextDark());
+            answerField.setCaretColor(AppTheme.getTextDark());
+            answerField.setBorder(BorderFactory.createCompoundBorder(
+                    BorderFactory.createLineBorder(AppTheme.getBorderClr(), 1),
+                    new EmptyBorder(6, 10, 6, 10)));
+        }
+        if (submitButton != null) {
+            submitButton.setBackground(AppTheme.getTextDark());
+            submitButton.setForeground(AppTheme.getBgCard());
+        }
+        if (helpButton != null) {
+            helpButton.setBackground(AppTheme.getBgPrimary());
+            helpButton.setForeground(AppTheme.getTextMuted());
+        }
+        if (hintButton != null) {
+            hintButton.setBackground(AppTheme.getBgCard());
+            hintButton.setForeground(AppTheme.getTextMuted());
+            hintButton.setBorder(BorderFactory.createCompoundBorder(
+                    BorderFactory.createLineBorder(AppTheme.getBorderClr(), 1),
+                    new EmptyBorder(6, 12, 6, 12)));
+        }
+        if (hintLabel != null) {
+            hintLabel.setForeground(AppTheme.getAccentGold());
+        }
+    }
+
+    private void setupKeyBindings() {
+        InputMap im = getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW);
+        ActionMap am = getActionMap();
+
+        im.put(KeyStroke.getKeyStroke(KeyEvent.VK_ESCAPE, 0), "escapeKey");
+        am.put("escapeKey", new AbstractAction() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                int choice = JOptionPane.showConfirmDialog(
+                        GamePanel.this,
+                        "Do you want to exit the current quiz and return to categories? 🦉",
+                        "Exit Quiz?",
+                        JOptionPane.YES_NO_OPTION,
+                        JOptionPane.QUESTION_MESSAGE
+                );
+                if (choice == JOptionPane.YES_OPTION) {
+                    nav.goToCategories();
+                }
+            }
+        });
+
+        im.put(KeyStroke.getKeyStroke(KeyEvent.VK_F1, 0), "hintKey");
+        im.put(KeyStroke.getKeyStroke(KeyEvent.VK_H, InputEvent.CTRL_DOWN_MASK), "hintKey");
+        am.put("hintKey", new AbstractAction() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                if (hintButton != null && hintButton.isEnabled()) {
+                    hintButton.doClick();
+                }
+            }
+        });
+    }
+
+
+
+    private void proposeUpgrade() {
+        String current = activeSession.getDifficulty();
+        String next = AdaptiveDifficultyEngine.upgrade(current);
+        int choice = JOptionPane.showConfirmDialog(
+                this,
+                "Archie notices you're doing amazing! 🦉\nWould you like to try the next difficulty level: " + next + "?",
+                "Level Up?",
+                JOptionPane.YES_NO_OPTION,
+                JOptionPane.QUESTION_MESSAGE
+        );
+        if (choice == JOptionPane.YES_OPTION) {
+            activeSession.setDifficulty(next);
+            feedbackLabel.setText("✨ Difficulty upgraded to " + next + "! ✨");
+            feedbackLabel.setForeground(SUCCESS_GREEN);
+        }
+    }
+
+    private void proposeDowngrade() {
+        String current = activeSession.getDifficulty();
+        String prev = AdaptiveDifficultyEngine.downgrade(current);
+        int choice = JOptionPane.showConfirmDialog(
+                this,
+                "No worries! Archie suggests taking it a bit easier. 🦉\nWould you like to change the difficulty to: " + prev + "?",
+                "Adjust Level?",
+                JOptionPane.YES_NO_OPTION,
+                JOptionPane.QUESTION_MESSAGE
+        );
+        if (choice == JOptionPane.YES_OPTION) {
+            activeSession.setDifficulty(prev);
+            feedbackLabel.setText("✨ Difficulty adjusted to " + prev + "! ✨");
+            feedbackLabel.setForeground(ACCENT_GOLD);
+        }
+    }
+
 
     // ── Widget helper ─────────────────────────────────────────────────────────
 

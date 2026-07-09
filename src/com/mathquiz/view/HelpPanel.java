@@ -3,6 +3,8 @@ package com.mathquiz.view;
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import java.awt.*;
+import com.mathquiz.config.AppTheme;
+
 
 /**
  * Persistent Help & Guide panel accessible via the ❓ button on every screen.
@@ -53,17 +55,35 @@ public class HelpPanel extends JPanel {
     private JPanel buildHeader() {
         JPanel p = new JPanel(new GridBagLayout());
         p.setOpaque(false);
-        p.setBorder(new EmptyBorder(28, 30, 10, 30));
+        p.setBorder(new EmptyBorder(20, 30, 10, 30));
 
         GridBagConstraints gbc = new GridBagConstraints();
         gbc.gridx = 0; gbc.gridy = 0; gbc.anchor = GridBagConstraints.CENTER;
 
+        // Logo
+        int row = 0;
+        try {
+            java.net.URL logoUrl = HelpPanel.class.getResource("/com/mathquiz/resources/logo.png");
+            if (logoUrl != null) {
+                ImageIcon logoIcon = new ImageIcon(logoUrl);
+                Image scaledImg = logoIcon.getImage().getScaledInstance(55, 55, Image.SCALE_SMOOTH);
+                JLabel logoLabel = new JLabel(new ImageIcon(scaledImg));
+                gbc.gridy = row++;
+                gbc.insets = new Insets(0, 0, 8, 0);
+                p.add(logoLabel, gbc);
+            }
+        } catch (Exception e) {
+            System.err.println("Could not load logo in HelpPanel: " + e.getMessage());
+        }
+
+        gbc.gridy = row++;
+        gbc.insets = new Insets(0, 0, 0, 0);
         JLabel title = new JLabel("🦉 Help & Guide");
         title.setFont(new Font("Serif", Font.PLAIN, 30));
         title.setForeground(TEXT_DARK);
         p.add(title, gbc);
 
-        gbc.gridy = 1;
+        gbc.gridy = row++;
         JLabel sub = new JLabel("Everything you need to know about Atelier Arithmetic!");
         sub.setFont(new Font("SansSerif", Font.PLAIN, 13));
         sub.setForeground(TEXT_MUTED);
@@ -145,13 +165,38 @@ public class HelpPanel extends JPanel {
 
         content.add(Box.createVerticalStrut(12));
 
-        content.add(buildSection("🦉 About Archie the Owl",
-                "Archie is your math buddy! He appears during the guided tour to show you how\n" +
-                "everything works. You can replay the full tour anytime by clicking the '🦉 Tour'\n" +
-                "button on the Home screen. Archie will walk you through everything again!"));
+        content.add(buildSection("⚙️ Settings & Customization",
+                "• DARK MODE: click the Moon icon on the Home screen to toggle professional zinc dark mode.\n" +
+                "• FONT SCALING: click the Scale button to enlarge text sizing recursively to 125% or 150%.\n" +
+                "• PROFILE SWITCHER: select your profile name in the dropdown to keep your data isolated.\n" +
+                "• SOUND EFFECTS: toggle arpeggio sound chimes and warning buzzer sounds off or on."));
+
+        content.add(Box.createVerticalStrut(12));
+
+        content.add(buildSection("🔥 Weekly Streaks & Daily Challenges",
+                "• WEEKLY CALENDAR: see checkmarks for each day of the past 7 days you completed math practice.\n" +
+                "• PRACTICE STREAK: complete at least one quiz daily to build your flame streak level.\n" +
+                "• DAILY CHALLENGE: a unique daily quiz of 10 medium questions. Prevents double-completion daily."));
+
+        content.add(Box.createVerticalStrut(12));
+
+        content.add(buildSection("📊 Analytics, Smart Practice & Quiz Builder",
+                "• CHARTS: line charts show accuracy trends; hexagonal radar charts show category strengths.\n" +
+                "• SMART PRACTICE: click Practice on the Home screen to play a quiz custom-designed to address your weakest topic.\n" +
+                "• QUIZ BUILDER: Parents & Teachers can build custom math quiz sets and load them via the dropdown."));
+
+        content.add(Box.createVerticalStrut(12));
+
+        content.add(buildSection("🎨 About Atelier Arithmetic & Archie",
+                "Atelier Arithmetic is a premium math quiz and intelligence learning studio built for children.\n\n" +
+                "Archie the Owl is your mathematics guide! He will help you during the interactive tour, " +
+                "provide hints during calculations, and offer helpful learning suggestions on the results dashboard.\n\n" +
+                "Version: 1.0.0\n" +
+                "Brand and mascot designs by Atelier Arithmetic Studio. All rights reserved."));
 
         JScrollPane scroll = new JScrollPane(content);
-        scroll.setBorder(BorderFactory.createLineBorder(BORDER_CLR, 0));
+        scroll.setBorder(BorderFactory.createEmptyBorder());
+        scroll.setViewportBorder(BorderFactory.createEmptyBorder());
         scroll.getVerticalScrollBar().setUnitIncrement(16);
         scroll.getViewport().setBackground(BG_PRIMARY);
         return scroll;
@@ -218,4 +263,56 @@ public class HelpPanel extends JPanel {
             default:           nav.goToWelcome();
         }
     }
+    public void applyTheme() {
+        setBackground(AppTheme.getBgPrimary());
+        recolorTree(this);
+    }
+
+    private void recolorTree(Container parent) {
+        for (Component c : parent.getComponents()) {
+            if (c instanceof JPanel) {
+                JPanel p = (JPanel) c;
+                if (p.isOpaque() && p != this) {
+                    p.setBackground(AppTheme.getBgCard());
+                    p.setBorder(BorderFactory.createCompoundBorder(
+                            BorderFactory.createLineBorder(AppTheme.getBorderClr(), 1),
+                            new EmptyBorder(12, 16, 12, 16)));
+                } else {
+                    p.setBackground(AppTheme.getBgPrimary());
+                }
+                recolorTree(p);
+            } else if (c instanceof JLabel) {
+                JLabel lbl = (JLabel) c;
+                if (lbl.getFont().getSize() > 20) {
+                    lbl.setForeground(AppTheme.getTextDark());
+                } else if (lbl.getFont().getSize() > 11) {
+                    lbl.setForeground(AppTheme.getAccentGold());
+                } else {
+                    if (lbl.getText().startsWith("<html>")) {
+                        String colorHex = AppTheme.isDarkMode() ? "#aaa" : "#555";
+                        String textClean = lbl.getText().replaceAll("color:#[0-9a-fA-F]+", "color:" + colorHex);
+                        lbl.setText(textClean);
+                    }
+                    lbl.setForeground(AppTheme.getTextMuted());
+                }
+            } else if (c instanceof JButton) {
+                JButton btn = (JButton) c;
+                if (btn.getText().contains("Back")) {
+                    btn.setBackground(AppTheme.getTextDark());
+                    btn.setForeground(AppTheme.getBgCard());
+                } else {
+                    btn.setBackground(AppTheme.getBgPrimary());
+                    btn.setForeground(AppTheme.getTextMuted());
+                }
+            } else if (c instanceof JScrollPane) {
+                JScrollPane s = (JScrollPane) c;
+                s.getViewport().setBackground(AppTheme.getBgPrimary());
+                Component view = s.getViewport().getView();
+                if (view instanceof Container) {
+                    recolorTree((Container) view);
+                }
+            }
+        }
+    }
 }
+
