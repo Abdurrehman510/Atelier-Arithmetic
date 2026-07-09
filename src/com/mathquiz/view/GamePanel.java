@@ -51,7 +51,8 @@ public class GamePanel extends JPanel {
     private JLabel       eqLabel;
     private JButton      helpButton;
     private JButton      hintButton;
-    private JLabel       hintLabel;
+    private JPanel       hintPanel;
+    private JLabel       hintTextLabel;
 
 
 
@@ -216,7 +217,10 @@ public class GamePanel extends JPanel {
         hintButton.addActionListener(e -> {
             if (currentQuestion != null) {
                 String hint = com.mathquiz.service.HintService.generateHint(currentQuestion.getExpression());
-                hintLabel.setText(hint);
+                hintTextLabel.setText(hint);
+                hintPanel.setVisible(true);
+                playCard.revalidate();
+                playCard.repaint();
             }
         });
         fieldRow.add(hintButton);
@@ -236,12 +240,21 @@ public class GamePanel extends JPanel {
         feedbackLabel.setForeground(TEXT_MUTED);
         playCard.add(feedbackLabel, c);
 
-        // ── Hint label ────────────────────────────────────────────────────────
+        // ── Hint Box Panel ───────────────────────────────────────────────────
         c.gridy     = 3;
-        hintLabel = new JLabel(" ", SwingConstants.CENTER);
-        hintLabel.setFont(new Font("SansSerif", Font.PLAIN, 11));
-        hintLabel.setForeground(TEXT_MUTED);
-        playCard.add(hintLabel, c);
+        hintPanel = new JPanel(new BorderLayout(10, 0));
+        hintPanel.setOpaque(true);
+        hintPanel.setVisible(false);
+
+        JLabel hintIcon = new JLabel("💡");
+        hintIcon.setFont(new Font("SansSerif", Font.PLAIN, 15));
+        hintPanel.add(hintIcon, BorderLayout.WEST);
+
+        hintTextLabel = new JLabel("");
+        hintTextLabel.setFont(new Font("SansSerif", Font.PLAIN, 12));
+        hintPanel.add(hintTextLabel, BorderLayout.CENTER);
+
+        playCard.add(hintPanel, c);
 
         outer.add(playCard);
         return outer;
@@ -329,8 +342,9 @@ public class GamePanel extends JPanel {
         answerField.requestFocusInWindow();
         feedbackLabel.setText(" ");
         feedbackLabel.setForeground(TEXT_MUTED);
-        if (hintLabel != null) {
-            hintLabel.setText(" ");
+        if (hintPanel != null) {
+            hintPanel.setVisible(false);
+            hintTextLabel.setText("");
         }
 
 
@@ -452,8 +466,14 @@ public class GamePanel extends JPanel {
                     BorderFactory.createLineBorder(AppTheme.getBorderClr(), 1),
                     new EmptyBorder(6, 12, 6, 12)));
         }
-        if (hintLabel != null) {
-            hintLabel.setForeground(AppTheme.getAccentGold());
+        if (hintPanel != null) {
+            hintPanel.setBackground(AppTheme.isDarkMode() ? new Color(40, 38, 35) : new Color(254, 252, 246));
+            hintPanel.setBorder(BorderFactory.createCompoundBorder(
+                    BorderFactory.createLineBorder(AppTheme.getAccentGold(), 1),
+                    new EmptyBorder(8, 12, 8, 12)));
+        }
+        if (hintTextLabel != null) {
+            hintTextLabel.setForeground(AppTheme.getTextDark());
         }
     }
 
