@@ -81,8 +81,8 @@ public class QuizFrame extends JFrame implements QuizNavigator {
     public QuizFrame() {
         // ── Frame setup ────────────────────────────────────────────────────────
         setTitle("Atelier Arithmetic · Royal Math Quiz");
-        setSize(800, 580);
-        setMinimumSize(new Dimension(700, 510));
+        setSize(820, 620);
+        setMinimumSize(new Dimension(720, 550));
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLocationRelativeTo(null);
 

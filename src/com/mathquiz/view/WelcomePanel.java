@@ -189,11 +189,11 @@ public class WelcomePanel extends JPanel {
         card.setBackground(BG_CARD);
         card.setBorder(BorderFactory.createCompoundBorder(
                 BorderFactory.createLineBorder(BORDER_CLR, 1),
-                new EmptyBorder(30, 40, 30, 40)));
+                new EmptyBorder(18, 30, 18, 30)));
 
         GridBagConstraints c = new GridBagConstraints();
         c.fill   = GridBagConstraints.HORIZONTAL;
-        c.insets = new Insets(10, 10, 10, 10);
+        c.insets = new Insets(6, 10, 6, 10);
 
         // ── Row 0: Question count ─────────────────────────────────────────────
         c.gridx = 0; c.gridy = 0;
@@ -251,6 +251,14 @@ public class WelcomePanel extends JPanel {
 
         card.add(customBtnsPanel, c);
 
+        // ── Row 3: Start Button ───────────────────────────────────────────────
+        c.gridx = 0; c.gridy = 3;
+        c.gridwidth = 2;
+        c.insets = new Insets(14, 10, 4, 10);
+        startButton = makePrimaryButton("CHOOSE CATEGORY  →");
+        startButton.addActionListener(e -> handleStart());
+        card.add(startButton, c);
+
         outer.add(card);
         return outer;
     }
@@ -290,7 +298,7 @@ public class WelcomePanel extends JPanel {
     private JPanel buildFooter() {
         JPanel panel = new JPanel(new FlowLayout(FlowLayout.CENTER, 15, 0));
         panel.setOpaque(false);
-        panel.setBorder(new EmptyBorder(10, 10, 45, 10));
+        panel.setBorder(new EmptyBorder(8, 10, 20, 10));
 
         // Help button ❓
         JButton helpBtn = makeIconButton("❓ Guide");
@@ -312,16 +320,10 @@ public class WelcomePanel extends JPanel {
         smartPracticeBtn.addActionListener(e -> nav.startSmartPractice());
         panel.add(smartPracticeBtn);
 
-
         // Achievements button 🏆
         achievementsBtn = makeIconButton("🏆 Badges");
         achievementsBtn.addActionListener(e -> nav.showAchievements());
         panel.add(achievementsBtn);
-
-        // Main action
-        startButton = makePrimaryButton("CHOOSE CATEGORY  →");
-        startButton.addActionListener(e -> handleStart());
-        panel.add(startButton);
 
         return panel;
     }
