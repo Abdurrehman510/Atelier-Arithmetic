@@ -50,9 +50,32 @@ public class AppTheme {
     public static Color getBorderClr()  { return darkMode ? DARK_BORDER_CLR  : LIGHT_BORDER_CLR; }
     public static Color getAccentGold() { return darkMode ? DARK_ACCENT_GOLD : LIGHT_ACCENT_GOLD; }
 
-    /** Recursively scales all component fonts in the tree based on a scale factor. */
-    public static void scaleComponentFont(Component c, double scale) {
+    /** Recursively scales all component fonts and attaches hover/click sound effects. */
+    public static void scaleComponentFont(Component c, double scale, com.mathquiz.service.SoundService sound) {
         if (c == null) return;
+
+        // Automatically instrument button hover and clicks with low-latency synthetic sounds
+        if (c instanceof javax.swing.JButton) {
+            javax.swing.JButton btn = (javax.swing.JButton) c;
+            if (btn.getClientProperty("soundAttached") == null) {
+                btn.putClientProperty("soundAttached", Boolean.TRUE);
+                btn.addMouseListener(new java.awt.event.MouseAdapter() {
+                    @Override
+                    public void mouseEntered(java.awt.event.MouseEvent e) {
+                        if (btn.isEnabled() && sound != null) {
+                            sound.playHover();
+                        }
+                    }
+                    @Override
+                    public void mousePressed(java.awt.event.MouseEvent e) {
+                        if (btn.isEnabled() && sound != null) {
+                            sound.playClick();
+                        }
+                    }
+                });
+            }
+        }
+
         Font f = c.getFont();
         if (f != null && c instanceof JComponent) {
             JComponent jc = (JComponent) c;
@@ -69,7 +92,7 @@ public class AppTheme {
         }
         if (c instanceof Container) {
             for (Component child : ((Container) c).getComponents()) {
-                scaleComponentFont(child, scale);
+                scaleComponentFont(child, scale, sound);
             }
         }
     }

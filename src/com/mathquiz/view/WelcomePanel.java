@@ -413,7 +413,7 @@ public class WelcomePanel extends JPanel {
         // Sound Toggle
         soundToggleBtn = new JButton(getConfigSoundEmoji() + " Sound");
         styleToggleBtn(soundToggleBtn);
-        soundToggleBtn.addActionListener(e -> toggleSound());
+        soundToggleBtn.addActionListener(e -> showSoundMenu(soundToggleBtn));
         bar.add(soundToggleBtn);
 
         // Theme Toggle
@@ -516,7 +516,59 @@ public class WelcomePanel extends JPanel {
     private void toggleSound() {
         boolean current = config.isSoundEnabled();
         config.setSoundEnabled(!current);
-        soundToggleBtn.setText(getConfigSoundEmoji() + " Sound");
+        if (nav instanceof QuizFrame) {
+            ((QuizFrame) nav).updateAllThemes();
+        }
+    }
+
+    private void showSoundMenu(Component parent) {
+        JPopupMenu menu = new JPopupMenu();
+        menu.setBackground(AppTheme.getBgCard());
+
+        boolean soundOn = config.isSoundEnabled();
+        JMenuItem muteItem = new JMenuItem((soundOn ? "🔊  Mute Sound" : "🔇  Unmute Sound"));
+        muteItem.setFont(new Font("SansSerif", Font.PLAIN, 12));
+        muteItem.setBackground(AppTheme.getBgCard());
+        muteItem.setForeground(AppTheme.getTextDark());
+        muteItem.addActionListener(e -> {
+            toggleSound();
+            com.mathquiz.service.SoundService snd = getSound();
+            if (snd != null) snd.playClick();
+        });
+        menu.add(muteItem);
+
+        menu.addSeparator();
+
+        int currentVol = config.getSoundVolume();
+        int[] vols = {100, 75, 50, 25};
+        for (int v : vols) {
+            boolean isCurrent = soundOn && (currentVol == v);
+            JMenuItem volItem = new JMenuItem((isCurrent ? "✓ " : "  ") + v + "% Volume");
+            volItem.setFont(new Font("SansSerif", isCurrent ? Font.BOLD : Font.PLAIN, 12));
+            volItem.setBackground(AppTheme.getBgCard());
+            volItem.setForeground(AppTheme.getTextDark());
+            volItem.setEnabled(soundOn);
+            volItem.addActionListener(e -> {
+                config.setSoundVolume(v);
+                com.mathquiz.service.SoundService snd = getSound();
+                if (snd != null) {
+                    snd.playClick();
+                }
+                if (nav instanceof QuizFrame) {
+                    ((QuizFrame) nav).updateAllThemes();
+                }
+            });
+            menu.add(volItem);
+        }
+
+        menu.show(parent, 0, parent.getHeight());
+    }
+
+    private com.mathquiz.service.SoundService getSound() {
+        if (nav instanceof QuizFrame) {
+            return ((QuizFrame) nav).getSoundService();
+        }
+        return null;
     }
 
     private String getConfigSoundEmoji() {
@@ -675,7 +727,11 @@ public class WelcomePanel extends JPanel {
             startButton.setForeground(AppTheme.getBgCard());
         }
 
-        if (soundToggleBtn != null) styleToggleBtn(soundToggleBtn);
+        if (soundToggleBtn != null) {
+            String volStr = config.isSoundEnabled() ? " " + config.getSoundVolume() + "%" : " Muted";
+            soundToggleBtn.setText(getConfigSoundEmoji() + volStr);
+            styleToggleBtn(soundToggleBtn);
+        }
         if (themeToggleBtn != null) {
             themeToggleBtn.setText(AppTheme.isDarkMode() ? "☀️ Light" : "🌙 Dark");
             styleToggleBtn(themeToggleBtn);

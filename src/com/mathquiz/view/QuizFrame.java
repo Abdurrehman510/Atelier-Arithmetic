@@ -205,6 +205,7 @@ public class QuizFrame extends JFrame implements QuizNavigator {
             timerRef[0].setRepeats(false);
             SwingUtilities.invokeLater(() -> timerRef[0].start());
         }
+        soundService.playLaunch();
     }
 
     // =========================================================================
@@ -213,6 +214,7 @@ public class QuizFrame extends JFrame implements QuizNavigator {
 
     @Override
     public void goToWelcome() {
+        soundService.playTransition();
         cardLayout.show(mainPanel, CARD_WELCOME);
         welcomePanel.focusDefaultField();
         maybeContinueTour(CARD_WELCOME);
@@ -220,6 +222,7 @@ public class QuizFrame extends JFrame implements QuizNavigator {
 
     @Override
     public void goToCategories() {
+        soundService.playTransition();
         categoryPanel.configure(
                 welcomePanel.getQuestionCount(),
                 welcomePanel.getDifficulty());
@@ -230,6 +233,7 @@ public class QuizFrame extends JFrame implements QuizNavigator {
 
     @Override
     public void startQuiz(String category, int questionCount, String difficulty) {
+        soundService.playQuizStart();
         lastSession = new QuizSession(questionCount, difficulty, category);
         gamePanel.startSession(lastSession);
         cardLayout.show(mainPanel, CARD_GAME);
@@ -240,9 +244,11 @@ public class QuizFrame extends JFrame implements QuizNavigator {
     public void finishQuiz(QuizSession session) {
         if (session == null) {
             // Called from ReviewPanel "Back to Results" — just navigate back
+            soundService.playTransition();
             cardLayout.show(mainPanel, CARD_RESULTS);
             return;
         }
+        soundService.playFanfare();
         if (session.getCategory().equalsIgnoreCase("Daily Challenge")) {
             java.text.SimpleDateFormat sdf = new java.text.SimpleDateFormat("yyyyMMdd");
             String todayStr = sdf.format(new java.util.Date());
@@ -259,6 +265,7 @@ public class QuizFrame extends JFrame implements QuizNavigator {
 
     @Override
     public void showReview(QuizSession session) {
+        soundService.playTransition();
         if (lastSession == null) return;
         reviewPanel.populate(lastSession, CARD_RESULTS);
         cardLayout.show(mainPanel, CARD_REVIEW);
@@ -266,30 +273,35 @@ public class QuizFrame extends JFrame implements QuizNavigator {
 
     @Override
     public void showHelp(String returnScreen) {
+        soundService.playTransition();
         helpPanel.setReturnScreen(returnScreen);
         cardLayout.show(mainPanel, CARD_HELP);
     }
 
     @Override
     public void showAnalytics() {
+        soundService.playTransition();
         analyticsPanel.refresh();
         cardLayout.show(mainPanel, CARD_ANALYTICS);
     }
 
     @Override
     public void startSmartPractice() {
+        soundService.playTransition();
         smartPracticePanel.refresh();
         cardLayout.show(mainPanel, CARD_SMART_PRACTICE);
     }
 
     @Override
     public void showAchievements() {
+        soundService.playTransition();
         achievementsPanel.refresh();
         cardLayout.show(mainPanel, CARD_ACHIEVEMENTS);
     }
 
     @Override
     public void startDailyChallenge() {
+        soundService.playQuizStart();
         String category = "Daily Challenge";
         String difficulty = "Medium";
         int questionCount = 10;
@@ -302,6 +314,7 @@ public class QuizFrame extends JFrame implements QuizNavigator {
 
     @Override
     public void launchTour() {
+        soundService.playTransition();
         // Always restart from the welcome card
         cardLayout.show(mainPanel, CARD_WELCOME);
         tourManager.startTourForScreen(CARD_WELCOME);
@@ -309,11 +322,13 @@ public class QuizFrame extends JFrame implements QuizNavigator {
 
     @Override
     public void showQuizBuilder() {
+        soundService.playTransition();
         cardLayout.show(mainPanel, CARD_QUIZ_BUILDER);
     }
 
     @Override
     public void startCustomQuiz(String quizName, java.util.List<com.mathquiz.model.Question> questions) {
+        soundService.playQuizStart();
         lastSession = new QuizSession(questions.size(), "Medium", "Custom: " + quizName);
         gamePanel.startSession(lastSession, questions);
         cardLayout.show(mainPanel, CARD_GAME);
@@ -365,7 +380,7 @@ public class QuizFrame extends JFrame implements QuizNavigator {
 
         // Dynamically apply scalable font size factor
         double scale = config.getFontSizeScale();
-        AppTheme.scaleComponentFont(this, scale);
+        AppTheme.scaleComponentFont(this, scale, soundService);
 
         SwingUtilities.updateComponentTreeUI(this);
         repaint();
@@ -380,6 +395,10 @@ public class QuizFrame extends JFrame implements QuizNavigator {
         if (tourManager.isActive() && tourManager.hasStepsForScreen(screen)) {
             tourManager.startTourForScreen(screen);
         }
+    }
+
+    public SoundService getSoundService() {
+        return soundService;
     }
 }
 

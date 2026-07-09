@@ -56,6 +56,19 @@ public class AppConfig {
         save();
     }
 
+    public int getSoundVolume() {
+        try {
+            return Integer.parseInt(props.getProperty("soundVolume", "70"));
+        } catch (NumberFormatException e) {
+            return 70;
+        }
+    }
+
+    public void setSoundVolume(int volume) {
+        props.setProperty("soundVolume", Integer.toString(volume));
+        save();
+    }
+
     public boolean isDarkMode() {
         return Boolean.parseBoolean(props.getProperty("darkMode", "false"));
     }

@@ -291,6 +291,7 @@ public class GamePanel extends JPanel {
         questionTimer = new javax.swing.Timer(1000, e -> {
             elapsedSeconds++;
             timerLabel.setText("⏱ " + elapsedSeconds + "s");
+            sound.playTick();
         });
     }
 
