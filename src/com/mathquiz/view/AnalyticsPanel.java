@@ -122,10 +122,10 @@ public class AnalyticsPanel extends JPanel {
         body.add(statCardsHolder);
         body.add(Box.createVerticalStrut(18));
 
-        // 2. Chart row
+        // 2. Chart row (Enlarged for better charts readability)
         JPanel chartRow = new JPanel(new GridLayout(1, 2, 20, 0));
         chartRow.setOpaque(false);
-        chartRow.setMaximumSize(new Dimension(Integer.MAX_VALUE, 280));
+        chartRow.setMaximumSize(new Dimension(Integer.MAX_VALUE, 330));
 
         lineChart  = new LineChartPanel();
         radarChart = new RadarChartPanel();
@@ -201,10 +201,11 @@ public class AnalyticsPanel extends JPanel {
         historyRow.add(wrapCard(goalsPanel, "🚀 Learning Goals & Quick Actions"));
         body.add(historyRow);
 
-        // Scroll wrap
+        // Scroll wrap (Forced vertical-only scrolling to prevent horizontal bar)
         JScrollPane scroll = new JScrollPane(body);
         scroll.setBorder(BorderFactory.createEmptyBorder());
         scroll.setViewportBorder(BorderFactory.createEmptyBorder());
+        scroll.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
         scroll.getVerticalScrollBar().setUnitIncrement(16);
         scroll.setOpaque(false);
         scroll.getViewport().setOpaque(false);
@@ -311,7 +312,7 @@ public class AnalyticsPanel extends JPanel {
         statCardsHolder.add(makeStatCard("Overall Accuracy", fmt(avgScore) + "%", accuracySubtitle, "📈"));
 
         String countSubtitle = "Practice: " + formatTime(totalSecs);
-        statCardsHolder.add(makeStatCard("Questions Solved", String.valueOf(totalQuestions), countSubtitle, "🧩"));
+        statCardsHolder.add(makeStatCard("Questions Solved", String.valueOf(totalQuestions), countSubtitle, "✏"));
 
         String speedSubtitle = "Fastest correct: " + (fastestSpeed == 0.0 ? "N/A" : fmt(fastestSpeed) + "s");
         statCardsHolder.add(makeStatCard("Average Speed", (avgSpeed == 0.0 ? "N/A" : fmt(avgSpeed) + "s"), speedSubtitle, "⏱"));
@@ -495,47 +496,42 @@ public class AnalyticsPanel extends JPanel {
     }
 
     private JPanel makeStatCard(String label, String value, String subtitle, String icon) {
-        JPanel card = new JPanel(new GridBagLayout());
+        JPanel card = new JPanel(new BorderLayout());
         card.setBackground(BG_CARD);
         card.setOpaque(true);
         card.setBorder(BorderFactory.createCompoundBorder(
                 BorderFactory.createLineBorder(BORDER_CLR, 1),
-                new EmptyBorder(8, 12, 8, 12)));
+                new EmptyBorder(12, 14, 12, 14)));
 
-        GridBagConstraints c = new GridBagConstraints();
-        c.gridx = 0; c.anchor = GridBagConstraints.WEST;
-
-        // Header line: icon & label side-by-side
-        JPanel head = new JPanel(new FlowLayout(FlowLayout.LEFT, 6, 0));
-        head.setOpaque(false);
         JLabel iconLbl = new JLabel(icon);
-        iconLbl.setFont(new Font("SansSerif", Font.PLAIN, 16));
-        head.add(iconLbl);
+        iconLbl.setFont(new Font("SansSerif", Font.PLAIN, 26));
+        iconLbl.setBorder(new EmptyBorder(2, 4, 2, 12));
+        iconLbl.setForeground(ACCENT_GOLD);
+        card.add(iconLbl, BorderLayout.WEST);
 
-        JLabel lblLbl = new JLabel(label);
-        lblLbl.setFont(new Font("SansSerif", Font.BOLD, 10));
+        JPanel txtPanel = new JPanel();
+        txtPanel.setOpaque(false);
+        txtPanel.setLayout(new BoxLayout(txtPanel, BoxLayout.Y_AXIS));
+
+        JLabel lblLbl = new JLabel(label.toUpperCase());
+        lblLbl.setFont(new Font("SansSerif", Font.BOLD, 9));
         lblLbl.setForeground(TEXT_MUTED);
-        head.add(lblLbl);
 
-        c.gridy = 0;
-        card.add(head, c);
-
-        // Big value
-        c.gridy = 1;
-        c.insets = new Insets(4, 8, 2, 8);
         JLabel valLbl = new JLabel(value);
         valLbl.setFont(new Font("Serif", Font.BOLD, 22));
         valLbl.setForeground(TEXT_DARK);
-        card.add(valLbl, c);
 
-        // Subtitle line
-        c.gridy = 2;
-        c.insets = new Insets(0, 8, 0, 8);
         JLabel subLbl = new JLabel(subtitle);
         subLbl.setFont(new Font("SansSerif", Font.PLAIN, 10));
         subLbl.setForeground(TEXT_MUTED);
-        card.add(subLbl, c);
 
+        txtPanel.add(lblLbl);
+        txtPanel.add(Box.createVerticalStrut(2));
+        txtPanel.add(valLbl);
+        txtPanel.add(Box.createVerticalStrut(2));
+        txtPanel.add(subLbl);
+
+        card.add(txtPanel, BorderLayout.CENTER);
         return card;
     }
 
@@ -671,7 +667,7 @@ public class AnalyticsPanel extends JPanel {
 
         RadarChartPanel() {
             setOpaque(false);
-            setPreferredSize(new Dimension(280, 200));
+            setPreferredSize(new Dimension(340, 270));
         }
 
         void setData(Map<String, Double> d) { this.data = d; repaint(); }
@@ -685,7 +681,7 @@ public class AnalyticsPanel extends JPanel {
             int w = getWidth(), h = getHeight();
             float cx = w / 2f;
             float cy = h / 2f - 8;
-            float maxR = Math.min(cx, cy) - 28;
+            float maxR = Math.min(cx - 40, cy - 14);
 
             int n = CATEGORY_LABELS.length;
 
@@ -753,8 +749,8 @@ public class AnalyticsPanel extends JPanel {
                 g2.fillOval((int) dataX[i] - 4, (int) dataY[i] - 4, 8, 8);
 
                 double angle = -Math.PI / 2 + 2 * Math.PI * i / n;
-                float lx = (float)(cx + (maxR + 14) * Math.cos(angle));
-                float ly = (float)(cy + (maxR + 14) * Math.sin(angle));
+                float lx = (float)(cx + (maxR + 12) * Math.cos(angle));
+                float ly = (float)(cy + (maxR + 12) * Math.sin(angle));
                 String label = CATEGORY_LABELS[i];
                 FontMetrics fm = g2.getFontMetrics();
                 g2.setColor(AppTheme.getTextMuted());
