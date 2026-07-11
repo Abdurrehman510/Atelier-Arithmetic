@@ -7,6 +7,9 @@ bin/
 *.war
 *.ear
 
+# Allow library dependency jars to be committed
+!lib/*.jar
+
 # ── IDE project files ─────────────────────────────────────────────────────────
 # IntelliJ IDEA
 .idea/
