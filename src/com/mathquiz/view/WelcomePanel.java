@@ -622,30 +622,118 @@ public class WelcomePanel extends JPanel {
     }
 
     private void createProfile() {
-        String name = JOptionPane.showInputDialog(
-                this,
-                "Enter new profile name: 🦉",
-                "Create Profile",
-                JOptionPane.QUESTION_MESSAGE
+        JDialog dialog = new JDialog((Frame) SwingUtilities.getWindowAncestor(this), "Create Profile 🦉", true);
+        dialog.setLayout(new BorderLayout(10, 10));
+        dialog.setBackground(AppTheme.getBgPrimary());
+
+        JPanel mainPanel = new JPanel();
+        mainPanel.setLayout(new BoxLayout(mainPanel, BoxLayout.Y_AXIS));
+        mainPanel.setBorder(new EmptyBorder(16, 16, 16, 16));
+        mainPanel.setBackground(AppTheme.getBgPrimary());
+
+        // Header Title
+        JLabel title = new JLabel("Create Child Profile");
+        title.setFont(new Font("Serif", Font.BOLD, 18));
+        title.setForeground(AppTheme.getTextDark());
+        title.setAlignmentX(Component.LEFT_ALIGNMENT);
+        mainPanel.add(title);
+        mainPanel.add(Box.createVerticalStrut(10));
+
+        // Privacy Warning Block (COPPA/GDPR-K Compliance Notice)
+        JLabel warning = new JLabel(
+            "<html><body>" +
+            "<b>🦉 Privacy First:</b> To protect child safety, please do not use your real " +
+            "first or last name! Choose a fun nickname or generate a mascot name below." +
+            "</body></html>"
         );
-        if (name != null) {
-            name = name.trim();
+        warning.setFont(new Font("SansSerif", Font.PLAIN, 11));
+        warning.setForeground(AppTheme.getTextMuted());
+        warning.setBorder(BorderFactory.createCompoundBorder(
+            BorderFactory.createLineBorder(AppTheme.getBorderClr(), 1),
+            new EmptyBorder(8, 8, 8, 8)
+        ));
+        warning.setAlignmentX(Component.LEFT_ALIGNMENT);
+        mainPanel.add(warning);
+        mainPanel.add(Box.createVerticalStrut(14));
+
+        // Input row
+        JPanel inputRow = new JPanel(new BorderLayout(8, 0));
+        inputRow.setOpaque(false);
+        inputRow.setAlignmentX(Component.LEFT_ALIGNMENT);
+
+        JTextField nameField = new JTextField();
+        nameField.setFont(new Font("SansSerif", Font.PLAIN, 13));
+        nameField.setBackground(AppTheme.getBgCard());
+        nameField.setForeground(AppTheme.getTextDark());
+        nameField.setBorder(BorderFactory.createCompoundBorder(
+            BorderFactory.createLineBorder(AppTheme.getBorderClr(), 1),
+            new EmptyBorder(6, 8, 6, 8)
+        ));
+        inputRow.add(nameField, BorderLayout.CENTER);
+
+        JButton generateBtn = new JButton("🎭 Spark Mascot Name");
+        generateBtn.setFont(new Font("SansSerif", Font.BOLD, 11));
+        generateBtn.setBackground(AppTheme.getAccentGold());
+        generateBtn.setForeground(AppTheme.getBgPrimary());
+        generateBtn.setFocusPainted(false);
+        generateBtn.setCursor(new Cursor(Cursor.HAND_CURSOR));
+        generateBtn.addActionListener(e -> {
+            String[] adjectives = {"Happy", "Clever", "Swift", "Bright", "Merry", "Kind", "Calm", "Brave", "Shiny", "Friendly", "Loyal", "Sparkly"};
+            String[] animals = {"Owl", "Panda", "Cheetah", "Squirrel", "Dolphin", "Penguin", "Tiger", "Koala", "Otter", "Badger", "Fox", "Falcon"};
+            Random rand = new Random();
+            String randomName = adjectives[rand.nextInt(adjectives.length)] + " " + animals[rand.nextInt(animals.length)];
+            nameField.setText(randomName);
+        });
+        inputRow.add(generateBtn, BorderLayout.EAST);
+        mainPanel.add(inputRow);
+        mainPanel.add(Box.createVerticalStrut(18));
+
+        // Actions Row
+        JPanel actionsRow = new JPanel(new FlowLayout(FlowLayout.RIGHT, 10, 0));
+        actionsRow.setOpaque(false);
+        actionsRow.setAlignmentX(Component.LEFT_ALIGNMENT);
+
+        JButton cancelBtn = new JButton("Cancel");
+        styleToggleBtn(cancelBtn);
+        cancelBtn.addActionListener(e -> dialog.dispose());
+        actionsRow.add(cancelBtn);
+
+        JButton createBtn = new JButton("Create Profile");
+        createBtn.setFont(new Font("SansSerif", Font.BOLD, 12));
+        createBtn.setBackground(AppTheme.getBgCard());
+        createBtn.setForeground(new Color(34, 139, 34));
+        createBtn.setFocusPainted(false);
+        createBtn.setBorder(BorderFactory.createCompoundBorder(
+            BorderFactory.createLineBorder(AppTheme.getBorderClr(), 1),
+            new EmptyBorder(6, 16, 6, 16)
+        ));
+        createBtn.setCursor(new Cursor(Cursor.HAND_CURSOR));
+        createBtn.addActionListener(e -> {
+            String name = nameField.getText().trim();
             if (name.isEmpty()) {
-                JOptionPane.showMessageDialog(this, "Profile name cannot be empty!", "Error", JOptionPane.ERROR_MESSAGE);
+                JOptionPane.showMessageDialog(dialog, "Profile name cannot be empty!", "Error", JOptionPane.ERROR_MESSAGE);
                 return;
             }
             if (!name.matches("[a-zA-Z0-9_ ]+")) {
-                JOptionPane.showMessageDialog(this, "Profile name contains invalid characters!", "Error", JOptionPane.ERROR_MESSAGE);
+                JOptionPane.showMessageDialog(dialog, "Profile name contains invalid characters!", "Error", JOptionPane.ERROR_MESSAGE);
                 return;
             }
             if (name.length() > 15) {
-                JOptionPane.showMessageDialog(this, "Profile name must be 15 characters or less!", "Error", JOptionPane.ERROR_MESSAGE);
+                JOptionPane.showMessageDialog(dialog, "Profile name must be 15 characters or less!", "Error", JOptionPane.ERROR_MESSAGE);
                 return;
             }
-
             config.addProfile(name);
             switchProfile(name);
-        }
+            dialog.dispose();
+        });
+        actionsRow.add(createBtn);
+        mainPanel.add(actionsRow);
+
+        dialog.add(mainPanel);
+        dialog.pack();
+        dialog.setResizable(false);
+        dialog.setLocationRelativeTo(this);
+        dialog.setVisible(true);
     }
 
     private void styleToggleBtn(JButton btn) {

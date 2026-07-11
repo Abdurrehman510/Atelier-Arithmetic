@@ -149,15 +149,30 @@ public class AppConfig {
     private void load() {
         File f = new File(CFG_FILE);
         if (!f.exists()) return;
-        try (InputStream in = new FileInputStream(f)) {
-            props.load(in);
-        } catch (IOException ignored) {}
+        try {
+            byte[] bytes = Files.readAllBytes(f.toPath());
+            String fileContent = new String(bytes, java.nio.charset.StandardCharsets.UTF_8);
+            String decrypted = com.mathquiz.util.CryptoHelper.decrypt(fileContent);
+            try (StringReader sr = new StringReader(decrypted)) {
+                props.load(sr);
+            }
+        } catch (IOException e) {
+            System.err.println("Failed to decrypt and load config: " + e.getMessage());
+        }
     }
 
     private void save() {
-        try (OutputStream out = new FileOutputStream(CFG_FILE)) {
-            props.store(out, "Atelier Arithmetic — User Configuration");
-        } catch (IOException ignored) {}
+        try {
+            StringWriter sw = new StringWriter();
+            props.store(sw, "Atelier Arithmetic — Secure Config");
+            String plainText = sw.toString();
+            String cipherText = com.mathquiz.util.CryptoHelper.encrypt(plainText);
+            try (FileOutputStream fos = new FileOutputStream(CFG_FILE)) {
+                fos.write(cipherText.getBytes(java.nio.charset.StandardCharsets.UTF_8));
+            }
+        } catch (IOException e) {
+            System.err.println("Failed to encrypt and save config: " + e.getMessage());
+        }
     }
 
     /** Returns the path used to store app data (history, config). */

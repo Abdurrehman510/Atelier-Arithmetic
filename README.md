@@ -273,6 +273,27 @@ To ensure enterprise-grade stability, data protection, and profile scaling, the 
 
 ---
 
+## 🔒 Security, Child Safety & Privacy Compliance (COPPA / GDPR-K)
+
+Atelier Arithmetic implements strict privacy-by-design principles to ensure compliance with the Children's Online Privacy Protection Act (**COPPA**) and **GDPR-K** guidelines for minors:
+
+### 1. Zero PII Data Collection (Data Minimization)
+- **Local-First Isolation**: All user profile data, stats, achievements, settings, and learning histories are stored strictly offline locally on the client machine. The application makes zero external network queries, protecting children from data leaks or cloud breaches.
+- **COPPA Profile Creation Dialog**: When adding a profile, the user is presented with a privacy directive stating: *"To protect child safety, please do not use your real first or last name!"*
+- **Mascot Name Generator**: Children can click the **🎭 Spark Mascot Name** button to generate fun, adjective-animal pseudonym profile names (e.g. *"Calm Dolphin"*, *"Clever Fox"*) without revealing personally identifiable information.
+
+### 2. Secure Local Data Encryption (AES-128)
+To prevent local tampering, cheating (unlocking badges or altering score percentages), or unauthorized reading of a child's study records, the application implements AES-128 symmetric encryption:
+- **Unique Machine Key Derivation**: Encryption keys are dynamically derived from hardware/OS parameters (`user.name`, `os.name`, `user.home`) processed via a SHA-256 hash. This binds the database to the host machine.
+- **Secure SQLite Persistence**: Sensitive fields inside the relational database (profile names, math categories, difficulty ratings, accuracy scores, and custom expression keys) are stored as encrypted Base64 ciphertexts.
+- **Secure Preferences**: User options stored inside `config.properties` are fully encrypted.
+
+### 3. Word-Based Math Parental Gates
+Administrative controls and data deletion parameters are locked behind a **Parental Gate** to ensure parent/teacher oversight:
+- **Math Verification Locks**: Opening the **Quiz Builder**, editing custom lists, or clicking **🗑 Reset History** launches a random text-based arithmetic lock challenge (e.g., *"Parent Verification: What is eight times nine?"* in words). The action proceeds only upon entering the correct mathematical value.
+
+---
+
 ## Immersive Audio System
 
 The application features a modular sound synthesizer engine (`SoundService.java`) which preloads audio files into memory for low-latency triggers:

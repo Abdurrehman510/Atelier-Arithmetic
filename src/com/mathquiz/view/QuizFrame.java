@@ -322,8 +322,10 @@ public class QuizFrame extends JFrame implements QuizNavigator {
 
     @Override
     public void showQuizBuilder() {
-        soundService.playTransition();
-        cardLayout.show(mainPanel, CARD_QUIZ_BUILDER);
+        if (com.mathquiz.service.ParentalGate.verifyParent(this)) {
+            soundService.playTransition();
+            cardLayout.show(mainPanel, CARD_QUIZ_BUILDER);
+        }
     }
 
     @Override

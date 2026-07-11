@@ -3,6 +3,7 @@ package com.mathquiz.service;
 import com.mathquiz.config.AppConfig;
 import com.mathquiz.model.QuestionResult;
 import com.mathquiz.model.QuizSession;
+import com.mathquiz.util.CryptoHelper;
 
 import java.io.File;
 import java.sql.*;
@@ -15,6 +16,8 @@ import java.util.*;
 /**
  * Reads and writes quiz session history to a unified SQLite database
  * stored at ~/.atelier-arithmetic/atelier_arithmetic.db.
+ * Applies secure AES-128 column level encryption to all user profiles,
+ * categories, difficulty parameters, accuracy ratings, and expressions.
  */
 public class SessionRepository {
 
@@ -84,7 +87,7 @@ public class SessionRepository {
     }
 
     /**
-     * Appends the completed session to the database.
+     * Appends the completed session to the database, encrypting all PII and sensitive parameters.
      */
     public void save(QuizSession session) {
         String profile = AppConfig.getInstance().getCurrentProfile();
@@ -102,14 +105,14 @@ public class SessionRepository {
                 // Insert session
                 long sessionId;
                 try (PreparedStatement pstmt = conn.prepareStatement(insertSessionSql, Statement.RETURN_GENERATED_KEYS)) {
-                    pstmt.setString(1, profile);
+                    pstmt.setString(1, CryptoHelper.encrypt(profile));
                     pstmt.setString(2, timestamp);
-                    pstmt.setString(3, session.getCategory());
-                    pstmt.setString(4, session.getDifficulty());
+                    pstmt.setString(3, CryptoHelper.encrypt(session.getCategory()));
+                    pstmt.setString(4, CryptoHelper.encrypt(session.getDifficulty()));
                     pstmt.setInt(5, session.getTotalQuestions());
                     pstmt.setInt(6, session.getCorrectAnswersCount());
                     pstmt.setDouble(7, Math.round(session.getPercentage() * 10.0) / 10.0);
-                    pstmt.setString(8, session.getGrade());
+                    pstmt.setString(8, CryptoHelper.encrypt(session.getGrade()));
                     pstmt.setLong(9, session.getDurationMs());
                     pstmt.executeUpdate();
 
@@ -128,7 +131,7 @@ public class SessionRepository {
                 try (PreparedStatement pstmt = conn.prepareStatement(insertQ)) {
                     for (QuestionResult r : session.getResults()) {
                         pstmt.setLong(1, sessionId);
-                        pstmt.setString(2, r.getExpression());
+                        pstmt.setString(2, CryptoHelper.encrypt(r.getExpression()));
                         pstmt.setInt(3, r.getCorrectAnswer());
                         pstmt.setInt(4, r.getUserAnswer());
                         pstmt.setInt(5, r.isCorrect() ? 1 : 0);
@@ -169,18 +172,18 @@ public class SessionRepository {
              PreparedStatement pstmtSessions = conn.prepareStatement(querySessions);
              PreparedStatement pstmtQuestions = conn.prepareStatement(queryQuestions)) {
 
-            pstmtSessions.setString(1, profile);
+            pstmtSessions.setString(1, CryptoHelper.encrypt(profile));
             try (ResultSet rsSessions = pstmtSessions.executeQuery()) {
                 while (rsSessions.next()) {
                     long sessionId = rsSessions.getLong("id");
                     Map<String, Object> sessionMap = new LinkedHashMap<>();
                     sessionMap.put("timestamp", rsSessions.getString("timestamp"));
-                    sessionMap.put("category", rsSessions.getString("category"));
-                    sessionMap.put("difficulty", rsSessions.getString("difficulty"));
+                    sessionMap.put("category", CryptoHelper.decrypt(rsSessions.getString("category")));
+                    sessionMap.put("difficulty", CryptoHelper.decrypt(rsSessions.getString("difficulty")));
                     sessionMap.put("totalQuestions", rsSessions.getInt("total_questions"));
                     sessionMap.put("correctAnswers", rsSessions.getInt("correct_answers"));
                     sessionMap.put("percentage", rsSessions.getDouble("percentage"));
-                    sessionMap.put("grade", rsSessions.getString("grade"));
+                    sessionMap.put("grade", CryptoHelper.decrypt(rsSessions.getString("grade")));
                     sessionMap.put("durationMs", rsSessions.getLong("duration_ms"));
 
                     // Fetch questions for this session
@@ -189,7 +192,7 @@ public class SessionRepository {
                     try (ResultSet rsQuestions = pstmtQuestions.executeQuery()) {
                         while (rsQuestions.next()) {
                             Map<String, Object> qMap = new LinkedHashMap<>();
-                            qMap.put("expression", rsQuestions.getString("expression"));
+                            qMap.put("expression", CryptoHelper.decrypt(rsQuestions.getString("expression")));
                             qMap.put("correctAnswer", rsQuestions.getInt("correct_answer"));
                             qMap.put("userAnswer", rsQuestions.getInt("user_answer"));
                             qMap.put("correct", rsQuestions.getInt("correct") == 1);
@@ -215,7 +218,7 @@ public class SessionRepository {
         String query = "SELECT COUNT(*) FROM sessions WHERE profile_name = ?;";
         try (Connection conn = getConnection();
              PreparedStatement pstmt = conn.prepareStatement(query)) {
-            pstmt.setString(1, profile);
+            pstmt.setString(1, CryptoHelper.encrypt(profile));
             try (ResultSet rs = pstmt.executeQuery()) {
                 if (rs.next()) {
                     return rs.getInt(1);
@@ -242,7 +245,7 @@ public class SessionRepository {
                 pragma.execute("PRAGMA foreign_keys = ON;");
             }
             try (PreparedStatement pstmt = conn.prepareStatement(deleteSql)) {
-                pstmt.setString(1, profile);
+                pstmt.setString(1, CryptoHelper.encrypt(profile));
                 pstmt.executeUpdate();
             }
         } catch (SQLException e) {

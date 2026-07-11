@@ -275,6 +275,9 @@ public class AnalyticsPanel extends JPanel {
     }
 
     private void handleResetHistory() {
+        if (!com.mathquiz.service.ParentalGate.verifyParent(this)) {
+            return;
+        }
         int choice = JOptionPane.showConfirmDialog(
                 this,
                 "Are you sure you want to clear all your math quiz history?\nThis cannot be undone! 🦉",
