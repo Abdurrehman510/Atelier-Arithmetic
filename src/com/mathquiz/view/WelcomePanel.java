@@ -53,8 +53,10 @@ public class WelcomePanel extends JPanel {
     private JButton customLoadBtn;
     private JLabel customLabel;
 
-    // Reward economy
+    // Reward economy — tracked so they can be refreshed on return navigation
     private JLabel starBalanceLabel;
+    private JLabel shopCardBalLabel;
+    private JLabel shopCardInfoLabel;
     private JButton shopBtn;
 
     private final AppConfig config = AppConfig.getInstance();
@@ -193,8 +195,8 @@ public class WelcomePanel extends JPanel {
         String equipped = config.getEquippedItem();
         String accessoryDisplay = "none".equals(equipped) ? "" : getEquippedEmoji(equipped);
         String archieText = accessoryDisplay.isEmpty()
-            ? "<html><body>🦉 <b>Archie says:</b> \"Ready for a math adventure? Configure below and select a category!\"</body></html>"
-            : "<html><body>🦉" + accessoryDisplay + " <b>Archie says:</b> \"Looking great today! Ready for math?\"</body></html>";
+            ? "<html><body><font face='Segoe UI Emoji'>\ud83e\udd89</font> <b>Archie says:</b> \"Ready for a math adventure? Configure below and select a category!\"</body></html>"
+            : "<html><body><font face='Segoe UI Emoji'>\ud83e\udd89" + accessoryDisplay + "</font> <b>Archie says:</b> \"Looking great today! Ready for math?\"</body></html>";
         taglineLabel = new JLabel(archieText);
         taglineLabel.setFont(new Font("SansSerif", Font.PLAIN, 11));
         taglineLabel.setForeground(TEXT_MUTED);
@@ -389,7 +391,7 @@ public class WelcomePanel extends JPanel {
         com.mathquiz.service.AchievementService achievementService = new com.mathquiz.service.AchievementService(repo, analService);
         long unlockedCount = achievementService.calculateAchievements().stream().filter(ach -> ach.unlocked).count();
 
-        JLabel infoLabel = new JLabel("<html><body>💾 <b>" + totalSess + "</b> Sessions completed<br>🏆 <b>" + unlockedCount + " / 10</b> Badges unlocked</body></html>");
+        JLabel infoLabel = new JLabel("<html><body><font face='Segoe UI Emoji'>\ud83d\udcbe</font> <b>" + totalSess + "</b> Sessions completed<br><font face='Segoe UI Emoji'>\ud83c\udfc6</font> <b>" + unlockedCount + " / 10</b> Badges unlocked</body></html>");
         infoLabel.setFont(new Font("SansSerif", Font.PLAIN, 12));
         infoLabel.setForeground(TEXT_MUTED);
         card.add(infoLabel, c);
@@ -497,31 +499,31 @@ public class WelcomePanel extends JPanel {
         JPanel headerRow = new JPanel(new BorderLayout());
         headerRow.setOpaque(false);
 
-        JLabel title = new JLabel("🛍️ Archie's Shop");
+        JLabel title = new JLabel("\ud83d\udecd\ufe0f Archie's Shop");
         title.setFont(new Font("SansSerif", Font.BOLD, 13));
         title.setForeground(TEXT_DARK);
         headerRow.add(title, BorderLayout.WEST);
 
-        JLabel balLabel = new JLabel("⭐ " + config.getStarBalance());
-        balLabel.setFont(new Font("SansSerif", Font.BOLD, 12));
-        balLabel.setForeground(ACCENT_GOLD);
-        headerRow.add(balLabel, BorderLayout.EAST);
+        shopCardBalLabel = new JLabel("\u2605 " + config.getStarBalance());  // ★ U+2605 — renders in all fonts
+        shopCardBalLabel.setFont(new Font("SansSerif", Font.BOLD, 12));
+        shopCardBalLabel.setForeground(ACCENT_GOLD);
+        headerRow.add(shopCardBalLabel, BorderLayout.EAST);
         card.add(headerRow, c);
 
-        // Description
+        // Description (equipped accessory)
         c.gridy = 1;
         c.insets = new Insets(6, 0, 8, 0);
         String equippedId = config.getEquippedItem();
-        String equipped = "none".equals(equippedId) ? "Nothing equipped" : getEquippedEmoji(equippedId) + " Equipped";
-        JLabel infoLabel = new JLabel("<html><body>Spend stars to unlock hats, glasses & themes!<br>" + equipped + "</body></html>");
-        infoLabel.setFont(new Font("SansSerif", Font.PLAIN, 11));
-        infoLabel.setForeground(TEXT_MUTED);
-        card.add(infoLabel, c);
+        String equipped = "none".equals(equippedId) ? "Nothing equipped" : "<font face='Segoe UI Emoji'>" + getEquippedEmoji(equippedId) + "</font> Equipped";
+        shopCardInfoLabel = new JLabel("<html><body>Spend stars to unlock hats, glasses &amp; themes!<br>" + equipped + "</body></html>");
+        shopCardInfoLabel.setFont(new Font("SansSerif", Font.PLAIN, 11));
+        shopCardInfoLabel.setForeground(TEXT_MUTED);
+        card.add(shopCardInfoLabel, c);
 
         // Shop button
         c.gridy = 2;
         c.insets = new Insets(0, 0, 0, 0);
-        shopBtn = new JButton("🛍️ Open Mascot Shop");
+        shopBtn = new JButton("\ud83d\udecd\ufe0f Open Mascot Shop");
         shopBtn.setFont(new Font("SansSerif", Font.PLAIN, 12));
         shopBtn.setFocusPainted(false);
         shopBtn.setCursor(new Cursor(Cursor.HAND_CURSOR));
@@ -624,13 +626,14 @@ public class WelcomePanel extends JPanel {
         JPanel bar = new JPanel(new FlowLayout(FlowLayout.RIGHT, 10, 10));
         bar.setOpaque(false);
 
-        // Star balance display
+        // Star balance display — use ★ (U+2605) not ⭐ (U+2B50) for universal font compatibility
         int balance = config.getStarBalance();
-        starBalanceLabel = new JLabel("⭐ " + balance);
+        starBalanceLabel = new JLabel("\u2605 " + balance);
         starBalanceLabel.setFont(new Font("SansSerif", Font.BOLD, 13));
         starBalanceLabel.setForeground(ACCENT_GOLD);
         starBalanceLabel.setBorder(new EmptyBorder(0, 4, 0, 4));
         bar.add(starBalanceLabel);
+
 
         profileButton = new JButton("👤 " + config.getCurrentProfile());
         styleToggleBtn(profileButton);
@@ -1012,13 +1015,51 @@ public class WelcomePanel extends JPanel {
 
     public void applyTheme() {
         setBackground(AppTheme.getBgPrimary());
-        // Refresh star balance on every theme update (profile switch or redraw)
-        if (starBalanceLabel != null) {
-            starBalanceLabel.setText("⭐ " + config.getStarBalance());
-            starBalanceLabel.setForeground(AppTheme.getAccentGold());
-        }
+        refreshDynamicData();
         recolorTree(this);
     }
+
+    /**
+     * Refreshes all dynamic Welcome-screen labels that change at runtime:
+     * star balance (top bar + shop card), equipped accessory description,
+     * and Archie's mascot greeting tagline.
+     *
+     * Called by applyTheme() and by QuizFrame.goToWelcome() so the screen
+     * is always up-to-date when the user returns from the shop or results.
+     */
+    public void refreshDynamicData() {
+        int bal = config.getStarBalance();
+
+        // Top-bar star balance label
+        if (starBalanceLabel != null) {
+            starBalanceLabel.setText("\u2605 " + bal);   // ★ U+2605
+            starBalanceLabel.setForeground(AppTheme.getAccentGold());
+        }
+
+        // Shop card balance label (tracked field — no longer local)
+        if (shopCardBalLabel != null) {
+            shopCardBalLabel.setText("\u2605 " + bal);
+            shopCardBalLabel.setForeground(AppTheme.getAccentGold());
+        }
+
+        // Shop card equipped-item description
+        if (shopCardInfoLabel != null) {
+            String eqId = config.getEquippedItem();
+            String eqText = "none".equals(eqId) ? "Nothing equipped" : "<font face='Segoe UI Emoji'>" + getEquippedEmoji(eqId) + "</font> Equipped";
+            shopCardInfoLabel.setText("<html><body>Spend stars to unlock hats, glasses &amp; themes!<br>" + eqText + "</body></html>");
+        }
+
+        // Archie mascot tagline in hero header
+        if (taglineLabel != null) {
+            String eqId = config.getEquippedItem();
+            String accessory = "none".equals(eqId) ? "" : getEquippedEmoji(eqId);
+            String archieText = accessory.isEmpty()
+                ? "<html><body><font face='Segoe UI Emoji'>\ud83e\udd89</font> <b>Archie says:</b> \"Ready for a math adventure? Configure below and select a category!\"</body></html>"
+                : "<html><body><font face='Segoe UI Emoji'>\ud83e\udd89" + accessory + "</font> <b>Archie says:</b> \"Looking great today! Ready for math?\"</body></html>";
+            taglineLabel.setText(archieText);
+        }
+    }
+
 
     private void recolorTree(Container parent) {
         for (Component c : parent.getComponents()) {

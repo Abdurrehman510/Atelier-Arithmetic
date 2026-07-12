@@ -117,7 +117,7 @@ public class ResultsPanel extends JPanel {
     public void populate(QuizSession session, com.mathquiz.service.RewardService.RewardResult reward) {
         populate(session);
         if (reward != null && starsEarnedLabel != null) {
-            starsEarnedLabel.setText("⭐ +" + reward.total + " Stars Earned!");
+            starsEarnedLabel.setText("\u2605 +" + reward.total + " Stars Earned!");
             starsEarnedLabel.setToolTipText("<html><pre>" + reward.toSummary().replace("\n", "<br>") + "</pre></html>");
             starsEarnedLabel.setVisible(true);
         }

@@ -224,8 +224,10 @@ public class QuizFrame extends JFrame implements QuizNavigator {
         soundService.playTransition();
         cardLayout.show(mainPanel, CARD_WELCOME);
         welcomePanel.focusDefaultField();
+        welcomePanel.refreshDynamicData();   // Sync star balance, equipped item, Archie tagline
         maybeContinueTour(CARD_WELCOME);
     }
+
 
     @Override
     public void goToCategories() {

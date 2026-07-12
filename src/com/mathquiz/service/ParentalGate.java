@@ -31,7 +31,7 @@ public class ParentalGate {
         String challenge = String.format(
             "This screen is for parents or teachers only.\n\n" +
             "Please solve this math puzzle to proceed:\n" +
-            "⭐ What is %s times %s? ⭐",
+            "\u2605 What is %s times %s? \u2605",
             phraseA, phraseB
         );
 

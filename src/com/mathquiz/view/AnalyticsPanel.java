@@ -355,11 +355,11 @@ public class AnalyticsPanel extends JPanel {
 
         // 3. Recommendation
         if (totalSessions == 0) {
-            recommendationLabel.setText("<html><body>🦉 <b>Archie says:</b> \"Welcome! Complete a math quiz to see your learning recommendations!\"</body></html>");
+            recommendationLabel.setText("<html><body><font face='Segoe UI Emoji'>\ud83e\udd89</font> <b>Archie says:</b> \"Welcome! Complete a math quiz to see your learning recommendations!\"</body></html>");
         } else {
             String weakCat = analytics.getWeakestCategory();
             String weakDiff = analytics.getWeakestDifficulty();
-            recommendationLabel.setText("<html><body>🦉 <b>Archie says:</b> \"To boost your math skills, try a Practice run focusing on <b>" + weakCat + "</b> on <b>" + weakDiff + "</b>!\"</body></html>");
+            recommendationLabel.setText("<html><body><font face='Segoe UI Emoji'>\ud83e\udd89</font> <b>Archie says:</b> \"To boost your math skills, try a Practice run focusing on <b>" + weakCat + "</b> on <b>" + weakDiff + "</b>!\"</body></html>");
         }
 
         // 4. Strengths & Weaknesses

@@ -49,9 +49,9 @@ public class MascotShopPanel extends JPanel {
     static {
         ALL_ITEMS.add(new ShopItem("hat_top",     "Top Hat",       "🎩", "Hats",    "A dapper classic topper!",          30));
         ALL_ITEMS.add(new ShopItem("hat_crown",   "Royal Crown",   "👑", "Hats",    "Fit for a math champion!",           50));
-        ALL_ITEMS.add(new ShopItem("hat_wizard",  "Wizard Hat",    "🧙", "Hats",    "Channel your inner wizard!",         40));
+        ALL_ITEMS.add(new ShopItem("hat_wizard",  "Wizard Hat",    "🔮", "Hats",    "Channel your inner wizard!",         40));
         ALL_ITEMS.add(new ShopItem("hat_party",   "Party Hat",     "🎉", "Hats",    "Celebrate every quiz win!",          20));
-        ALL_ITEMS.add(new ShopItem("glasses_nerd","Nerd Glasses",  "🤓", "Glasses", "Show off your smarts!",              20));
+        ALL_ITEMS.add(new ShopItem("glasses_nerd","Nerd Glasses",  "👓", "Glasses", "Show off your smarts!",              20));
         ALL_ITEMS.add(new ShopItem("glasses_sun", "Cool Shades",   "😎", "Glasses", "Too cool for school!",               25));
         ALL_ITEMS.add(new ShopItem("glasses_star","Star Frames",   "⭐", "Glasses", "See the world in stars!",            35));
         ALL_ITEMS.add(new ShopItem("color_gold",  "Golden Archie", "✨", "Colors",  "Turn Archie into solid gold!",       60));
@@ -126,7 +126,7 @@ public class MascotShopPanel extends JPanel {
         titleLabel.setFont(new Font("Serif", Font.PLAIN, 26));
         leftCol.add(titleLabel);
 
-        JLabel hintLabel = new JLabel("Spend your ⭐ Stars to unlock cool looks for Archie!");
+        JLabel hintLabel = new JLabel("Spend your ★ Stars to unlock cool looks for Archie!");
         hintLabel.setFont(new Font("SansSerif", Font.PLAIN, 12));
         leftCol.add(Box.createVerticalStrut(4));
         leftCol.add(hintLabel);
@@ -137,7 +137,7 @@ public class MascotShopPanel extends JPanel {
         JPanel rightCol = new JPanel(new FlowLayout(FlowLayout.RIGHT, 12, 0));
         rightCol.setOpaque(false);
 
-        balanceLabel = new JLabel("⭐ " + rewardService.getBalance() + " Stars");
+        balanceLabel = new JLabel("★ " + rewardService.getBalance() + " Stars");  // ★ U+2605 renders in all fonts
         balanceLabel.setFont(new Font("SansSerif", Font.BOLD, 15));
         rightCol.add(balanceLabel);
 
@@ -173,9 +173,15 @@ public class MascotShopPanel extends JPanel {
                 new EmptyBorder(16, 14, 16, 14)));
         card.setBackground(AppTheme.getBgCard());
 
-        // Top: emoji icon
+        // Top: emoji icon — Segoe UI Emoji renders color/pictographic emoji on Windows
         JLabel emojiLabel = new JLabel(item.emoji, SwingConstants.CENTER);
-        emojiLabel.setFont(new Font("Serif", Font.PLAIN, 34));
+        try {
+            Font emojiFont = new Font("Segoe UI Emoji", Font.PLAIN, 34);
+            // Fall back to Serif if Segoe UI Emoji is unavailable (non-Windows)
+            emojiLabel.setFont(emojiFont.getFamily().equals("Segoe UI Emoji") ? emojiFont : new Font("Serif", Font.PLAIN, 34));
+        } catch (Exception ex) {
+            emojiLabel.setFont(new Font("Serif", Font.PLAIN, 34));
+        }
         card.add(emojiLabel, BorderLayout.NORTH);
 
         // Center: name + category + description
@@ -208,7 +214,7 @@ public class MascotShopPanel extends JPanel {
         JPanel bottomPanel = new JPanel(new BorderLayout(6, 0));
         bottomPanel.setOpaque(false);
 
-        JLabel priceLabel = new JLabel("⭐ " + item.price);
+        JLabel priceLabel = new JLabel("★ " + item.price);   // ★ U+2605 renders in all fonts
         priceLabel.setFont(new Font("SansSerif", Font.BOLD, 12));
         priceLabel.setForeground(owned ? AppTheme.getTextMuted() : AppTheme.getAccentGold());
         bottomPanel.add(priceLabel, BorderLayout.WEST);
@@ -227,7 +233,7 @@ public class MascotShopPanel extends JPanel {
                 refresh();
             });
         } else {
-            actionBtn = makeActionBtn("Buy " + item.price + "⭐", AppTheme.getAccentGold());
+            actionBtn = makeActionBtn("Buy " + item.price + "★", AppTheme.getAccentGold());
             actionBtn.addActionListener(e -> handlePurchase(item));
         }
 
@@ -254,16 +260,16 @@ public class MascotShopPanel extends JPanel {
         int balance = rewardService.getBalance();
         if (balance < item.price) {
             JOptionPane.showMessageDialog(this,
-                    "You need " + item.price + " ⭐ stars to unlock this!\n" +
-                    "You currently have " + balance + " ⭐ stars.\n\n" +
+                    "You need " + item.price + " ★ stars to unlock this!\n" +
+                    "You currently have " + balance + " ★ stars.\n\n" +
                     "Complete more quizzes to earn stars!",
-                    "Not Enough Stars ⭐",
+                    "Not Enough Stars",
                     JOptionPane.INFORMATION_MESSAGE);
             return;
         }
 
         int confirm = JOptionPane.showConfirmDialog(this,
-                "Unlock \"" + item.name + "\" for " + item.price + " ⭐ stars?",
+                "Unlock \"" + item.name + "\" for " + item.price + " ★ stars?",
                 "Confirm Purchase",
                 JOptionPane.YES_NO_OPTION);
         if (confirm != JOptionPane.YES_OPTION) return;
@@ -285,7 +291,7 @@ public class MascotShopPanel extends JPanel {
 
     /** Refreshes the grid and balance label (call after earning/spending stars). */
     public void refresh() {
-        balanceLabel.setText("⭐ " + rewardService.getBalance() + " Stars");
+        balanceLabel.setText("★ " + rewardService.getBalance() + " Stars");  // ★ U+2605
         populateGrid();
         applyTheme();
     }

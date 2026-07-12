@@ -155,7 +155,7 @@ public class RewardService {
         /** Returns a multiline summary string for display in tooltips or toasts. */
         public String toSummary() {
             StringBuilder sb = new StringBuilder();
-            sb.append("⭐ +" + total + " Stars Earned!\n");
+            sb.append("\u2605 +" + total + " Stars Earned!\n");
             sb.append("Base: +" + base + "\n");
             if (correctBonus > 0) sb.append("Correct answers: +" + correctBonus + "\n");
             if (perfectBonus > 0) sb.append("Perfect score bonus: +" + perfectBonus + "\n");

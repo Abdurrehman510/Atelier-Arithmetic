@@ -215,9 +215,10 @@ public class HelpPanel extends JPanel {
         titleLbl.setForeground(new Color(120, 90, 50));
         section.add(titleLbl, BorderLayout.NORTH);
 
-        // Multi-line body with line breaks preserved
+        // Multi-line body with line breaks preserved and emojis wrapped for Segoe UI Emoji
+        String bodyWrapped = wrapEmojis(body.replace("\n", "<br>"));
         String html = "<html><body style='font-family:SansSerif;font-size:12px;color:#555;'>"
-                + body.replace("\n", "<br>")
+                + bodyWrapped
                 + "</body></html>";
         JLabel bodyLbl = new JLabel(html);
         bodyLbl.setForeground(TEXT_MUTED);
@@ -225,6 +226,12 @@ public class HelpPanel extends JPanel {
         section.add(bodyLbl, BorderLayout.CENTER);
 
         return section;
+    }
+
+    private String wrapEmojis(String text) {
+        if (text == null) return "";
+        // Matches basic emoji/symbol ranges and SMP surrogate pairs (like U+1F300 to U+1F9FF)
+        return text.replaceAll("([\u2600-\u27BF]|[\ud83c-\udbff][\udc00-\udfff])", "<font face='Segoe UI Emoji'>$1</font>");
     }
 
     private JPanel buildFooter() {
