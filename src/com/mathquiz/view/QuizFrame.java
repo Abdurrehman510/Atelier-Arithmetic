@@ -7,6 +7,7 @@ import com.mathquiz.service.SessionRepository;
 import com.mathquiz.service.TourManager;
 import com.mathquiz.service.SoundService;
 import com.mathquiz.service.AchievementService;
+import com.mathquiz.service.RewardService;
 import com.mathquiz.config.AppTheme;
 import com.mathquiz.view.tour.TourOverlay;
 
@@ -56,6 +57,7 @@ public class QuizFrame extends JFrame implements QuizNavigator {
     private final AnalyticsService  analyticsService = new AnalyticsService(repository);
     private final SoundService      soundService = new SoundService(config);
     private final AchievementService achievementsService = new AchievementService(repository, analyticsService);
+    private final RewardService      rewardService       = new RewardService(config);
     private final TourOverlay       tourOverlay;
     private final TourManager       tourManager;
 
@@ -74,7 +76,7 @@ public class QuizFrame extends JFrame implements QuizNavigator {
     public static final String CARD_SMART_PRACTICE = "smart_practice";
     public static final String CARD_ACHIEVEMENTS = "achievements";
     public static final String CARD_QUIZ_BUILDER = "quiz_builder";
-    public static final String CARD_MASCOT_SHOP  = "mascot_shop";
+    public static final String CARD_SHOP         = "mascot_shop";
 
 
 
@@ -112,7 +114,7 @@ public class QuizFrame extends JFrame implements QuizNavigator {
         smartPracticePanel = new SmartPracticePanel(this, analyticsService);
         achievementsPanel = new AchievementsPanel(this, achievementsService);
         quizBuilderPanel = new QuizBuilderPanel(this);
-        mascotShopPanel = new MascotShopPanel(this, soundService);
+        mascotShopPanel  = new MascotShopPanel(this, rewardService);
 
 
 
@@ -127,7 +129,8 @@ public class QuizFrame extends JFrame implements QuizNavigator {
         mainPanel.add(smartPracticePanel, CARD_SMART_PRACTICE);
         mainPanel.add(achievementsPanel, CARD_ACHIEVEMENTS);
         mainPanel.add(quizBuilderPanel, CARD_QUIZ_BUILDER);
-        mainPanel.add(mascotShopPanel, CARD_MASCOT_SHOP);
+        mainPanel.add(mascotShopPanel,  CARD_SHOP);
+
 
 
         add(mainPanel);
@@ -253,34 +256,18 @@ public class QuizFrame extends JFrame implements QuizNavigator {
             return;
         }
         soundService.playFanfare();
-        
-        // Calculate and reward profile-specific coins
-        int baseCoins = 20;
-        int correctBonus = session.getCorrectAnswersCount() * 5;
-        int totalEarned = baseCoins + correctBonus;
-
         if (session.getCategory().equalsIgnoreCase("Daily Challenge")) {
             java.text.SimpleDateFormat sdf = new java.text.SimpleDateFormat("yyyyMMdd");
             String todayStr = sdf.format(new java.util.Date());
             config.setLastDailyChallengeDate(todayStr);
-            totalEarned += 100; // Daily challenge bonus
         }
-        
-        config.addCoins(totalEarned);
-        
-        final int earnedMsg = totalEarned;
-        SwingUtilities.invokeLater(() -> {
-            JOptionPane.showMessageDialog(this,
-                "🎉 Quiz Complete! You earned " + earnedMsg + " 🪙 coins!\n" +
-                "Head to the Mascot Shop on the Home screen to customize Archie!",
-                "Math Rewards 🦉",
-                JOptionPane.INFORMATION_MESSAGE);
-        });
-
         // Save to disk
         repository.save(session);
-        // Update results screen
-        resultsPanel.populate(session);
+        // Calculate & award stars (must happen AFTER save so streak is updated)
+        com.mathquiz.service.RewardService.RewardResult reward =
+                rewardService.calculateAndAwardQuizReward(session, analyticsService);
+        // Update results screen with reward info
+        resultsPanel.populate(session, reward);
         cardLayout.show(mainPanel, CARD_RESULTS);
         maybeContinueTour(CARD_RESULTS);
     }
@@ -303,11 +290,10 @@ public class QuizFrame extends JFrame implements QuizNavigator {
 
     @Override
     public void showAnalytics() {
-        if (com.mathquiz.service.ParentalGate.verifyParent(this)) {
-            soundService.playTransition();
-            analyticsPanel.refresh();
-            cardLayout.show(mainPanel, CARD_ANALYTICS);
-        }
+        if (!com.mathquiz.service.ParentalGate.verifyParent(this)) return;
+        soundService.playTransition();
+        analyticsPanel.refresh();
+        cardLayout.show(mainPanel, CARD_ANALYTICS);
     }
 
     @Override
@@ -354,19 +340,20 @@ public class QuizFrame extends JFrame implements QuizNavigator {
     }
 
     @Override
-    public void showMascotShop() {
-        soundService.playTransition();
-        mascotShopPanel.refresh();
-        cardLayout.show(mainPanel, CARD_MASCOT_SHOP);
-    }
-
-    @Override
     public void startCustomQuiz(String quizName, java.util.List<com.mathquiz.model.Question> questions) {
         soundService.playQuizStart();
         lastSession = new QuizSession(questions.size(), "Medium", "Custom: " + quizName);
         gamePanel.startSession(lastSession, questions);
         cardLayout.show(mainPanel, CARD_GAME);
     }
+
+    @Override
+    public void showMascotShop() {
+        soundService.playTransition();
+        mascotShopPanel.refresh();
+        cardLayout.show(mainPanel, CARD_SHOP);
+    }
+
 
     @Override
     public void showCardForTour(String screen) {

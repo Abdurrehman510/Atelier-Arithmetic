@@ -122,73 +122,6 @@ public class AppConfig {
         }
     }
 
-    // ── Profile-specific Customization & Visual Economy ──────────────────────
-
-    public int getCoins() {
-        String profile = getCurrentProfile();
-        try {
-            return Integer.parseInt(props.getProperty(profile + ".coins", "0"));
-        } catch (NumberFormatException e) {
-            return 0;
-        }
-    }
-
-    public void setCoins(int count) {
-        String profile = getCurrentProfile();
-        props.setProperty(profile + ".coins", String.valueOf(count));
-        save();
-    }
-
-    public void addCoins(int count) {
-        setCoins(getCoins() + count);
-    }
-
-    public boolean isItemUnlocked(String itemId) {
-        if ("None".equalsIgnoreCase(itemId) || "Default".equalsIgnoreCase(itemId)) return true;
-        String profile = getCurrentProfile();
-        String raw = props.getProperty(profile + ".unlockedItems", "");
-        String[] parts = raw.split(",");
-        for (String p : parts) {
-            if (p.trim().equalsIgnoreCase(itemId)) {
-                return true;
-            }
-        }
-        return false;
-    }
-
-    public void unlockItem(String itemId) {
-        String profile = getCurrentProfile();
-        String raw = props.getProperty(profile + ".unlockedItems", "");
-        if (raw.isEmpty()) {
-            props.setProperty(profile + ".unlockedItems", itemId);
-        } else {
-            props.setProperty(profile + ".unlockedItems", raw + "," + itemId);
-        }
-        save();
-    }
-
-    public String getEquippedAccessory() {
-        String profile = getCurrentProfile();
-        return props.getProperty(profile + ".equippedAccessory", "None");
-    }
-
-    public void setEquippedAccessory(String item) {
-        String profile = getCurrentProfile();
-        props.setProperty(profile + ".equippedAccessory", item);
-        save();
-    }
-
-    public String getEquippedTheme() {
-        String profile = getCurrentProfile();
-        return props.getProperty(profile + ".equippedTheme", "Default");
-    }
-
-    public void setEquippedTheme(String theme) {
-        String profile = getCurrentProfile();
-        props.setProperty(profile + ".equippedTheme", theme);
-        save();
-    }
-
     public double getFontSizeScale() {
         try {
             return Double.parseDouble(props.getProperty("fontSizeScale", "1.25"));
@@ -199,6 +132,52 @@ public class AppConfig {
 
     public void setFontSizeScale(double scale) {
         props.setProperty("fontSizeScale", Double.toString(scale));
+        save();
+    }
+
+    // ── Star Reward Economy ───────────────────────────────────────────────────
+
+    public int getStarBalance() {
+        try {
+            return Integer.parseInt(props.getProperty("starBalance", "0"));
+        } catch (NumberFormatException e) {
+            return 0;
+        }
+    }
+
+    public void setStarBalance(int balance) {
+        props.setProperty("starBalance", Integer.toString(Math.max(0, balance)));
+        save();
+    }
+
+    /** Comma-separated list of unlocked shop item IDs for the current profile. */
+    public java.util.List<String> getUnlockedItems() {
+        String raw = props.getProperty("unlockedItems." + getCurrentProfile(), "");
+        java.util.List<String> list = new java.util.ArrayList<>();
+        if (!raw.isEmpty()) {
+            for (String id : raw.split(",")) {
+                String trimmed = id.trim();
+                if (!trimmed.isEmpty()) list.add(trimmed);
+            }
+        }
+        return list;
+    }
+
+    public void addUnlockedItem(String itemId) {
+        java.util.List<String> list = getUnlockedItems();
+        if (!list.contains(itemId)) {
+            list.add(itemId);
+            props.setProperty("unlockedItems." + getCurrentProfile(), String.join(",", list));
+            save();
+        }
+    }
+
+    public String getEquippedItem() {
+        return props.getProperty("equippedItem." + getCurrentProfile(), "none");
+    }
+
+    public void setEquippedItem(String itemId) {
+        props.setProperty("equippedItem." + getCurrentProfile(), itemId);
         save();
     }
 

@@ -37,13 +37,15 @@ This project demonstrates strong product thinking, clean software engineering, m
 5. [File Structure](#file-structure)
 6. [Installation & Running](#installation--running)
 7. [Grading & Remarks System](#grading--remarks-system)
-8. [Data Persistence & SQLite Architecture](#data-persistence--sqlite-architecture)
-9. [Immersive Audio System](#immersive-audio-system)
-10. [Global Exception Handling](#global-exception-handling)
-11. [Design Philosophy](#design-philosophy)
-12. [Technical Highlights](#technical-highlights)
-13. [Requirements](#requirements)
-14. [License](#license)
+8. [Stars Reward Economy & Mascot Shop](#stars-reward-economy--mascot-shop)
+9. [Data Persistence & SQLite Architecture](#data-persistence--sqlite-architecture)
+10. [Immersive Audio System](#immersive-audio-system)
+11. [Global Exception Handling](#global-exception-handling)
+12. [Security, Child Safety & Privacy](#security-child-safety--privacy-compliance-coppa--gdpr-k)
+13. [Design Philosophy](#design-philosophy)
+14. [Technical Highlights](#technical-highlights)
+15. [Requirements](#requirements)
+16. [License](#license)
 
 ---
 
@@ -78,7 +80,8 @@ Atelier Arithmetic has been fully realized through a rigorous 5-phase roadmap, s
 | **Phase 3** | **Engagement & Audio** | Persistence streak tracking with flame indicators, 10 unlockable achievement badges, sound chimes, and Dark Mode theme toggle. |
 | **Phase 4** | **Bespoke Features** | Multi-user profiles, step-by-step scaffolded hints, PDF/HTML report exports, and high-DPI scaling (125%/150%). |
 | **Phase 5** | **Customizer & Tour** | Interactive 10-category quiz engine, custom parent/teacher Quiz Builder, and a comprehensive 19-step guided tour overlay. |
-| **Production Upgrade** | **Enterprise Hardening** | Relational **SQLite persistence engine**, global **uncaught exception handler**, layout alignments, and a modular volume settings popup. |
+| **Production** | **Enterprise Hardening** | Relational **SQLite persistence**, global **exception handler**, AES-128 encryption, and a modular volume settings popup. |
+| **UX & Safety** | **Security & Engagement** | COPPA mascot-name generator, AES-encrypted config/DB, extended parental gates (Analytics, Sound Settings, Quiz Builder, History Reset), **Stars/Coins reward economy**, and **Mascot Shop** with 12 unlockable cosmetic accessories for Archie the Owl. |
 
 ---
 
@@ -93,7 +96,12 @@ Redesigned into a premium 2-column SaaS dashboard:
   - **Daily Quest Tracker**: Launch buttons, 7-day calendar strip matching active challenges, and streak day counts.
   - **Performance Card**: Count summaries of completed sessions and unlocked achievements badges.
   - **Guide Card**: Quick launchers to start smart practice, Parent guides, or replay the onboarding tour.
-- **Top Bar controls**: Include a Profile Selector dropdown, Dark Mode toggle button, Help panel guide button, and a **Sound Settings button** which triggers a slider popup for volume levels (100%, 75%, 50%, 25%) and mute controls.
+- **Top Bar controls**: Include a Profile Selector dropdown, Dark Mode toggle button, Font Scale toggle, **⭐ Star balance indicator**, and a **Sound Settings button** (gated by Parental Verification). The star balance label always reflects the current profile's earnings.
+- **Right Column Cards** (4 total):
+  - **Daily Quest Tracker**: Launch buttons, 7-day calendar strip, and streak day counts.
+  - **Performance Card**: Count summaries of completed sessions and unlocked achievement badges, with links to Analytics and Badges.
+  - **🛍️ Archie's Shop Card**: Displays current star balance and equipped accessory; links to the Mascot Shop.
+  - **Guide Card**: Quick launchers to start smart practice, re-run the guided tour, or open the Help panel.
 
 ### 🗂️ Category Selection Screen
 Ten discipline cards displayed in a 2×5 grid, each with an icon, name, short description, and a `START` button. Categories:
@@ -120,10 +128,10 @@ The active quiz interface. Shows:
 
 ### 📊 Results Screen (Performance Dashboard)
 Post-session performance report rendered as a 4-card dashboard:
-- **Key Metrics Card**: Displays correct question counts, success percentage rates, letter grades with emoji badges, total duration, and average speed (seconds per question).
-- **Session Mastery Card**: Highlights your fastest solved expression and Challenge Area (longest question solved) to pinpoint strengths and areas needing focus.
+- **Key Metrics Card**: Displays correct question counts, success percentage rates, letter grades with emoji badges, total duration, average speed (seconds per question), and a prominent **⭐ +N Stars Earned!** reward indicator (with tooltip showing the full breakdown: base, correct-answer bonus, grade bonus, daily, and streak).
+- **Session Mastery Card**: Highlights your fastest solved expression and Challenge Area to pinpoint strengths and areas needing focus.
 - **Archie's Insights Card**: Archie the Owl offers customized educational remarks and learning tips based on accuracy percentages.
-- **Suggested Path Card**: Suggests next steps (e.g. smart practice launcher or next difficulty level step-up prompts) with an interactive button to launch the practice run directly.
+- **Suggested Path Card**: Suggests next steps (e.g. smart practice launcher or next difficulty level step-up prompts) with an interactive button to launch directly.
 - Footer buttons include: `❓ Guide`, `📋 Review Answers`, `📄 Export Report`, and `🔄 PLAY AGAIN`.
 
 ### 📈 Analytics Dashboard Screen
@@ -185,24 +193,30 @@ d:/MathQuizApp/
             │   ├── AnalyticsService.java
             │   ├── CustomQuizService.java
             │   ├── HintService.java
+            │   ├── ParentalGate.java        # ← Word-math parental lock
             │   ├── QuestionGenerator.java
+            │   ├── RewardService.java       # ← Stars economy engine
             │   ├── SessionRepository.java
             │   ├── SoundService.java
             │   └── TourManager.java
+            ├── util/
+            │   └── CryptoHelper.java        # ← AES-128 encryption utility
             └── view/               # Swing GUI panels and tour overlay
                 ├── AchievementsPanel.java
                 ├── AnalyticsPanel.java
                 ├── CategoryPanel.java
                 ├── GamePanel.java
                 ├── HelpPanel.java
+                ├── MascotShopPanel.java     # ← NEW: Reward shop UI
                 ├── QuizBuilderPanel.java
                 ├── QuizFrame.java
                 ├── QuizNavigator.java
                 ├── ResultsPanel.java
                 ├── ReviewPanel.java
                 ├── SmartPracticePanel.java
-                ├── TourOverlay.java
-                └── WelcomePanel.java
+                ├── WelcomePanel.java
+                └── tour/
+                    └── TourOverlay.java
 ```
 
 ---
@@ -240,6 +254,53 @@ Atelier Arithmetic uses a child-friendly grading and remarks scale designed to e
 | **40% – 52%** | C+ | Developing — You're Learning! |
 | **33% – 39%** | C | Working Hard — Try Again! |
 | **Under 33%** | D | Keep Trying — Every Step Counts! |
+
+---
+
+## ⭐ Stars Reward Economy & Mascot Shop
+
+Atelier Arithmetic includes a built-in engagement economy to motivate consistent daily practice. Stars (⭐) are earned automatically after every quiz and can be spent in the **Mascot Shop** to unlock cosmetic accessories for Archie the Owl.
+
+### Star Reward Formula
+
+| Reward Source | Stars Earned |
+|:---|:---:|
+| Base reward (completing any quiz) | +5 |
+| Each correct answer | +1 per answer |
+| Perfect score (100%) | +10 bonus |
+| Grade A+ / A++ (85–99%) | +5 bonus |
+| Grade A (78–84%) | +3 bonus |
+| Daily Challenge completion | +8 bonus |
+| Streak bonus (×2 per day, max +10) | +2 to +10 |
+| New achievement unlocked | +15 bonus |
+
+The **⭐ N Stars** balance is displayed in the top bar at all times and is stored encrypted in `config.properties`.
+
+### Mascot Shop (12 Items)
+
+Children spend earned stars to unlock cosmetic accessories for Archie the Owl. All items are purely cosmetic and do not affect gameplay:
+
+| Category | Item | Price |
+|:---|:---|:---:|
+| 🎩 Hats | Top Hat | 30 ⭐ |
+| 🎩 Hats | Royal Crown | 50 ⭐ |
+| 🎩 Hats | Wizard Hat | 40 ⭐ |
+| 🎉 Hats | Party Hat | 20 ⭐ |
+| 👓 Glasses | Nerd Glasses | 20 ⭐ |
+| 😎 Glasses | Cool Shades | 25 ⭐ |
+| ⭐ Glasses | Star Frames | 35 ⭐ |
+| ✨ Colors | Golden Archie | 60 ⭐ |
+| 🌈 Colors | Rainbow Glow | 80 ⭐ |
+| 🎓 Badges | Scholar Badge | 35 ⭐ |
+| 🌟 Badges | Star Champion | 45 ⭐ |
+| 💖 Badges | Kind Heart | 30 ⭐ |
+
+**Shop Mechanics:**
+- **Purchase** items with earned stars via confirmation dialog.
+- **Equip** any owned item to display it on Archie in the Home screen mascot greeting.
+- **Unequip** removes the accessory (reverts to plain Archie).
+- All purchases and equipped items **persist across restarts** (stored per-profile, encrypted).
+- The Shop Card on the Home Screen shows current star balance and equipped item at a glance.
 
 ---
 
@@ -288,36 +349,14 @@ To prevent local tampering, cheating (unlocking badges or altering score percent
 - **Secure SQLite Persistence**: Sensitive fields inside the relational database (profile names, math categories, difficulty ratings, accuracy scores, and custom expression keys) are stored as encrypted Base64 ciphertexts.
 - **Secure Preferences**: User options stored inside `config.properties` are fully encrypted.
 
-### 3. Word-Based Math Parental Gates
-Administrative controls and data deletion parameters are locked behind a **Parental Gate** to ensure parent/teacher oversight:
-- **Math Verification Locks**: Opening the **Quiz Builder**, editing custom lists, or clicking **🗑 Reset History** launches a random text-based arithmetic lock challenge (e.g., *"Parent Verification: What is eight times nine?"* in words). The action proceeds only upon entering the correct mathematical value.
+### 3. Extended Word-Based Math Parental Gates
+Administrative controls and data deletion parameters are locked behind a **Parental Gate** to ensure parent/teacher oversight. The following areas are ALL protected:
+- **📊 Analytics Dashboard** — Requires parental verification before children can view historical session data.
+- **🛠️ Quiz Builder** — Creating or editing custom quizzes requires a parental challenge.
+- **🗑 Reset History** — Deleting session records is locked with a random text-based arithmetic challenge.
+- **🔊 Sound Settings** — Volume levels and mute controls require parental verification, preventing children from changing audio configuration.
 
----
-
-## 🪙 Coins Economy & Custom Mascot Shop
-
-Atelier Arithmetic features an interactive offline reward economy that reinforces learning and daily study habits without distracting micro-transactions:
-
-### 1. Earn Math Rewards (Coins Economy)
-- **Base Rewards**: Complete any math session to earn a flat `20` coins.
-- **Accuracy Bonuses**: Earn an additional `5` coins for every question answered correctly.
-- **Daily seeded Quest**: Earn a massive `100` bonus coins for completing the Daily seeded Challenge.
-- **Encrypted Local Ledger**: All coin transactions, unlocked purchases, and equipped configurations are safely compiled and stored locally inside the profile-specific Base64 AES-128 preferences properties.
-
-### 2. Custom Mascot Shop
-- **Archie's Accessories**: Children can spend their math coins to buy cool decorations for Archie the Owl:
-  *   **Fancy Bow Tie** 🎀 (Cost: `80` coins)
-  *   **Cool Glasses** 🕶️ (Cost: `100` coins)
-  *   **Wizard Hat** 🧙‍♂️ (Cost: `150` coins)
-  *   **Gold Crown** 👑 (Cost: `300` coins)
-- **Dynamic Outfit Display**: Equipped accessories are worn by Archie and mentioned dynamically in his speech greetings (e.g. *"I'm wearing my Gold Crown 👑 today!"*).
-
-### 3. Dynamic Visual Themes
-Kids can unlock primary UI theme accent colors:
-- **Amethyst Theme** 🟣 (Cost: `200` coins) — Recolors active elements to a royal purple layout.
-- **Emerald Theme** 🟢 (Cost: `200` coins) — Recolors active elements to a vibrant green layout.
-- **Ruby Theme** 🔴 (Cost: `250` coins) — Recolors active elements to a modern red layout.
-Themes update the borders, buttons, and graphics of the entire Swing tree recursively in real time.
+**Challenge Format**: A random multiplication problem presented in English words (e.g., *"What is eight times nine?"*). Access is granted only upon entering the correct numeric answer (e.g., `72`).
 
 ---
 

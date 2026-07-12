@@ -52,8 +52,10 @@ public class WelcomePanel extends JPanel {
     private JButton customBuilderBtn;
     private JButton customLoadBtn;
     private JLabel customLabel;
-    private JLabel infoLabel;
-    private JLabel streakLabel;
+
+    // Reward economy
+    private JLabel starBalanceLabel;
+    private JButton shopBtn;
 
     private final AppConfig config = AppConfig.getInstance();
     private final QuizNavigator nav;
@@ -188,7 +190,12 @@ public class WelcomePanel extends JPanel {
 
         c.gridy = 2;
         c.insets = new Insets(4, 0, 0, 0);
-        taglineLabel = new JLabel("<html><body>🦉 <b>Archie says:</b> \"Ready for a math adventure? Configure below and select a category!\"</body></html>");
+        String equipped = config.getEquippedItem();
+        String accessoryDisplay = "none".equals(equipped) ? "" : getEquippedEmoji(equipped);
+        String archieText = accessoryDisplay.isEmpty()
+            ? "<html><body>🦉 <b>Archie says:</b> \"Ready for a math adventure? Configure below and select a category!\"</body></html>"
+            : "<html><body>🦉" + accessoryDisplay + " <b>Archie says:</b> \"Looking great today! Ready for math?\"</body></html>";
+        taglineLabel = new JLabel(archieText);
         taglineLabel.setFont(new Font("SansSerif", Font.PLAIN, 11));
         taglineLabel.setForeground(TEXT_MUTED);
         textPanel.add(taglineLabel, c);
@@ -286,19 +293,25 @@ public class WelcomePanel extends JPanel {
 
         // Card 1: Daily challenge
         c.gridy = 0;
-        c.weighty = 0.35;
-        c.insets = new Insets(0, 0, 14, 0);
+        c.weighty = 0.28;
+        c.insets = new Insets(0, 0, 12, 0);
         panel.add(buildDailyChallengeCard(), c);
 
         // Card 2: Stats & Progress
         c.gridy = 1;
-        c.weighty = 0.35;
-        c.insets = new Insets(0, 0, 14, 0);
+        c.weighty = 0.28;
+        c.insets = new Insets(0, 0, 12, 0);
         panel.add(buildStatsCard(), c);
 
-        // Card 3: Guide & smart practice
+        // Card 3: Mascot Shop (Reward Economy)
         c.gridy = 2;
-        c.weighty = 0.30;
+        c.weighty = 0.22;
+        c.insets = new Insets(0, 0, 12, 0);
+        panel.add(buildShopCard(), c);
+
+        // Card 4: Guide & smart practice
+        c.gridy = 3;
+        c.weighty = 0.22;
         c.insets = new Insets(0, 0, 0, 0);
         panel.add(buildGuideCard(), c);
 
@@ -330,7 +343,7 @@ public class WelcomePanel extends JPanel {
 
         SessionRepository repo = new SessionRepository();
         int streak = getCurrentStreak(repo);
-        streakLabel = new JLabel("🔥 " + streak + " Day Streak");
+        JLabel streakLabel = new JLabel("🔥 " + streak + " Day Streak");
         streakLabel.setFont(new Font("SansSerif", Font.BOLD, 12));
         streakLabel.setForeground(ACCENT_GOLD);
         headerRow.add(streakLabel, BorderLayout.EAST);
@@ -376,7 +389,7 @@ public class WelcomePanel extends JPanel {
         com.mathquiz.service.AchievementService achievementService = new com.mathquiz.service.AchievementService(repo, analService);
         long unlockedCount = achievementService.calculateAchievements().stream().filter(ach -> ach.unlocked).count();
 
-        infoLabel = new JLabel("<html><body>💾 <b>" + totalSess + "</b> Sessions completed<br>🏆 <b>" + unlockedCount + " / 10</b> Badges unlocked<br>🪙 <b>" + config.getCoins() + "</b> Coins earned</body></html>");
+        JLabel infoLabel = new JLabel("<html><body>💾 <b>" + totalSess + "</b> Sessions completed<br>🏆 <b>" + unlockedCount + " / 10</b> Badges unlocked</body></html>");
         infoLabel.setFont(new Font("SansSerif", Font.PLAIN, 12));
         infoLabel.setForeground(TEXT_MUTED);
         card.add(infoLabel, c);
@@ -384,29 +397,22 @@ public class WelcomePanel extends JPanel {
         // Actions
         c.gridy = 2;
         c.insets = new Insets(4, 0, 0, 0);
-        JPanel actionsRow = new JPanel(new GridLayout(1, 3, 8, 0));
+        JPanel actionsRow = new JPanel(new GridLayout(1, 2, 10, 0));
         actionsRow.setOpaque(false);
 
-        analyticsBtn = new JButton("📊 Stats");
-        analyticsBtn.setFont(new Font("SansSerif", Font.PLAIN, 11));
+        analyticsBtn = new JButton("📊 Analytics");
+        analyticsBtn.setFont(new Font("SansSerif", Font.PLAIN, 12));
         analyticsBtn.setFocusPainted(false);
         analyticsBtn.setCursor(new Cursor(Cursor.HAND_CURSOR));
         analyticsBtn.addActionListener(e -> nav.showAnalytics());
         actionsRow.add(analyticsBtn);
 
         achievementsBtn = new JButton("🏆 Badges");
-        achievementsBtn.setFont(new Font("SansSerif", Font.PLAIN, 11));
+        achievementsBtn.setFont(new Font("SansSerif", Font.PLAIN, 12));
         achievementsBtn.setFocusPainted(false);
         achievementsBtn.setCursor(new Cursor(Cursor.HAND_CURSOR));
         achievementsBtn.addActionListener(e -> nav.showAchievements());
         actionsRow.add(achievementsBtn);
-
-        JButton shopBtn = new JButton("🛍️ Shop");
-        shopBtn.setFont(new Font("SansSerif", Font.PLAIN, 11));
-        shopBtn.setFocusPainted(false);
-        shopBtn.setCursor(new Cursor(Cursor.HAND_CURSOR));
-        shopBtn.addActionListener(e -> nav.showMascotShop());
-        actionsRow.add(shopBtn);
 
         card.add(actionsRow, c);
 
@@ -471,6 +477,66 @@ public class WelcomePanel extends JPanel {
         card.add(actionsRow, c);
 
         return card;
+    }
+
+    private JPanel buildShopCard() {
+        JPanel card = new JPanel(new GridBagLayout());
+        card.setBackground(BG_CARD);
+        card.setOpaque(true);
+        card.setBorder(BorderFactory.createCompoundBorder(
+                BorderFactory.createLineBorder(BORDER_CLR, 1),
+                new EmptyBorder(12, 16, 12, 16)));
+
+        GridBagConstraints c = new GridBagConstraints();
+        c.fill = GridBagConstraints.HORIZONTAL;
+        c.weightx = 1.0;
+        c.gridx = 0;
+
+        // Header row
+        c.gridy = 0;
+        JPanel headerRow = new JPanel(new BorderLayout());
+        headerRow.setOpaque(false);
+
+        JLabel title = new JLabel("🛍️ Archie's Shop");
+        title.setFont(new Font("SansSerif", Font.BOLD, 13));
+        title.setForeground(TEXT_DARK);
+        headerRow.add(title, BorderLayout.WEST);
+
+        JLabel balLabel = new JLabel("⭐ " + config.getStarBalance());
+        balLabel.setFont(new Font("SansSerif", Font.BOLD, 12));
+        balLabel.setForeground(ACCENT_GOLD);
+        headerRow.add(balLabel, BorderLayout.EAST);
+        card.add(headerRow, c);
+
+        // Description
+        c.gridy = 1;
+        c.insets = new Insets(6, 0, 8, 0);
+        String equippedId = config.getEquippedItem();
+        String equipped = "none".equals(equippedId) ? "Nothing equipped" : getEquippedEmoji(equippedId) + " Equipped";
+        JLabel infoLabel = new JLabel("<html><body>Spend stars to unlock hats, glasses & themes!<br>" + equipped + "</body></html>");
+        infoLabel.setFont(new Font("SansSerif", Font.PLAIN, 11));
+        infoLabel.setForeground(TEXT_MUTED);
+        card.add(infoLabel, c);
+
+        // Shop button
+        c.gridy = 2;
+        c.insets = new Insets(0, 0, 0, 0);
+        shopBtn = new JButton("🛍️ Open Mascot Shop");
+        shopBtn.setFont(new Font("SansSerif", Font.PLAIN, 12));
+        shopBtn.setFocusPainted(false);
+        shopBtn.setCursor(new Cursor(Cursor.HAND_CURSOR));
+        shopBtn.addActionListener(e -> nav.showMascotShop());
+        card.add(shopBtn, c);
+
+        return card;
+    }
+
+    /** Maps a shop item ID to its display emoji for use in the mascot greeting. */
+    private String getEquippedEmoji(String itemId) {
+        for (com.mathquiz.view.MascotShopPanel.ShopItem item : com.mathquiz.view.MascotShopPanel.ALL_ITEMS) {
+            if (item.id.equals(itemId)) return item.emoji;
+        }
+        return "";
     }
 
     private void handleLoadCustomQuiz(Component parent) {
@@ -557,6 +623,14 @@ public class WelcomePanel extends JPanel {
     private JPanel buildTopBar() {
         JPanel bar = new JPanel(new FlowLayout(FlowLayout.RIGHT, 10, 10));
         bar.setOpaque(false);
+
+        // Star balance display
+        int balance = config.getStarBalance();
+        starBalanceLabel = new JLabel("⭐ " + balance);
+        starBalanceLabel.setFont(new Font("SansSerif", Font.BOLD, 13));
+        starBalanceLabel.setForeground(ACCENT_GOLD);
+        starBalanceLabel.setBorder(new EmptyBorder(0, 4, 0, 4));
+        bar.add(starBalanceLabel);
 
         profileButton = new JButton("👤 " + config.getCurrentProfile());
         styleToggleBtn(profileButton);
@@ -765,6 +839,7 @@ public class WelcomePanel extends JPanel {
     }
 
     private void showSoundMenu(Component parent) {
+        if (!com.mathquiz.service.ParentalGate.verifyParent(this)) return;
         JPopupMenu menu = new JPopupMenu();
         menu.setBackground(AppTheme.getBgCard());
 
@@ -937,41 +1012,11 @@ public class WelcomePanel extends JPanel {
 
     public void applyTheme() {
         setBackground(AppTheme.getBgPrimary());
-        
-        // Refresh Archie's speech bubble details
-        String accessory = config.getEquippedAccessory();
-        String accessoryStr = "None".equalsIgnoreCase(accessory) ? "" : " wearing my " + accessory + " 🎩";
-        if (taglineLabel != null) {
-            taglineLabel.setText("<html><body>🦉 <b>Archie says:</b> \"Ready for a math adventure" + accessoryStr + "? Configure below and select a category!\"</body></html>");
+        // Refresh star balance on every theme update (profile switch or redraw)
+        if (starBalanceLabel != null) {
+            starBalanceLabel.setText("⭐ " + config.getStarBalance());
+            starBalanceLabel.setForeground(AppTheme.getAccentGold());
         }
-        
-        // Refresh profile button text to reflect dynamic changes
-        if (profileButton != null) {
-            profileButton.setText("👤 " + config.getCurrentProfile());
-        }
-
-        // Refresh stats card info
-        SessionRepository repo = new SessionRepository();
-        int totalSess = repo.loadRaw().size();
-        AnalyticsService analService = new AnalyticsService(repo);
-        com.mathquiz.service.AchievementService achievementService = new com.mathquiz.service.AchievementService(repo, analService);
-        long unlockedCount = achievementService.calculateAchievements().stream().filter(ach -> ach.unlocked).count();
-        if (infoLabel != null) {
-            infoLabel.setText("<html><body>💾 <b>" + totalSess + "</b> Sessions completed<br>🏆 <b>" + unlockedCount + " / 10</b> Badges unlocked<br>🪙 <b>" + config.getCoins() + "</b> Coins earned</body></html>");
-        }
-
-        // Refresh streak and calendar strip
-        if (streakLabel != null) {
-            int streak = getCurrentStreak(repo);
-            streakLabel.setText("🔥 " + streak + " Day Streak");
-        }
-        if (calendarStripHolder != null) {
-            calendarStripHolder.removeAll();
-            calendarStripHolder.add(buildCalendarStrip());
-            calendarStripHolder.revalidate();
-            calendarStripHolder.repaint();
-        }
-
         recolorTree(this);
     }
 

@@ -55,6 +55,9 @@ public class ResultsPanel extends JPanel {
     private JPanel adviceCard;
     private JPanel nextStepsCard;
 
+    // Stars earned display
+    private JLabel starsEarnedLabel;
+
     public ResultsPanel(QuizNavigator nav) {
         this.nav = nav;
         setBackground(AppTheme.getBgPrimary());
@@ -99,9 +102,25 @@ public class ResultsPanel extends JPanel {
         // Update dashboard title with profile context
         dashboardTitleLabel.setText("Performance Dashboard: " + AppConfig.getInstance().getCurrentProfile());
 
+        // Hide stars label when called without reward (tour, review back, etc.)
+        if (starsEarnedLabel != null) starsEarnedLabel.setVisible(false);
+
         applyTheme();
         revalidate();
         repaint();
+    }
+
+    /**
+     * Populate with reward information displayed in the KPI card.
+     * Called by QuizFrame after a real completed quiz session.
+     */
+    public void populate(QuizSession session, com.mathquiz.service.RewardService.RewardResult reward) {
+        populate(session);
+        if (reward != null && starsEarnedLabel != null) {
+            starsEarnedLabel.setText("⭐ +" + reward.total + " Stars Earned!");
+            starsEarnedLabel.setToolTipText("<html><pre>" + reward.toSummary().replace("\n", "<br>") + "</pre></html>");
+            starsEarnedLabel.setVisible(true);
+        }
     }
 
     // ── Calculations & Content Generators ────────────────────────────────────
@@ -260,6 +279,14 @@ public class ResultsPanel extends JPanel {
         kpiContent.add(gradeLabel);
         kpiContent.add(durationLabel);
         kpiContent.add(speedLabel);
+
+        // Stars reward display (hidden initially; shown after real quiz)
+        starsEarnedLabel = new JLabel("");
+        starsEarnedLabel.setFont(new Font("SansSerif", Font.BOLD, 13));
+        starsEarnedLabel.setForeground(new Color(184, 150, 110)); // gold
+        starsEarnedLabel.setBorder(new EmptyBorder(8, 0, 0, 0));
+        starsEarnedLabel.setVisible(false);
+        kpiContent.add(starsEarnedLabel);
 
         kpiCard = createCardPanel("📊 Key Metrics", kpiContent);
         container.add(kpiCard);

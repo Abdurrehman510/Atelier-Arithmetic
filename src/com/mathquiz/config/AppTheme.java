@@ -48,17 +48,7 @@ public class AppTheme {
     public static Color getTextDark()   { return darkMode ? DARK_TEXT_DARK   : LIGHT_TEXT_DARK; }
     public static Color getTextMuted()  { return darkMode ? DARK_TEXT_MUTED  : LIGHT_TEXT_MUTED; }
     public static Color getBorderClr()  { return darkMode ? DARK_BORDER_CLR  : LIGHT_BORDER_CLR; }
-    public static Color getAccentGold() {
-        String theme = AppConfig.getInstance().getEquippedTheme();
-        if ("Amethyst".equalsIgnoreCase(theme)) {
-            return new Color(155, 89, 182); // Amethyst Purple
-        } else if ("Emerald".equalsIgnoreCase(theme)) {
-            return new Color(46, 204, 113); // Emerald Green
-        } else if ("Ruby".equalsIgnoreCase(theme)) {
-            return new Color(231, 76, 60); // Ruby Red
-        }
-        return darkMode ? DARK_ACCENT_GOLD : LIGHT_ACCENT_GOLD;
-    }
+    public static Color getAccentGold() { return darkMode ? DARK_ACCENT_GOLD : LIGHT_ACCENT_GOLD; }
 
     /** Recursively scales all component fonts and attaches hover/click sound effects. */
     public static void scaleComponentFont(Component c, double scale, com.mathquiz.service.SoundService sound) {

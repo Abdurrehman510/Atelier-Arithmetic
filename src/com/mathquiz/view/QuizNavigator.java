@@ -64,11 +64,11 @@ public interface QuizNavigator {
     /** Show the Custom Quiz Builder screen. */
     void showQuizBuilder();
 
-    /** Show the Mascot Shop custom customizations panel. */
-    void showMascotShop();
-
     /** Start a quiz session populated by custom author questions. */
     void startCustomQuiz(String quizName, java.util.List<com.mathquiz.model.Question> questions);
+
+    /** Show the Mascot Shop where children can spend earned stars. */
+    void showMascotShop();
 
     /** Transition to card layout card dynamically during active guided tour. */
     void showCardForTour(String screen);
