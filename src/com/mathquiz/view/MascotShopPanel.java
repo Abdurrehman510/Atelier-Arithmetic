@@ -95,12 +95,13 @@ public class MascotShopPanel extends JPanel {
 
         gridPanel = new JPanel(new GridLayout(0, 3, 14, 14));
         gridPanel.setOpaque(false);
-        gridPanel.setBorder(new EmptyBorder(0, 30, 20, 30));
+        gridPanel.setBorder(new EmptyBorder(12, 30, 20, 30)); // 12px top padding
 
         scrollPane = new JScrollPane(gridPanel,
                 JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED,
                 JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
-        scrollPane.setBorder(null);
+        scrollPane.setBorder(BorderFactory.createEmptyBorder());
+        scrollPane.setViewportBorder(BorderFactory.createEmptyBorder());
         scrollPane.getViewport().setOpaque(false);
         scrollPane.setOpaque(false);
 
@@ -182,6 +183,8 @@ public class MascotShopPanel extends JPanel {
         } catch (Exception ex) {
             emojiLabel.setFont(new Font("Serif", Font.PLAIN, 34));
         }
+        // Add vertical padding to prevent top/bottom glyph clipping due to system font metrics
+        emojiLabel.setBorder(new EmptyBorder(12, 0, 4, 0));
         card.add(emojiLabel, BorderLayout.NORTH);
 
         // Center: name + category + description
@@ -294,6 +297,12 @@ public class MascotShopPanel extends JPanel {
         balanceLabel.setText("★ " + rewardService.getBalance() + " Stars");  // ★ U+2605
         populateGrid();
         applyTheme();
+        // Reset scroll position to top to prevent Swing focus auto-scroll bugs
+        SwingUtilities.invokeLater(() -> {
+            if (scrollPane != null) {
+                scrollPane.getVerticalScrollBar().setValue(0);
+            }
+        });
     }
 
     public void applyTheme() {
