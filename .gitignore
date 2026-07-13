@@ -57,3 +57,7 @@ $RECYCLE.BIN/
 *.log
 *.tmp
 *.temp
+
+# ── Build output directories ──────────────────────────────────────────────────
+build/
+logo.ico

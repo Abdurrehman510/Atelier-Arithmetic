@@ -223,20 +223,26 @@ d:/MathQuizApp/
 
 ## Installation & Running
 
-### Prerequisites
+### 📦 End-User Installation (Windows Native)
 
-- **Java Development Kit (JDK) 17 or higher** installed and available on your system path.
-- The `sqlite-jdbc-3.42.0.0.jar` binary placed in the `/lib/` folder (automatically included).
+Atelier Arithmetic is distributed as a self-contained native Windows package requiring **no pre-installed Java**:
+1. Run the native Windows MSI installer `dist/AtelierArithmetic-1.0.0.msi` (or extract `dist/AtelierArithmetic-v1.0.0-Portable.zip`).
+2. Follow the setup prompt to choose your directory. The installation will:
+   - Install a stripped, lightweight Java runtime.
+   - Register a desktop and Start Menu shortcut.
+   - Register a clean uninstaller in Add/Remove Programs.
 
-### Execution
+### 💻 Developer Quick Launch
 
-Double-click `run.bat` or run the following command in PowerShell/CMD:
+For active development, testing, and debugging, double-click `run.bat` or run:
 
 ```cmd
 run.bat
 ```
 
-The script automatically compiles source files with classpaths, synchronizes resources, and launches the application.
+The script compiles Java source files, maps resources, and launches the desktop app.
+
+For production packaging orchestration, EV code signing, and silent installations, refer to the [DEPLOYMENT.md](file:///d:/MathQuizApp/DEPLOYMENT.md) guide.
 
 ---
 
