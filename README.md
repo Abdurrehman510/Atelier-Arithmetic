@@ -773,6 +773,24 @@ Archie the Owl logo artwork copyright © Atelier Arithmetic Studio. All rights r
 
 ---
 
+## 👤 About the Author
+
+This application was engineered by **Abdurrehman**, Founder of an IT Consulting & Digital Transformation agency specializing in:
+- **Enterprise SaaS & Web Solutions**: Architecting scalable cloud platforms, responsive interfaces, and custom business software.
+- **Enterprise-Grade AI & Business Automation**: Integrating Large Language Models (LLMs) and custom workflow integrations to optimize processes.
+- **Custom Desktop & Cross-Platform Apps**: Engineering high-performance local-first desktop apps (like Atelier Arithmetic) with secure native installers.
+
+### 🤝 Let's Collaborate!
+Looking to design custom SaaS products, deploy AI tools, automate workflows, or hire a premium engineering partner for paid project work? We help businesses transform concepts into production-grade systems.
+
+- **🌐 Portfolio**: [abdurrehman.dev](https://abdurrehman.dev)
+- **🐙 GitHub**: [github.com/Abdurrehman510](https://github.com/Abdurrehman510)
+- **💼 LinkedIn**: [linkedin.com/in/abdurrehman](https://linkedin.com/in/abdurrehman)
+- **✉️ Email**: [abdurrehman.work@gmail.com](mailto:abdurrehman.work@gmail.com)
+- **📞 Phone**: Available upon business inquiry via email
+
+---
+
 <div align="center">
 
 Made with ❤️ for young mathematicians everywhere.
