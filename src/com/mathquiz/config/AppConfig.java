@@ -181,6 +181,12 @@ public class AppConfig {
         save();
     }
 
+    public void resetProfileCustomizations(String profile) {
+        props.remove("unlockedItems." + profile);
+        props.remove("equippedItem." + profile);
+        save();
+    }
+
 
     // -------------------------------------------------------------------------
     // I/O helpers

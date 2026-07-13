@@ -286,8 +286,7 @@ public class AnalyticsPanel extends JPanel {
                 JOptionPane.WARNING_MESSAGE
         );
         if (choice == JOptionPane.YES_OPTION) {
-            analytics.clearHistory();
-            refresh();
+            nav.resetAllData();
         }
     }
 

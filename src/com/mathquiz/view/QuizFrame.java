@@ -421,6 +421,25 @@ public class QuizFrame extends JFrame implements QuizNavigator {
         }
     }
 
+    @Override
+    public void resetAllData() {
+        // 1. Purge repository database
+        analyticsService.clearHistory();
+
+        // 2. Reset config data for current profile
+        String profileName = config.getCurrentProfile();
+        config.setStarBalance(0);
+        config.setEquippedItem("none");
+        config.resetProfileCustomizations(profileName);
+
+        // 3. Refresh all dynamic UI panels instantly
+        welcomePanel.refreshDynamicData();
+        analyticsPanel.refresh();
+        achievementsPanel.refresh();
+        smartPracticePanel.refresh();
+        mascotShopPanel.refresh();
+    }
+
     public SoundService getSoundService() {
         return soundService;
     }

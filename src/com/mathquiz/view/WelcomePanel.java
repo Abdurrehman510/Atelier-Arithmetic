@@ -58,6 +58,8 @@ public class WelcomePanel extends JPanel {
     private JLabel shopCardBalLabel;
     private JLabel shopCardInfoLabel;
     private JButton shopBtn;
+    private JLabel statsInfoLabel;
+    private JLabel streakLabel;
 
     private final AppConfig config = AppConfig.getInstance();
     private final QuizNavigator nav;
@@ -345,7 +347,7 @@ public class WelcomePanel extends JPanel {
 
         SessionRepository repo = new SessionRepository();
         int streak = getCurrentStreak(repo);
-        JLabel streakLabel = new JLabel("🔥 " + streak + " Day Streak");
+        streakLabel = new JLabel("🔥 " + streak + " Day Streak");
         streakLabel.setFont(new Font("SansSerif", Font.BOLD, 12));
         streakLabel.setForeground(ACCENT_GOLD);
         headerRow.add(streakLabel, BorderLayout.EAST);
@@ -391,10 +393,10 @@ public class WelcomePanel extends JPanel {
         com.mathquiz.service.AchievementService achievementService = new com.mathquiz.service.AchievementService(repo, analService);
         long unlockedCount = achievementService.calculateAchievements().stream().filter(ach -> ach.unlocked).count();
 
-        JLabel infoLabel = new JLabel("<html><body><font face='Segoe UI Emoji'>\ud83d\udcbe</font> <b>" + totalSess + "</b> Sessions completed<br><font face='Segoe UI Emoji'>\ud83c\udfc6</font> <b>" + unlockedCount + " / 10</b> Badges unlocked</body></html>");
-        infoLabel.setFont(new Font("SansSerif", Font.PLAIN, 12));
-        infoLabel.setForeground(TEXT_MUTED);
-        card.add(infoLabel, c);
+        statsInfoLabel = new JLabel("<html><body><font face='Segoe UI Emoji'>\ud83d\udcbe</font> <b>" + totalSess + "</b> Sessions completed<br><font face='Segoe UI Emoji'>\ud83c\udfc6</font> <b>" + unlockedCount + " / 10</b> Badges unlocked</body></html>");
+        statsInfoLabel.setFont(new Font("SansSerif", Font.PLAIN, 12));
+        statsInfoLabel.setForeground(TEXT_MUTED);
+        card.add(statsInfoLabel, c);
 
         // Actions
         c.gridy = 2;
@@ -1057,6 +1059,31 @@ public class WelcomePanel extends JPanel {
                 ? "<html><body><font face='Segoe UI Emoji'>\ud83e\udd89</font> <b>Archie says:</b> \"Ready for a math adventure? Configure below and select a category!\"</body></html>"
                 : "<html><body><font face='Segoe UI Emoji'>\ud83e\udd89" + accessory + "</font> <b>Archie says:</b> \"Looking great today! Ready for math?\"</body></html>";
             taglineLabel.setText(archieText);
+        }
+
+        // Stats card info label
+        if (statsInfoLabel != null) {
+            SessionRepository repo = new SessionRepository();
+            int totalSess = repo.loadRaw().size();
+            AnalyticsService analService = new AnalyticsService(repo);
+            com.mathquiz.service.AchievementService achievementService = new com.mathquiz.service.AchievementService(repo, analService);
+            long unlockedCount = achievementService.calculateAchievements().stream().filter(ach -> ach.unlocked).count();
+            statsInfoLabel.setText("<html><body><font face='Segoe UI Emoji'>\ud83d\udcbe</font> <b>" + totalSess + "</b> Sessions completed<br><font face='Segoe UI Emoji'>\ud83c\udfc6</font> <b>" + unlockedCount + " / 10</b> Badges unlocked</body></html>");
+        }
+
+        // Streak label
+        if (streakLabel != null) {
+            SessionRepository repo = new SessionRepository();
+            int streak = getCurrentStreak(repo);
+            streakLabel.setText("🔥 " + streak + " Day Streak");
+        }
+
+        // Calendar strip
+        if (calendarStripHolder != null) {
+            calendarStripHolder.removeAll();
+            calendarStripHolder.add(buildCalendarStrip());
+            calendarStripHolder.revalidate();
+            calendarStripHolder.repaint();
         }
     }
 

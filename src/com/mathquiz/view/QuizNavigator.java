@@ -72,4 +72,7 @@ public interface QuizNavigator {
 
     /** Transition to card layout card dynamically during active guided tour. */
     void showCardForTour(String screen);
+
+    /** Resets all history, config, shop purchases, and refreshes the application UI instantly. */
+    void resetAllData();
 }
