@@ -256,7 +256,7 @@
 | FEAT-03 | P3 | De-duplicate questions within a session; mastery-based difficulty progression | Needs generator tests |
 | FEAT-04 | P2 | Backup/restore (export/import) of history & settings; makes machine moves possible | Mitigates PRD risk R1; interacts with DEBT-08 |
 | FEAT-05 | P2 | Accessibility pass: AA-compliant text colours, visible focus, keyboard-operable tour, accessible names, high-contrast theme | See design §3.5, §14 |
-| FEAT-06 | P3 (raise to P1 when premium work starts) | macOS/Linux packaging with `jpackage` (sqlite-jdbc already bundles natives) | Emoji font handling differs. Owner decision 2026-11-08: Windows + macOS at launch (needs macOS to build; the owner has no Apple device, so use a CI macOS runner and a cloud Mac or tester Macs for testing; Apple Developer account, notarization); see premium-roadmap X1 |
+| FEAT-06 | P3 (raise to P1 when premium work starts) | macOS/Linux packaging with `jpackage` (sqlite-jdbc already bundles natives) | Emoji font handling differs. Owner decision 2026-11-08: Windows + macOS at launch (needs macOS to build; the owner has no Apple device, so use a CI macOS runner and a cloud Mac or tester Macs for testing; Apple Developer account, notarization); see premium-roadmap X1. **Deferred 2026-11-08: Windows first; plan 0B on hold until roadmap D2 triggers** |
 | FEAT-07 | P3 | Localisation (needs DEBT-14) | |
 | FEAT-08 | P3 | Teacher reports: multi-session PDF/HTML for a profile | |
 | FEAT-09 | P3 | Heatmap intensity + tooltips; trend chart tooltips | |

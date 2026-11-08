@@ -2,6 +2,8 @@
 
 > **For agentic workers:** REQUIRED SUB-SKILL: Use superpowers:subagent-driven-development (recommended) or superpowers:executing-plans to implement this plan task-by-task. Steps use checkbox (`- [ ]`) syntax for tracking.
 
+> **Status: DEFERRED (owner decision, 2026-11-08).** Windows first. Restart this plan when the triggers in `docs/premium-roadmap.md` decision D2 are met. Re-check action versions and runner labels then.
+
 **Goal:** Build and test the app for macOS (Apple silicon) automatically in the cloud, producing an unsigned `.dmg` for internal testing, without the owner needing an Apple device.
 
 **Architecture:** GitHub Actions on the existing repository (`github.com/Abdurrehman510/MathQuizApp`) runs the Phase 0A test suite on Windows and macOS runners. A new `package-mac.sh` builds a jpackage app image and DMG on the macOS runner, and the DMG is uploaded as a build artifact. A one-off manual smoke test on a rented or borrowed Mac confirms the packaged app really works.

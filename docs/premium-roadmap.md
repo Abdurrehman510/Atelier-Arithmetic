@@ -19,7 +19,7 @@
 | Buyer | Premium, enrichment-minded parents of children aged 8–15 who judge a product by outcomes, not price | Owner |
 | USPs | (1) Measured **Thinking Profile**: baseline, re-test every 8–12 weeks, plain-language outcome report. (2) The **"why" coach**: error diagnosis plus the Mistake Lab. (3) **Original reasoning games** (Function Machines, Balance Lab, Constraint Castle). Supporting: offline privacy, printable worksheets | Proposed; validate with parents |
 | Countries | Wave 1: US, UK, Canada, Australia, Singapore. Wave 2: UAE/Gulf, New Zealand, Ireland. Later: affluent urban India, non-English markets | Delegated to me; based on judgment, not verified statistics |
-| Platform | **Windows + macOS** at launch. Tablets and Chromebooks later (keep the engine reusable). **The owner has no Apple device (2026-11-08)**, so Mac builds and testing need CI or a cloud Mac; see X1 | Owner decided; plan open |
+| Platform | **Windows first.** macOS is deferred until the D2 triggers are met (the owner has no Apple device). Tablets and Chromebooks later; keep the engine reusable and the code free of Windows-only APIs | Owner decided 2026-11-08 |
 | Pricing | Annual-first flat family plan (up to about 3 children), higher-priced monthly option, medium-to-high range. Test annual **$149 vs $199** and monthly **$19 vs $24** on the website. Premium tier with expert-reviewed report later. No lifetime plan at launch. 14-day trial | Proposed; hypotheses, not data |
 | Payments | Merchant of record (e.g. Paddle) for global tax; occasional online licence check with an offline grace period; no child data sent | Proposed |
 | Expert access | **None yet.** Recruit a maths educator and an educational psychologist/psychometrician before the Thinking Profile ships (D.6, decision D6) | Open |
@@ -126,10 +126,10 @@ Sizes are relative: **S** (days), **M** (1–2 weeks), **L** (several weeks), **
 | **3** | New mechanics | G1, G2, G3, G4–G8, C2–C5 | Highest development cost; build after the hook is validated |
 | **4** | Progression and community | R1–R7, R8, R9, R11, then R10, then P15 | R10 is the only part needing a server and legal review; do it last |
 | **L** | Launch track (parallel to Phase 1) | L1–L4 (Part G.6) | Launch v1 on Phase 1 scope only; Phases 3–4 ship as later releases |
-| **X** | Platform, updates and expertise | X1 Mac packaging, X2 update channel, X3 recruit assessment advisors | Win + Mac is a launch requirement; the Thinking Profile cannot ship without X3 |
+| **X** | Platform, updates and expertise | X1 Mac packaging, X2 update channel, X3 recruit assessment advisors | X1 deferred until the D2 triggers; the Thinking Profile cannot ship without X3 |
 
 **Track X notes**
-- **X1 — macOS packaging.** Extends FEAT-06. `jpackage` can only build a DMG on macOS, and the app must be signed and notarized (Apple Developer account, paid annual membership). **The owner has no Apple device (2026-11-08)**, so the plan is:
+- **X1 — macOS packaging (deferred 2026-11-08; see D2).** Extends FEAT-06. `jpackage` can only build a DMG on macOS, and the app must be signed and notarized (Apple Developer account, paid annual membership). **The owner has no Apple device (2026-11-08)**, so the plan is:
   - Build, sign and notarize in CI on a macOS runner (e.g. GitHub Actions), with the signing certificate stored as a secret.
   - Test on a rented cloud Mac, or on Macs belonging to pilot families or testers. Cover Apple silicon and Intel, emoji and font rendering, and the installer warning flow.
   - Buy a used Mac only if the Mac pipeline proves worth it.
@@ -459,7 +459,7 @@ Updated one-liner: *The adaptive maths-thinking coach that tells you why your ch
 | ID | Decision | Recommendation (not final) |
 |---|---|---|
 | D1 | Free vs Family Plus split | Keep the child-facing learning loop free (practice, hints, basic Mistake Lab, current adaptive rules); charge for parent insights, worksheets, skill-level adaptive engine, mechanic packs and multi-child (G.3) |
-| D2 | Platform reach | **Decided 2026-11-08: Windows + macOS at launch.** Tablets and Chromebooks later. The owner has no Apple device; open point: Windows-only early access, with Mac added before full launch (X1)? |
+| D2 | Platform reach | **Decided 2026-11-08: Windows first; macOS deferred.** Restart plan 0B when all three hold: (1) Phase 1 paid features work on Windows with pilot families; (2) launch is about 2–3 months away; (3) Apple Developer enrolment is possible and an hour on a cloud or borrowed Mac is booked. Re-decide then whether full launch waits for Mac. Tablets and Chromebooks later |
 | D3 | Which curricula to tag first (Common Core, UK NC, Singapore, IB, CBSE)? | Pick the one or two where the first paying parents are |
 | D4 | Licence model and sales channel | Annual-first flat family plan with a higher-priced monthly option, sold direct through a merchant of record (e.g. Paddle); no lifetime plan at launch; app stores later if at all (check terms) |
 | D5 | Online community feature (R10): wanted at all? | Defer until the offline positioning has proven itself; needs legal review |
