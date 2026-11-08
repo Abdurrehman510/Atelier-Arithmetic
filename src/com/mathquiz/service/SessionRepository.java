@@ -116,8 +116,12 @@ public class SessionRepository {
                 }
 
                 // Insert questions
-                String insertQ = "INSERT INTO session_questions (session_id, expression, correct_answer, user_answer, correct, time_ms) " +
-                                 "VALUES (?, ?, ?, ?, ?, ?);";
+                boolean v2 = schemaVersion >= 2;
+                String insertQ = v2
+                        ? "INSERT INTO session_questions (session_id, expression, correct_answer, user_answer, correct, time_ms, "
+                          + "skill_id, difficulty, hints_used) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?);"
+                        : "INSERT INTO session_questions (session_id, expression, correct_answer, user_answer, correct, time_ms) "
+                          + "VALUES (?, ?, ?, ?, ?, ?);";
                 try (PreparedStatement pstmt = conn.prepareStatement(insertQ)) {
                     for (QuestionResult r : session.getResults()) {
                         pstmt.setLong(1, sessionId);
@@ -126,6 +130,11 @@ public class SessionRepository {
                         pstmt.setInt(4, r.getUserAnswer());
                         pstmt.setInt(5, r.isCorrect() ? 1 : 0);
                         pstmt.setLong(6, r.getTimeSpentMs());
+                        if (v2) {
+                            pstmt.setString(7, CryptoHelper.encrypt(r.getSkill().id()));
+                            pstmt.setString(8, CryptoHelper.encrypt(r.getDifficulty()));
+                            pstmt.setInt(9, r.getHintsUsed());
+                        }
                         pstmt.addBatch();
                     }
                     pstmt.executeBatch();
@@ -153,10 +162,12 @@ public class SessionRepository {
             "WHERE profile_name = ? " +
             "ORDER BY id DESC;";
 
-        String queryQuestions = 
-            "SELECT expression, correct_answer, user_answer, correct, time_ms " +
+        boolean v2 = schemaVersion >= 2;
+        String queryQuestions =
+            "SELECT expression, correct_answer, user_answer, correct, time_ms" +
+            (v2 ? ", skill_id, difficulty, hints_used " : " ") +
             "FROM session_questions " +
-            "WHERE session_id = ?;";
+            "WHERE session_id = ? ORDER BY id;";
 
         try (Connection conn = getConnection();
              PreparedStatement pstmtSessions = conn.prepareStatement(querySessions);
@@ -187,6 +198,10 @@ public class SessionRepository {
                             qMap.put("userAnswer", rsQuestions.getInt("user_answer"));
                             qMap.put("correct", rsQuestions.getInt("correct") == 1);
                             qMap.put("timeMs", rsQuestions.getLong("time_ms"));
+                            // Schema v2 fields; null / 0 for legacy rows and in legacy mode
+                            qMap.put("skillId", v2 ? CryptoHelper.decrypt(rsQuestions.getString("skill_id")) : null);
+                            qMap.put("difficulty", v2 ? CryptoHelper.decrypt(rsQuestions.getString("difficulty")) : null);
+                            qMap.put("hintsUsed", v2 ? rsQuestions.getInt("hints_used") : 0);
                             questionsList.add(qMap);
                         }
                     }

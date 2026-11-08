@@ -199,7 +199,7 @@ See [non-goals](#22-non-goals-v100). Additionally *not present today* (gaps, not
 ### 6.7 Hints (`FR-HNT`)
 | ID | Requirement | St |
 |---|---|:---:|
-| FR-HNT-01 | A "💡 Hint" button (also **F1** and **Ctrl+H**) shall show an HTML hint in a gold-bordered box under the answer; the box hides when the next question loads. Hints are free and not tracked. | I |
+| FR-HNT-01 | A "💡 Hint" button (also **F1** and **Ctrl+H**) shall show an HTML hint in a gold-bordered box under the answer; the box hides when the next question loads. Hints are free. Each hint opened **before** the answer is submitted is counted and saved with that question (`hints_used`, schema v2); the count is not shown in the UI yet (FEAT-02). | I |
 | FR-HNT-02 | Hint content (first match wins, see `HintService.generateHint`): (a) starts with `(` and contains `)` and an operator → BODMAS hint (left bracket, right bracket, combine with middle operator when the form `) op (` is found, else generic BODMAS text); (b) contains substring `of` → fraction/percentage hint (1/2, 3/4, else "divide by 100 then multiply"); (c) starts `Pattern:` → generic "look at the change between steps"; (d) starts `Solve for x:` → generic "isolate x"; (e) starts `Convert` with meters→cm, hours→minutes, litres→mL → unit-factor hint; (f) operator `+`, `-`, `*`/`×`, `/` → partition/step/reverse-multiplication hint (worked example only for 2-digit operands, or exact division); (g) fallback "Break the numbers into parts…". | **P** (rule (b) misroutes measurement/ratio/numerator word problems — BUG-07) |
 
 ### 6.8 Adaptive difficulty (`FR-ADP`)
@@ -208,7 +208,7 @@ See [non-goals](#22-non-goals-v100). Additionally *not present today* (gaps, not
 | FR-ADP-01 | After every submitted answer the engine shall evaluate the session. No recommendation is made until **≥ 4** answers exist. After a suggestion, a cool-down applies: the next suggestion can appear no earlier than **5 answers later** (the counter also advances if the child declines). | I |
 | FR-ADP-02 | **UPGRADE** when the last **5** answers are all correct and current difficulty is not Hard. **DOWNGRADE** when the last **3** answers are all wrong and current difficulty is not Easy. Upgrade is checked first. | I |
 | FR-ADP-03 | A recommendation shall be presented as a **modal Yes/No dialog** ("Level Up?" / "Adjust Level?"). Yes changes the *active session's* difficulty (affecting subsequent questions only) and shows a feedback line; No keeps it. The cool-down starts either way. | I |
-| FR-ADP-04 | The difficulty stored with the session is the **final** value at completion. | I |
+| FR-ADP-04 | The difficulty stored with the session is the **final** value at completion. Each saved question also stores the difficulty it was generated at (schema v2), so a mid-session level change is visible per question. | I |
 
 ### 6.9 Results and grading (`FR-RES`)
 | ID | Requirement | St |
