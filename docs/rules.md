@@ -125,6 +125,7 @@
 | R-DOM-09 | The daily challenge MUST be playable at most once per calendar day (per decision Q4 in the PRD). | Reward integrity. | ⚠ BUG-04 |
 | R-DOM-10 | Mixed excludes Special and the advanced categories (PRD FR-QGN-03). | Spec. | ✔ |
 | R-DOM-11 | A new generator sub-type MUST be added together with an invariant test (≥ 10,000 samples, all difficulties). | Prevents broken questions reaching children. | ✔ `QuestionGeneratorInvariantTest` + golden master |
+| R-DOM-12 | `Skill` IDs (`add.2digit.2terms`, …) are persisted keys: never rename, reuse or remove one; only add new IDs. | Stored per answered question; renames orphan history. | ✔ `SkillTest` |
 
 ---
 

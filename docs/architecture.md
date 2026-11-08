@@ -133,6 +133,7 @@ Root: `D:\MathQuizApp`. Source root: `src/com/mathquiz/`.
 | `config` | `AppTheme` | 99 | Static light/dark palettes and semantic getters (`getBgPrimary/Card/TextDark/TextMuted/BorderClr/AccentGold`); `scaleComponentFont()` recursively scales fonts and attaches hover/click sounds to buttons |
 | `model` | `Question` | 23 | Immutable expression + `int` answer |
 | `model` | `QuestionResult` | 35 | Immutable per-answer record (expression, correct, user answer, correctness, ms) |
+| `model` | `Skill` | 126 | Enum of 56 persisted micro-skill IDs (one per generator sub-type, plus `custom`); `id()`, `category()`, `fromId`, `forCategory` — see [§7.6](#76-skill-catalog-persisted-keys) |
 | `model` | `QuizSession` | 117 | Session state (count, difficulty (mutable), category, start time, results); percentage, **grade, remarks, emoji** rules |
 | `service` | `QuestionGenerator` | 576 | `generate(difficulty, category)`, `generateSeeded(difficulty, category, dateSeed, index)`; one private generator per category |
 | `service` | `AdaptiveDifficultyEngine` | 146 | `evaluate(results, difficulty)` → `UPGRADE/DOWNGRADE/MAINTAIN`; static `upgrade/downgrade/canUpgrade/canDowngrade` |
@@ -379,6 +380,9 @@ Achievements, streaks, heatmap, per-category accuracy, weakest category/difficul
 
 ### 7.5 Performance characteristics (static analysis)
 `loadRaw()` loads **all** sessions and, for each, a separate query for its questions, decrypting every encrypted field. It is called repeatedly: opening Analytics triggers ≈ 17 full loads; refreshing Home ≈ 5 (stats label ×3, streak, calendar) and Home refresh happens on every return to Home and every theme/scale/profile change. Everything runs on the EDT. Fine for tens of sessions; will degrade with hundreds (DEBT-03, DEBT-09).
+
+### 7.6 Skill catalog (persisted keys)
+`Skill` IDs such as `add.2digit.2terms` name the micro-skill a question practises: one per generator sub-type (55) plus `custom` for Quiz Builder questions. They become persisted values once stored per answered question, so they are keys like category names: never rename, reuse or remove one (rules.md R-DOM-12). The full list lives in `src/com/mathquiz/model/Skill.java` and is frozen by `SkillTest.skillIdsAreStable`. Prerequisite links between skills are not modelled yet; they wait for the assessment advisors (premium roadmap X3).
 
 ## 8. Security architecture
 
