@@ -7,9 +7,9 @@ import com.mathquiz.config.AppTheme;
 
 
 /**
- * Persistent Help & Guide panel accessible via the ❓ button on every screen.
+ * Help & Guide panel opened from the ❓ Guide buttons on the Home, Category, Game and Results screens.
  *
- * Organised into 8 child-friendly sections covering every major feature.
+ * Organised into 13 child-friendly sections covering every major feature.
  * Uses large readable text, emoji headers, and plain language suitable for
  * children aged 8–14.
  *
@@ -99,21 +99,46 @@ public class HelpPanel extends JPanel {
         content.setBorder(new EmptyBorder(10, 30, 20, 30));
 
         content.add(buildSection("📖 How to Start a Quiz",
-                "1. On the Home screen, choose HOW MANY questions you want (try 5 or 10 to start).\n" +
-                "2. Pick a DIFFICULTY: Easy is great for beginners, Hard is for champions!\n" +
-                "3. Click 'CHOOSE CATEGORY' and then pick what type of math you want to practise.\n" +
-                "4. Answer each question by typing a number and pressing ENTER or the Submit button.\n" +
-                "5. After all questions, you'll see your score and grade!"));
+                "1. On the Home screen, pick HOW MANY questions (try 5 or 10).\n" +
+                "2. Pick a DIFFICULTY: Easy for beginners, Hard for champions!\n" +
+                "3. Click 'CHOOSE CATEGORY', then pick a type of math.\n" +
+                "4. Type a whole number, then press ENTER or click Submit.\n" +
+                "5. After the last question, you'll see your score and grade!\n" +
+                "Want to stop early? Press ESC during a quiz and choose Yes.\n" +
+                "A quiz you leave early is not saved."));
 
         content.add(Box.createVerticalStrut(12));
 
         content.add(buildSection("➕ Understanding the Categories",
-                "ADDITION — Add numbers together to get the sum. Example: 34 + 57 = 91\n" +
-                "DIFFERENCE — Subtract one number from another. Example: 85 - 32 = 53\n" +
-                "MULTIPLICATION — Multiply numbers to get the product. Example: 12 × 7 = 84\n" +
-                "DIVISION — Divide numbers perfectly (no remainders!). Example: 48 / 6 = 8\n" +
-                "MIXED — A random mix of all four types! Great for all-round practice.\n" +
-                "SPECIAL — Tricky compound expressions using brackets. Example: (6 + 4) × (9 - 3) = 60"));
+                "ADDITION — Add numbers to get the sum. Example: 34 + 57 = 91\n" +
+                "DIFFERENCE — Subtract to find the gap. Example: 85 - 32 = 53\n" +
+                "MULTIPLICATION — Multiply to get the product. Example: 12 * 7 = 84\n" +
+                "DIVISION — Divide perfectly (no remainders!). Example: 48 / 6 = 8\n" +
+                "MIXED — A random mix of the four types above!\n" +
+                "SPECIAL — Compound expressions with brackets.\n" +
+                "&nbsp;&nbsp;Example: (6 + 4) * (9 - 3) = 60\n" +
+                "FRACTIONS — Parts of numbers, percentages and ratios.\n" +
+                "&nbsp;&nbsp;Example: What is 3/4 of 20? = 15\n" +
+                "PATTERNS — Find the missing number in a sequence.\n" +
+                "&nbsp;&nbsp;Example: Pattern: 2, 4, 6, 8, _ = 10\n" +
+                "ALGEBRA — Find the mystery number x.\n" +
+                "&nbsp;&nbsp;Example: Solve for x: x + 5 = 12 means x = 7\n" +
+                "MEASUREMENT — Convert units; find areas, perimeters and volumes.\n" +
+                "&nbsp;&nbsp;Example: Convert 3 meters to centimeters = 300\n" +
+                "In the game, * means multiply and / means divide.\n" +
+                "Every answer is a whole number."));
+
+        content.add(Box.createVerticalStrut(12));
+
+        content.add(buildSection("💡 Hints, Level Prompts & Shortcuts",
+                "• Stuck? Click 💡 Hint (or press F1 or Ctrl+H).\n" +
+                "&nbsp;&nbsp;Hints are free!\n" +
+                "• After 5 right answers in a row, Archie may offer the next level.\n" +
+                "&nbsp;&nbsp;After 3 wrong answers in a row, he may offer an easier level.\n" +
+                "&nbsp;&nbsp;It is always your choice.\n" +
+                "• Type whole numbers only. Anything else just lets you try again.\n" +
+                "• ENTER sends your answer. ESC asks if you want to leave the quiz.\n" +
+                "• Category screen: arrow keys to move, ENTER or SPACE to start."));
 
         content.add(Box.createVerticalStrut(12));
 
@@ -122,77 +147,110 @@ public class HelpPanel extends JPanel {
                 "A+  (85–94%)  → Excellent — Impressive Skills! 🌟\n" +
                 "A   (78–84%)  → Very Good — Strong Performance! 💪\n" +
                 "B+  (65–77%)  → Good — Solid Foundation! 👍\n" +
-                "B   (53–64%)  → Progressing — Keep Practising! 📈\n" +
+                "B   (53–64%)  → Progressing — Keep Practicing! 📈\n" +
                 "C+  (40–52%)  → Developing — You're Learning! 🔄\n" +
                 "C   (33–39%)  → Getting Started — Stay Curious! 🌱\n" +
-                "D   (0–32%)   → Room to Grow — Try an Easier Level! 🚀"));
+                "D   (below 33%) → Room to Grow — Try an Easier Level! 🚀"));
 
         content.add(Box.createVerticalStrut(12));
 
         content.add(buildSection("⏱ About the Timer",
                 "Each question shows a timer counting up in seconds (⏱ 0s, ⏱ 1s…).\n" +
-                "There is NO time limit — it's just there to help you track how fast you're getting!\n" +
-                "As you practise more, you'll notice your time getting shorter. That means you're improving!"));
+                "There is NO time limit — it just shows how fast you're getting!\n" +
+                "As you practice, your times get shorter — you're improving!"));
 
         content.add(Box.createVerticalStrut(12));
 
         content.add(buildSection("📋 Reviewing Your Answers",
-                "After finishing a quiz, click the '📋 Review Answers' button on the results screen.\n" +
+                "After a quiz, click '📋 Review Answers' on the results screen.\n" +
                 "You'll see a table of every question with:\n" +
                 "  - Your answer\n" +
                 "  - The correct answer\n" +
                 "  - Whether you were right (✅) or wrong (❌)\n" +
                 "  - How long you took\n" +
-                "Green rows = correct. Red rows = incorrect. Learn from your mistakes!"));
+                "Green rows = correct. Red rows = incorrect. Learn from mistakes!"));
+
+        content.add(Box.createVerticalStrut(12));
+
+        content.add(buildSection("🛍️ Stars, Badges & Archie's Shop",
+                "• Every finished quiz earns stars: 5 for finishing and 1 for each\n" +
+                "&nbsp;&nbsp;right answer, plus bonus stars for great scores, streaks and\n" +
+                "&nbsp;&nbsp;the Daily Challenge.\n" +
+                "• Spend stars in Archie's Shop (Home screen → Open Mascot Shop)\n" +
+                "&nbsp;&nbsp;on hats, glasses, colors and badges for Archie.\n" +
+                "&nbsp;&nbsp;A new item goes on Archie right away.\n" +
+                "• 10 BADGES unlock by themselves as you play: your first quiz,\n" +
+                "&nbsp;&nbsp;a perfect score, an answer in under 2 seconds, 10 quizzes,\n" +
+                "&nbsp;&nbsp;90% or more in Addition, Difference, Multiplication or Division,\n" +
+                "&nbsp;&nbsp;80% or more on a Hard Special quiz, and a 3-day streak.\n" +
+                "• Stars are kept for the whole computer. Each profile has\n" +
+                "&nbsp;&nbsp;its own quiz history, badges and Archie accessories."));
 
         content.add(Box.createVerticalStrut(12));
 
         content.add(buildSection("💾 Your Progress is Saved!",
-                "Every quiz session is automatically saved to your computer!\n" +
-                "This means in future updates of the app, you'll be able to see your full history,\n" +
-                "track your improvement over time, and find out which areas need more practice.\n" +
-                "Your data is stored privately on your own computer only."));
+                "Every finished quiz is saved on this computer automatically.\n" +
+                "Each profile keeps its own history. Grown-ups can open\n" +
+                "Analytics on the Home screen (after a math puzzle) to see\n" +
+                "accuracy, speed, streaks and the topics that need practice.\n" +
+                "Your data stays on this computer unless a report is exported."));
 
         content.add(Box.createVerticalStrut(12));
 
         content.add(buildSection("🎮 Tips to Score Higher",
                 "✅ Start on Easy and master it before moving to Medium or Hard.\n" +
-                "✅ Use the MIXED category to practise all math types.\n" +
-                "✅ Review your wrong answers after each session — that's where learning happens!\n" +
+                "✅ Use MIXED to practice all four basic operations.\n" +
+                "✅ Review your wrong answers — that's where learning happens!\n" +
                 "✅ Set a goal: beat your previous score each time you play!\n" +
-                "✅ Practise a little every day — even 5 questions a day makes a big difference!\n" +
-                "✅ For SPECIAL questions, solve the brackets first (BODMAS rule)."));
+                "✅ Practice a little every day — even 5 questions helps!\n" +
+                "✅ For SPECIAL questions, solve the brackets first (BODMAS rule).\n" +
+                "✅ Try Smart Practice: Archie picks where you can improve the most."));
 
         content.add(Box.createVerticalStrut(12));
 
         content.add(buildSection("⚙️ Settings & Customization",
-                "• DARK MODE: click the Moon icon on the Home screen to toggle professional zinc dark mode.\n" +
-                "• FONT SCALING: click the Scale button to enlarge text sizing recursively to 125% or 150%.\n" +
-                "• PROFILE SWITCHER: select your profile name in the dropdown to keep your data isolated.\n" +
-                "• SOUND EFFECTS: toggle arpeggio sound chimes and warning buzzer sounds off or on."));
+                "• DARK MODE: click the Moon button on the Home screen\n" +
+                "&nbsp;&nbsp;(it becomes a Sun to switch back).\n" +
+                "• TEXT SIZE: the Scale button cycles 100%, 125% (start) and 150%.\n" +
+                "• PROFILES: click your profile name to switch or create one.\n" +
+                "&nbsp;&nbsp;Use a nickname (or Spark Mascot Name), never your real name!\n" +
+                "• SOUND: the Sound button opens a menu to mute or pick a volume\n" +
+                "&nbsp;&nbsp;(100%, 75%, 50% or 25%). A grown-up math puzzle comes first."));
 
         content.add(Box.createVerticalStrut(12));
 
         content.add(buildSection("🔥 Weekly Streaks & Daily Challenges",
-                "• WEEKLY CALENDAR: see checkmarks for each day of the past 7 days you completed math practice.\n" +
-                "• PRACTICE STREAK: complete at least one quiz daily to build your flame streak level.\n" +
-                "• DAILY CHALLENGE: a unique daily quiz of 10 medium questions. Prevents double-completion daily."));
+                "• WEEKLY CALENDAR: on the Home screen, a filled dot ● marks\n" +
+                "&nbsp;&nbsp;each of the last 7 days you finished a quiz.\n" +
+                "• PRACTICE STREAK: finish a quiz daily to grow your 🔥.\n" +
+                "&nbsp;&nbsp;Missing a whole day starts it over.\n" +
+                "• DAILY CHALLENGE: everyone gets the same 10 Medium questions\n" +
+                "&nbsp;&nbsp;each day, with bonus stars. When you finish, the Home button\n" +
+                "&nbsp;&nbsp;says Completed until tomorrow."));
 
         content.add(Box.createVerticalStrut(12));
 
         content.add(buildSection("📊 Analytics, Smart Practice & Quiz Builder",
-                "• CHARTS: line charts show accuracy trends; hexagonal radar charts show category strengths.\n" +
-                "• SMART PRACTICE: click Practice on the Home screen to play a quiz custom-designed to address your weakest topic.\n" +
-                "• QUIZ BUILDER: Parents & Teachers can build custom math quiz sets and load them via the dropdown."));
+                "• ANALYTICS (for grown-ups): an accuracy line chart, a 10-sided\n" +
+                "&nbsp;&nbsp;radar chart of each category, a 28-day practice map, strengths,\n" +
+                "&nbsp;&nbsp;weaknesses and recent quizzes. Reset History clears the current\n" +
+                "&nbsp;&nbsp;profile's quiz history, stars and Archie accessories.\n" +
+                "• SMART PRACTICE: click Practice on the Home screen to play 10\n" +
+                "&nbsp;&nbsp;questions on the topic and level where you can improve most.\n" +
+                "• QUIZ BUILDER (for parents and teachers): write your own\n" +
+                "&nbsp;&nbsp;questions and answers, then play them with Load Quiz on Home.\n" +
+                "• Analytics, Quiz Builder and Sound ask for a math puzzle first."));
 
         content.add(Box.createVerticalStrut(12));
 
         content.add(buildSection("🎨 About Atelier Arithmetic & Archie",
-                "Atelier Arithmetic is a premium math quiz and intelligence learning studio built for children.\n\n" +
-                "Archie the Owl is your mathematics guide! He will help you during the interactive tour, " +
-                "provide hints during calculations, and offer helpful learning suggestions on the results dashboard.\n\n" +
+                "Atelier Arithmetic is a math quiz studio built for children.\n\n" +
+                "Archie the Owl is your mathematics guide! He shows you around\n" +
+                "in the interactive tour, greets you on the Home screen, and\n" +
+                "shares learning tips on your results and analytics screens.\n\n" +
                 "Version: 1.0.0\n" +
-                "Brand and mascot designs by Atelier Arithmetic Studio. All rights reserved."));
+                "Brand and mascot designs by Atelier Arithmetic Studio.\n" +
+                "All rights reserved."));
 
         JScrollPane scroll = new JScrollPane(content);
         scroll.setBorder(BorderFactory.createEmptyBorder());
@@ -217,7 +275,7 @@ public class HelpPanel extends JPanel {
 
         // Multi-line body with line breaks preserved and emojis wrapped for Segoe UI Emoji
         String bodyWrapped = wrapEmojis(body.replace("\n", "<br>"));
-        String html = "<html><body style='font-family:SansSerif;font-size:12px;color:#555;'>"
+        String html = "<html><body style='font-family:SansSerif;font-size:12px;color:#555;width:440px;'>"
                 + bodyWrapped
                 + "</body></html>";
         JLabel bodyLbl = new JLabel(html);
