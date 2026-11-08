@@ -48,7 +48,8 @@ Atelier Arithmetic is a **production-quality, feature-rich Java Swing desktop ap
 17. [Design Philosophy](#design-philosophy)
 18. [Technical Highlights](#technical-highlights)
 19. [Requirements](#requirements)
-20. [License](#license)
+20. [Known Limitations](#known-limitations)
+21. [License](#license)
 
 ---
 
@@ -64,9 +65,9 @@ Atelier Arithmetic is positioned not as a quiz app, but as a **personal math tra
 
 - Tells children **exactly** which questions they got wrong and what the correct answers were via a scrollable review screen.
 - Tracks **how fast** they answered each question, encouraging computational fluency.
-- **Saves every session** to a relational SQLite database indexed by user profile for long-term analytics.
+- **Saves every session** to a relational SQLite database organised by user profile for long-term analytics.
 - Uses **encouraging, growth-mindset language** in every piece of feedback, narrated by Archie the Owl.
-- Onboards every new user with a **19-step interactive guided tour** so they immediately feel confident using the full feature set.
+- Onboards every new user with a **24-step interactive guided tour** so they immediately feel confident using the full feature set.
 - Motivates daily return through **streaks, achievements, and a star economy** that lets children customize Archie.
 
 ---
@@ -81,9 +82,9 @@ Atelier Arithmetic is fully realized across 6 shipped phases plus a comprehensiv
 | **Phase 2** | Intelligence Layer | Custom Java2D Bezier line graph, 10-spoke radar chart, 28-day activity heatmap, Smart Practice mode, Adaptive Difficulty Engine |
 | **Phase 3** | Engagement & Audio | Streak tracker with 7-day calendar strip, 10 unlockable achievement badges, programmatic sound synthesizer, Dark Mode |
 | **Phase 4** | Bespoke Features | Multi-user profiles, step-by-step scaffolded hints, Base64-embedded HTML report export, high-DPI font scaling (100%/125%/150%) |
-| **Phase 5** | Customizer & Tour | 10-category adaptive quiz engine, Custom Quiz Builder (parent/teacher), 19-step guided onboarding tour with mascot overlay |
+| **Phase 5** | Customizer & Tour | 10-category adaptive quiz engine, Custom Quiz Builder (parent/teacher), 24-step guided onboarding tour with mascot overlay |
 | **Production** | Enterprise Hardening | Relational SQLite persistence with ACID transactions, global JVM uncaught exception handler, AES-128 encryption, volume settings popup |
-| **UX & Safety** | Security & Engagement | COPPA-compliant mascot name generator, encrypted config/DB, extended word-based parental gates, **Stars/Coins reward economy**, **12-item Mascot Shop** |
+| **UX & Safety** | Security & Engagement | COPPA-aware mascot name generator, encrypted config/DB, word-based parental gates, **Stars reward economy**, **12-item Mascot Shop** |
 | **Distribution** | Windows Packaging | `jlink` custom minimal JRE, `jpackage` native launcher, WiX MSI installer, EV code signing pipeline, portable ZIP fallback |
 
 ---
@@ -97,19 +98,19 @@ A premium 2-column SaaS-style dashboard. All top bar controls and dashboard card
 **Top Bar** (always visible):
 - 👤 **Profile Selector** — dropdown to switch or create profiles, with a COPPA-aware creation dialog
 - ⭐ **Star Balance Indicator** — live display of earned stars for the active profile
-- 🔊 **Sound Settings Button** — opens volume/mute popup (parental gate protected)
+- 🔊 **Sound Settings Button** — opens a menu with a mute toggle and four volume presets (100 / 75 / 50 / 25 %) (parental gate protected)
 - 🌙 **Dark Mode Toggle** — switches between the warm light and rich dark themes
-- 🔠 **Font Scale Toggle** — cycles 100% → 125% → 150% for accessibility
+- 🔍 **Font Scale Toggle** — cycles 100% → 125% → 150% → 100% for accessibility (the default is 125%)
 
 **Left Column:**
-- Brand logo + Archie's greeting speech bubble (updates with equipped accessory)
+- Brand logo + Archie's greeting line (updates when an accessory is equipped)
 - Question count input and difficulty selector (`Easy` / `Medium` / `Hard`)
 - `CHOOSE CATEGORY →` primary CTA button
-- Custom Quiz Builder launch buttons (parent/teacher, parental gate protected)
+- Custom quiz buttons: **🛠️ Quiz Builder** (parent/teacher; opening it is parental gate protected) and **📂 Load Quiz** (runs a saved custom quiz; not gated)
 
 **Right Column Cards (4 total):**
-- **Daily Quest Tracker** — date-aware daily challenge launcher, 7-day calendar strip with streak flame indicators
-- **Performance & Badges Card** — session count, streak count, and unlocked badge count; links to Analytics and Achievements panels
+- **Daily Quest Tracker** — Daily Challenge button (shows ✅ Completed once done for the day), a 🔥 day-streak counter, and a 7-day strip (● practised / ○ not)
+- **Performance & Badges Card** — completed-session count and unlocked-badge count (`n / 10`); links to the Analytics and Badges screens
 - **🛍️ Archie's Shop Card** — live star balance and currently equipped accessory name; links to Mascot Shop
 - **Guide Card** — launchers for Smart Practice, guided tour replay, and Help panel
 
@@ -117,7 +118,7 @@ A premium 2-column SaaS-style dashboard. All top bar controls and dashboard card
 
 ### 🗂️ Category Selection Screen
 
-Ten discipline cards in a responsive 2×5 grid. Each card displays a large emoji icon, category name, a one-line description, and a `START` button.
+Ten discipline cards in a three-column, vertically scrollable grid. Each card displays a large emoji icon, category name, a one-line description, and a `START` button. The grid is fully keyboard-operable: arrow keys move between cards, **Enter/Space** starts the focused category, and **Esc** goes back to the Home screen.
 
 | Icon | Category | Description |
 |:---:|---|---|
@@ -140,11 +141,12 @@ The live quiz interface:
 - **Progress bar & question counter** (top)
 - **Live per-question count-up timer** — ⏱ seconds ticking, recorded per question
 - **Large arithmetic expression** displayed in a prominent serif font card
-- **💡 Hint drawer** — animated slide-down panel with step-by-step scaffolded hints (context-aware for each category)
+- **💡 Hint box** — shown under the answer field on request (button, **F1** or **Ctrl+H**) with a step-by-step hint matched to the question type (partitioning, BODMAS, reverse multiplication, unit factors…); it is hidden again on the next question
 - **Answer input field** with Enter-key support
 - **Real-time feedback** on submission (correct/wrong with the right answer shown on incorrect)
-- **Adaptive Difficulty Banner** — non-intrusive banner suggesting difficulty change after 5 consecutive perfect answers or 3 consecutive wrong answers
-- **❓ Help button** — opens the Help panel without losing progress
+- **Adaptive Difficulty prompt** — a Yes/No dialog offering the next level after 5 correct answers in a row, or an easier level after 3 wrong answers in a row; accepting changes the difficulty of the remaining questions
+- **❓ Guide button** — opens the Help panel. Leaving Help from a running quiz returns to the Home screen, which ends that quiz
+- **Esc** — asks whether to leave the quiz; leaving discards the unfinished session (nothing is saved)
 
 ---
 
@@ -153,18 +155,20 @@ The live quiz interface:
 A 4-card post-session performance report:
 
 1. **KPI Metrics Card** — Score (X/N), success %, letter grade, total session time, average response speed (seconds/question), and **⭐ +N Stars Earned!** label with a hover tooltip showing the full reward breakdown
-2. **Session Mastery Card** — fastest solved expression with its response time, and the hardest (slowest) question encountered
+2. **Session Mastery Card** — the fastest correctly solved expression with its response time, and a *challenge area*: the slowest incorrect question (or the slowest correct one if every answer was right)
 3. **Archie's Insights Card** — dynamically generated encouraging feedback from Archie based on accuracy tier
-4. **Suggested Next Steps Card** — actionable recommendation button (e.g., step-up difficulty or retry category)
+4. **Suggested Next Steps Card** — one recommendation button. With 85%+ it suggests stepping up (Easy → Medium, Medium → Hard; the button returns to the Home screen so you can choose the level) or, on Hard, today's Daily Challenge. Below 85% it opens Smart Practice
 
 **Footer buttons:** `❓ Guide` | `📋 Review Answers` | `📄 Export Report` | `🔄 PLAY AGAIN`
+
+`Export Report` saves a self-contained HTML report and then opens the system print dialog. The grade remark (e.g. *"Very Good — Strong Performance!"*) appears in the exported report; the dashboard shows the grade with an emoji badge.
 
 ---
 
 ### 📋 Review Answers Screen
 
 A scrollable table of every question answered in the session:
-- Expression, your answer, correct answer, ✅/❌ indicator, and time taken (ms)
+- Expression, your answer, correct answer, ✅/❌ indicator, and time taken (seconds); correct rows are tinted green and wrong rows red
 - Sorted in question order for post-session analysis
 
 ---
@@ -175,16 +179,16 @@ A comprehensive learning analytics view (parental gate protected):
 
 | Component | Description |
 |---|---|
-| **Stat Cards (×4)** | Overall Accuracy %, Total Questions Solved, Average Response Speed, Longest Streak |
-| **Accuracy Trend Chart** | Custom Java2D Bezier curve line graph of last 20 session scores |
+| **Stat Cards (×4)** | Overall Accuracy % (best score beneath), Questions Solved (with total practice time), Average Speed (with fastest correct answer), Practice Streak (current streak, longest beneath) |
+| **Accuracy Trend Chart** | Custom Java2D Bezier curve line graph of up to 20 session scores (needs at least 2 sessions; see [Known Limitations](#known-limitations)) |
 | **Category Radar Chart** | 10-spoke radar visualization showing per-category performance |
-| **Activity Heatmap** | 4×7 grid of the last 28 active days |
+| **Activity Heatmap** | 4×7 grid of the last 28 calendar days (gold = at least one quiz that day) |
 | **Strengths & Weaknesses** | Top 2 best vs. worst categories based on a 70% accuracy threshold |
 | **Archie's Recommendations** | Personalized speech-bubble advice based on current performance |
-| **Recent Sessions Log** | Last 10 sessions with timestamp, category, grade, and score |
-| **Goals Checklist** | Interactive daily learning goals with action buttons |
+| **Recent Sessions Log** | The 4 most recent sessions: category (difficulty), score %, seconds per question, and date |
+| **Goals Checklist** | Two read-only goals (Daily Quest done today, streak alive) plus **Smart Practice** and **Daily Challenge** buttons |
 
-**Quick actions:** `🔄 Refresh` | `🗑 Reset History` (parental gate) | `← Back`
+**Header actions:** `🗑 Reset History` (parental gate + confirmation; clears the active profile's quiz history **and** its stars and shop items) | `← Back`
 
 ---
 
@@ -205,7 +209,7 @@ A comprehensive learning analytics view (parental gate protected):
 | 🔬 | Special Specialist | Scored 80%+ on a Hard Special quiz |
 | 🔥 | Consistency Champion | Maintained a 3+ day practice streak |
 
-Unlocking a new badge awards **+15 bonus stars**.
+Badges are calculated from the active profile's saved history, so clearing the history locks them again. Unlocking a badge does not currently award bonus stars or play a sound (see [Known Limitations](#known-limitations)).
 
 ---
 
@@ -217,63 +221,65 @@ Unlocking a new badge awards **+15 bonus stars**.
 
 ### 🧠 Smart Practice Panel
 
-Analyses session history to identify the child's weakest category and lowest accuracy difficulty. Displays a personalized recommendation card and an instant `Launch Practice` button to start a targeted 10-question session. Shows a friendly empty-state card if no history exists yet.
+Analyses session history to identify the child's weakest category and lowest accuracy difficulty. Displays a personalized recommendation card and a `START SMART PRACTICE →` button that starts a targeted 10-question session. With no history yet it shows a friendly empty-state card and the button opens the category screen instead.
 
 ---
 
 ### 🔨 Custom Quiz Builder (Parent/Teacher)
 
 An editable table interface for building custom quiz sessions:
-- Add custom expressions with their exact expected numeric answers
+- Add custom expressions with their exact expected **integer** answers (the app does not evaluate the expression; the author supplies the answer)
 - Remove questions from the table
-- Name and save the quiz set to disk via `CustomQuizService`
-- Load saved quizzes from the Home Screen with a `Load Saved Quiz` button
-- Fully protected by the Parental Gate
+- Name and save the quiz set to disk via `CustomQuizService` (stored as plain JSON in `custom_quizzes/`; saving under an existing name overwrites it)
+- Load saved quizzes from the Home screen with the `📂 Load Quiz` button (not gated; the quiz runs as category `Custom: <name>` at Medium difficulty)
+- Opening the builder is protected by the Parental Gate
 
 ---
 
 ### ❓ Help Panel
 
-An 8-section inline help guide accessible from every screen via the `❓` button. Written in plain, child-friendly language with emoji section headers. The back button returns to the screen the user came from.
+A 13-section inline help guide opened from the `❓ Guide` buttons on the Home, Category, Game and Results screens. Written in plain, child-friendly language with emoji section headers (starting a quiz, all 10 categories, hints and level prompts, grades, timer, review, stars/badges/shop, saved progress, tips, settings, streaks and the daily challenge, analytics/Smart Practice/Quiz Builder, and about Archie). **Back** returns to the Category or Results screen when opened from there; from the Home screen or from a running quiz it returns to Home.
 
 ---
 
 ### 🗺️ Guided Onboarding Tour
 
-A 19-step interactive tour with a translucent `TourOverlay` glass pane that spotlights each UI element, narrated by Archie. Features:
+A 24-step interactive tour with a translucent `TourOverlay` glass pane that spotlights each UI element, narrated by Archie. Features:
 - Auto-launches on first run, skippable at any time
 - Can be replayed from the Home Screen Guide Card
-- Spotlights each major control with an animated highlight and Archie's mascot speech bubble
-- Completion is persisted in `config.properties` (`tourSeen = true`)
+- Spotlights each major control with a gold-ringed cut-out and Archie's speech bubble, switching screens automatically (Home → Categories → Game → Results → Review → Home)
+- Finishing the tour is remembered (`tourSeen = true` in the encrypted `config.properties`); skipping it is not, so the tour is offered again at the next launch
 
 ---
 
 ## Quiz Categories & Question Engine
 
-All 10 categories use the `QuestionGenerator` service to generate **fully randomized, non-repeating questions** seeded per session. Each difficulty level meaningfully changes operand ranges and structural complexity:
+All 10 categories use the `QuestionGenerator` service to generate **randomized questions with guaranteed whole-number answers** (every draw is independent, so a question can occasionally repeat within a session). Each difficulty level changes operand ranges and structural complexity. Full ranges are listed in [docs/PRD.md §9](docs/PRD.md).
 
 ### Core Categories (Phase 1)
 
 | Category | Easy | Medium | Hard |
 |---|---|---|---|
-| **Addition** | 2 operands (10–99) | 3 operands (100–999) | 4 operands (1000–9999) |
+| **Addition** | 2 operands (10–99) | 3 operands (100–999) | 4 operands (two of 1000–9999, two of 100–999) |
 | **Difference** | 2 operands, guaranteed positive | 3 operands | 4 operands |
-| **Multiplication** | 2 factors (2–12 × 2–12) | 2 larger factors | 3 factors |
-| **Division** | Perfect divisors up to 10 | Larger perfect quotients | Multi-step exact division |
+| **Multiplication** | 2 factors (10–98 × 2–10) | 3 factors (10–98 × 2–9 × 2–5) | 3 factors (100–998 × 2–9 × 2–9) |
+| **Division** | `D / d`, divisor 2–13, quotient 2–16 | Two-step `(D / d) / e` | `D / d`, divisor 3–50, quotient 10–99 |
 | **Mixed** | Randomly picks one of the 4 core types per question | ← | ← |
-| **Special** | BODMAS bracket expressions with 1 inner op | Nested expressions | 3-term compound brackets |
+| **Special** | Five bracket templates picked at random, small operands | Same templates, operands up to ~50 | Same templates, operands up to ~150 |
+
+> The five *Special* templates are `(A + B) * (C - D)`, `(A - B) / (C + D)`, `(A / B) + (C / D)`, `(A * B) / (C * D)` and `(A / B) - (C * D)`. Only the first two scale with difficulty; the other three are the same on every level. All divisions are exact.
 
 ### Advanced Categories (Phase 5)
 
 | Category | Easy | Medium | Hard |
 |---|---|---|---|
-| **Fractions** | Simple fractional parts of integers | Mixed number conversions, ratios | Percentage queries, complex fraction multiplication |
-| **Patterns** | Linear progressions (±step) | Alternating steps, progressive increments | Geometric sequences, Fibonacci-like, polynomial `n*(n+1)` |
-| **Algebra** | Single-step `x + B = C` | Two-step `Ax + B = C`, `(x+B)/A = C` | Double-sided equations, simultaneous systems |
+| **Fractions** | `a/b` of a whole number | Mixed-number numerators, simplified denominators, `a/b` of larger values | Percentages, ratio word problems, product of two fractions of a number |
+| **Patterns** | Linear progressions (±step), alternating +a / −b | Growing steps, geometric (×2 to ×4), alternating ×2 / +k | Fibonacci-like, `n² ± c`, interleaved sequences, `n(n+1)` and `n² − n` |
+| **Algebra** | Single-step (`x + A = B`, `x − A = B`, `A − x = B`, `Ax = B`) | Two-step `Ax + B = C`, `(x+B)/A = C` | Double-sided equations, simultaneous systems |
 | **Measurement** | Metric conversions (m→cm, L→mL) | Time calculations, rectangular area/perimeter | Box volumes, multi-unit complex word problems |
 
 ### Daily Challenge Mode
-The Home Screen's **Daily Quest Tracker** launches a date-seeded 10-question daily challenge. The same questions are generated for all users on the same day (deterministic seed), and completion awards **+8 bonus stars**. Completion state resets each calendar day.
+The Home Screen's **Daily Quest Tracker** launches a date-seeded 10-question daily challenge (Medium difficulty, questions drawn from the four core operations). The same questions are generated for all users on the same day (deterministic seed), and completion awards **+8 bonus stars**. Completion is recorded once per computer (not per profile); the Home button then shows ✅ Completed until the next calendar day.
 
 ---
 
@@ -326,8 +332,8 @@ The application follows a strict **Model-View-Controller (MVC)** pattern, enhanc
 ### Key Design Principles
 - **QuizNavigator interface**: All panels depend only on this interface — never on `QuizFrame` directly — making each panel independently portable.
 - **Single panel instances**: All 11 panels are created once in `QuizFrame` and reused via `CardLayout`, minimizing memory overhead and enabling smooth transitions.
-- **Service-Panel separation**: No panel contains business logic. All computation (scoring, grading, reward calculation, hint generation, etc.) lives in dedicated service classes.
-- **Encrypted persistence**: Both `config.properties` and all sensitive SQLite columns are encrypted at rest via AES-128.
+- **Service-Panel separation**: Business rules (scoring, grading, reward calculation, hint generation, analytics) live in model and service classes. A few small calculations, such as the Home screen's streak counter, still live in panels and are tracked as technical debt in [docs/task.md](docs/task.md).
+- **Encrypted persistence**: Both `config.properties` and the sensitive SQLite columns are encrypted at rest via AES-128 (machine-bound; see the limits in the Security section).
 
 ---
 
@@ -337,6 +343,7 @@ The application follows a strict **Model-View-Controller (MVC)** pattern, enhanc
 MathQuizApp/
 ├── README.md                        # Project documentation (this file)
 ├── DEPLOYMENT.md                    # Packaging, signing & distribution guide
+├── docs/                            # PRD, architecture, rules, design, task register, roles & skills
 ├── run.bat                          # Developer compile-and-run script
 ├── package.ps1                      # Automated Windows build & packaging pipeline
 ├── sign.ps1                         # EV code signing automation script
@@ -373,7 +380,7 @@ MathQuizApp/
             │   ├── RewardService.java            # Stars economy engine
             │   ├── SessionRepository.java        # SQLite ACID read/write
             │   ├── SoundService.java             # Programmatic audio synthesizer
-            │   └── TourManager.java              # 19-step guided tour controller
+            │   └── TourManager.java              # 24-step guided tour controller
             ├── util/
             │   ├── CryptoHelper.java             # AES-128 encrypt/decrypt helper
             │   ├── IcoConverter.java             # PNG → ICO packaging converter
@@ -383,20 +390,31 @@ MathQuizApp/
                 ├── AnalyticsPanel.java           # Full analytics dashboard
                 ├── CategoryPanel.java            # 10-category selection grid
                 ├── GamePanel.java                # Live quiz interface
-                ├── HelpPanel.java                # 8-section help guide
+                ├── HelpPanel.java                # 13-section help guide
                 ├── MascotShopPanel.java          # 12-item cosmetic accessory shop
                 ├── QuizBuilderPanel.java         # Custom quiz editor table
                 ├── QuizFrame.java                # Main frame + CardLayout orchestrator
                 ├── QuizNavigator.java            # Navigation contract interface
                 ├── ResultsPanel.java             # 4-card post-quiz dashboard
                 ├── ReviewPanel.java              # Scrollable question review table
-                ├── SmartPracticePanel.java       # AI-targeted practice launcher
+                ├── SmartPracticePanel.java       # Weakest-topic practice launcher
                 ├── WelcomePanel.java             # Home dashboard
                 └── tour/
                     ├── MascotPainter.java        # Custom Archie mascot renderer
                     ├── TourOverlay.java          # Glass-pane spotlight overlay
                     └── TourStep.java             # Step data model
 ```
+
+### Further documentation
+
+| Document | Contents |
+|---|---|
+| [docs/PRD.md](docs/PRD.md) | Product requirements, business rules, exact question specs |
+| [docs/architecture.md](docs/architecture.md) | Layers, runtime flow, data model, security limits, build pipeline |
+| [docs/rules.md](docs/rules.md) | Project rules and conventions |
+| [docs/design.md](docs/design.md) | Design system, screens, tour and audio specs |
+| [docs/task.md](docs/task.md) | Task register, known issues, regression checklist |
+| [docs/role_skills.md](docs/role_skills.md) | Roles, skills and working agreements |
 
 ---
 
@@ -408,7 +426,7 @@ Atelier Arithmetic ships as a fully self-contained Windows application bundled w
 
 1. Download `AtelierArithmetic-1.0.0.msi` (or extract `AtelierArithmetic-v1.0.0-Portable.zip`).
 2. Run the installer. It will:
-   - Install the application and a bundled ~35MB custom JRE (no system Java needed).
+   - Install the application and a bundled ~46 MB custom JRE (no system Java needed).
    - Create **Desktop** and **Start Menu** shortcuts.
    - Register a clean uninstaller in **Add/Remove Programs**.
 3. Launch from the desktop shortcut. No terminal or command line required.
@@ -420,7 +438,7 @@ msiexec /i AtelierArithmetic-1.0.0.msi /qn /norestart
 
 ### 💻 Developer Quick Launch
 
-Requires **JDK 17+** installed and on `PATH`. Clone or download the repository and run:
+Requires **JDK 17+** installed and on `PATH` (verified with JDK 21). Clone or download the repository and run:
 
 ```cmd
 run.bat
@@ -430,7 +448,7 @@ This compiles all source files with the SQLite classpath, copies logo resources 
 
 ### 🛠️ Rebuild Native Installer
 
-Requires JDK 21 and [WiX Toolset v3.11+](https://wixtoolset.org/) on `PATH`:
+Requires a JDK (17 or 21) with `JAVA_HOME` set. The MSI additionally needs the [WiX Toolset v3.11+](https://wixtoolset.org/) on `PATH`; without WiX the script produces the portable ZIP instead:
 
 ```powershell
 powershell -File package.ps1
@@ -452,8 +470,8 @@ Atelier Arithmetic uses a child-friendly grading and remarks scale designed to r
 | 65% – 77% | **B+** | Good — Solid Foundation! |
 | 53% – 64% | **B** | Progressing — Keep Practicing! |
 | 40% – 52% | **C+** | Developing — You're Learning! |
-| 33% – 39% | **C** | Working Hard — Try Again! |
-| Under 33% | **D** | Keep Trying — Every Step Counts! |
+| 33.33% – 39% | **C** | Getting Started — Stay Curious! |
+| Under 33.33% | **D** | Room to Grow — Try an Easier Level! |
 
 ---
 
@@ -471,10 +489,11 @@ Atelier Arithmetic includes a built-in engagement economy that motivates consist
 | Grade A+ or A++ (85–99%) | +5 bonus |
 | Grade A (78–84%) | +3 bonus |
 | Daily Challenge completion | +8 bonus |
-| Streak bonus (×2 per day, max +10) | +2 to +10 |
-| New achievement badge unlocked | +15 bonus |
+| Streak bonus (×2 per consecutive day, max +10) | +2 to +10 |
 
-The **⭐ N Stars** balance is displayed in the top bar at all times, updated dynamically on each navigation event, and stored encrypted in `config.properties` per profile.
+The perfect-score bonus replaces the grade bonus (they are not added together), and the streak bonus counts today's quiz, so every completed quiz earns at least +2 streak stars.
+
+The **★ N** balance is shown in the Home screen's top bar, on the shop card and in the shop header, and is refreshed whenever you return to Home. It is stored (encrypted) in `config.properties` and is **shared by all profiles on the same computer**; the items you unlock and equip are saved per profile.
 
 ### Mascot Shop — 12 Items
 
@@ -496,8 +515,8 @@ Children spend earned stars to unlock purely cosmetic accessories for Archie the
 | Badges | Kind Heart | 💖 | 30 ⭐ |
 
 **Shop mechanics:**
-- **Purchase** via a confirmation dialog — balance is checked before deducting.
-- **Equip** any owned item — it appears in Archie's greeting tagline on the Home Screen.
+- **Purchase** via a confirmation dialog — balance is checked before deducting, and the new item is equipped automatically.
+- **Equip** any owned item (one at a time) — it appears in Archie's greeting tagline on the Home Screen.
 - **Unequip** to return Archie to his default appearance.
 - Guard against duplicate purchases — the Buy button is permanently replaced with Equip once an item is owned.
 - The **Home Screen Shop Card** shows the live balance and equipped item name at a glance.
@@ -507,19 +526,20 @@ Children spend earned stars to unlock purely cosmetic accessories for Archie the
 ## Analytics & Intelligence Layer
 
 ### Smart Practice Mode
-Scans all session history to identify the weakest category and lowest accuracy difficulty. Displays a personalized recommendation card. The `Launch Practice` button immediately starts a targeted 10-question session at that exact category/difficulty combination.
+Scans all session history to identify the weakest category and lowest accuracy difficulty. Displays a personalized recommendation card. The `START SMART PRACTICE →` button immediately starts a targeted 10-question session at that exact category/difficulty combination (the weakest category is chosen among the ten core categories you have played; the weakest difficulty is chosen across all sessions).
 
 ### Adaptive Difficulty Engine
-During an active quiz session, `AdaptiveDifficultyEngine` evaluates every submitted answer:
-- **Upgrade suggestion**: 5 consecutive perfect answers → banner suggests stepping up.
-- **Downgrade suggestion**: 3 consecutive wrong answers → banner suggests stepping down.
-- A 5-question cooldown suppresses repeated suggestions to avoid interrupting flow.
+During an active quiz session, `AdaptiveDifficultyEngine` evaluates every submitted answer (nothing is suggested before the 4th answer):
+- **Upgrade suggestion**: the last 5 answers all correct (and the level is below Hard) → a Yes/No dialog offers the next level.
+- **Downgrade suggestion**: the last 3 answers all wrong (and the level is above Easy) → a Yes/No dialog offers an easier level.
+- Accepting changes the difficulty of the *remaining* questions; the final level is what gets saved.
+- A cool-down of 5 answers after each suggestion (accepted or declined) avoids interrupting the flow.
 
 ### Analytics Service
 `AnalyticsService` computes:
 - Overall accuracy percentage across all sessions
 - Per-category average accuracy (used for radar chart)
-- Accuracy trend data for the Bezier line chart (last 20 sessions)
+- Accuracy trend data for the Bezier line chart (up to 20 sessions)
 - Current and longest practice streaks (date-aware)
 - Weakest and strongest category identification
 
@@ -562,20 +582,30 @@ All session data is stored in an embedded SQLite database at `~/.atelier-arithme
 - **ACID Transactions**: Session and all its question records are written atomically. A failure rolls back everything.
 - **Cascading Deletes**: Clearing history purges both tables cleanly via `ON DELETE CASCADE`.
 - **Profile Isolation**: All rows include an encrypted `profile_name` column — a single database supports unlimited profiles.
-- **Foreign Key Enforcement**: `PRAGMA foreign_keys = ON` is executed on every connection.
+- **Foreign Key Enforcement**: `PRAGMA foreign_keys = ON` is issued before history is cleared so the cascade removes the question rows (SQLite applies this setting per connection).
 
 **User preferences** are stored in `~/.atelier-arithmetic/config.properties`, including:
 - Profile list and active profile
-- Star balance (per-profile)
-- Unlocked and equipped shop items (per-profile)
+- Star balance (shared by all profiles on the computer)
+- Unlocked and equipped shop items (per profile)
 - Sound enabled/volume, dark mode, font scale
-- Tour completion flag, last daily challenge date
+- Tour completion flag, last daily challenge date (shared)
+
+Everything lives in one folder that the uninstaller does **not** remove:
+
+```
+~/.atelier-arithmetic/            (Windows: %USERPROFILE%\.atelier-arithmetic\)
+├── config.properties             # encrypted preferences
+├── atelier_arithmetic.db         # SQLite session history
+├── custom_quizzes/               # parent-built quizzes (plain JSON)
+└── logs/error.log                # crash reports
+```
 
 ---
 
 ## 🔐 Security, Child Safety & Privacy (COPPA / GDPR-K)
 
-Atelier Arithmetic implements strict **privacy-by-design** principles:
+Atelier Arithmetic follows **privacy-by-design** principles. These measures reflect the spirit of children's-privacy rules such as COPPA and GDPR-K; they are **not a legal certification**.
 
 ### Zero Network Activity
 The application makes **zero external network requests**. All data is stored strictly offline on the child's machine. There are no analytics trackers, no cloud syncs, and no third-party SDKs.
@@ -587,19 +617,21 @@ The `CryptoHelper` class provides AES-128/ECB/PKCS5Padding encryption using a ma
 SHA-256(user.name + os.name + user.home) → first 16 bytes → AES key
 ```
 
-This binds encrypted data to the specific machine, making copied database files non-readable on other systems.
+This binds encrypted data to the specific machine and Windows account, so copied files are not readable elsewhere. It is machine-bound obfuscation meant to stop casual copying and tampering — it is **not** a defence against someone who can run code as the same user (the key is derived from non-secret system properties and ECB mode is deterministic). Restoring the files under a different Windows account makes the data unreadable.
 
 **What is encrypted:**
 - Entire `config.properties` file (serialized as plaintext, then encrypted as Base64)
 - `profile_name`, `category`, `difficulty`, `grade` columns in the `sessions` table
 - `expression` column in the `session_questions` table
 
+**What is not encrypted:** the numeric and date columns of the database (question counts, scores, durations, timestamps, answers) and the custom quiz files (plain JSON).
+
 **Graceful fallback:** If decryption fails (e.g., legacy plain-text config), the raw value is used without crashing.
 
 ### COPPA-Aware Profile Management
 - **Privacy directive** shown at profile creation: *"To protect child safety, please do not use your real first or last name!"*
 - **🎭 Spark Mascot Name generator** creates fun adjective-animal pseudonyms (e.g., *"Joyful Penguin"*, *"Clever Fox"*) at the click of a button
-- Profile name constraints: no spaces, no special characters, max 15 characters
+- Profile name constraints: letters, digits, underscores and spaces only; 1–15 characters
 
 ### Data Minimization
 The application collects only what is required for its educational function:
@@ -632,7 +664,8 @@ A randomly generated multiplication problem presented entirely in English words:
 
 - Factors are randomly selected between 3 and 12 on each invocation.
 - Access is granted only upon entering the exact correct numeric answer.
-- Clicking **Cancel** or entering a wrong answer silently denies access.
+- **Cancel** closes the prompt silently; a wrong or non-numeric answer shows a "Lock Active" warning. Either way access is denied.
+- Not gated: Load Quiz, Mascot Shop, Badges, Smart Practice and regular quizzes.
 
 ---
 
@@ -644,26 +677,26 @@ A randomly generated multiplication problem presented entirely in English words:
 
 | Event | Sound |
 |---|---|
-| App launch | Rising warm C-major chord chime |
+| App launch | Rising C4 → E4 → G4 → C5 arpeggio |
 | Button hover | Quiet high-frequency tick |
 | Button click | Brief clean pop |
-| Category selected | Bright A5 bell chime |
 | Quiz start | Energetic 4-note rising arpeggio |
 | Correct answer | C5 → E5 → G5 major triad arpeggio |
 | Wrong answer | Descending soft buzz slide |
-| Achievement unlocked | Sparkling double high-bell arpeggio |
-| Streak milestone | Uplifting quick slide up |
-| Timer tick | Quiet wooden clock tick |
+| Quiz completed | Fanfare (C4 · E4 · G4, then a long C5) |
+| Timer tick | Quiet wooden clock tick (once per second) |
 | Navigation transition | Quick slide-up chime |
 
 ### Global Instrumentation
 
-`AppTheme.scaleComponentFont()` recursively walks the entire Swing component tree and attaches hover and click `MouseListener` instances to every `JButton`. This means **all buttons across all panels** automatically produce audio feedback with zero per-button wiring.
+`AppTheme.scaleComponentFont()` recursively walks the entire Swing component tree and attaches hover and click `MouseListener` instances to every `JButton`. Buttons are therefore instrumented automatically whenever the UI theme is refreshed, with no per-button wiring.
+
+Sounds for category selection, achievement unlocks, streak milestones and notifications exist in `SoundService` but are not yet triggered by any screen.
 
 ### Sound Settings
-A parental-gate-protected popup provides:
-- **Master mute toggle**
-- **Volume slider** (0–100%) with live preview tone on change
+A parental-gate-protected popup menu provides:
+- **Mute / Unmute** toggle
+- **Volume presets** — 100 %, 75 %, 50 %, 25 % — with a click sound previewing the new level (the default volume is 70 %)
 
 ---
 
@@ -691,10 +724,10 @@ See [DEPLOYMENT.md](DEPLOYMENT.md) for the full guide. Summary:
 
 ### `package.ps1` — Automated Build Pipeline
 
-1. **Verify tools** — checks `JAVA_HOME`, locates `jlink`, `jpackage`, and WiX
+1. **Verify tools** — checks `JAVA_HOME`, confirms `javac`, `jar` and `jpackage` (which runs `jlink` internally) are available, and detects WiX
 2. **Compile** — `javac` with the SQLite classpath
 3. **Icon conversion** — compiles and runs `IcoConverter.java` to translate `logo.png` → `logo.ico`
-4. **Custom JRE (`jlink`)** — links a stripped ~35MB runtime from only required modules:
+4. **Custom JRE (`jlink`)** — links a stripped runtime (~46 MB in the Java 21.0.1 build) from only the required modules:
    `java.base, java.desktop, java.sql, java.xml, java.naming, jdk.charsets`
 5. **Native launcher (`jpackage`)** — bundles the JRE + JAR into `dist/AtelierArithmetic/AtelierArithmetic.exe`
 6. **MSI Installer** (if WiX present) — produces `dist/AtelierArithmetic-1.0.0.msi` with:
@@ -741,8 +774,8 @@ The HTML report exporter reads `logo.png` at runtime, converts it to a Base64 da
 ### Custom Java2D Charts
 All analytics charts are hand-coded using Java2D `Graphics2D`:
 - **Line Chart**: Cubic Bezier curves with gradient fills and axis labels.
-- **Radar Chart**: Trigonometric polygon with per-category color fills, anti-aliased.
-- **Heatmap**: 28-cell `4×7` grid with opacity-mapped daily activity intensities.
+- **Radar Chart**: Ten-sided polygon with a translucent gold fill and per-category coloured vertex markers, anti-aliased.
+- **Heatmap**: 28-cell `4×7` grid; a cell is gold when at least one quiz was completed that day.
 
 ### Programmatic Sound Synthesis
 `SoundService` generates all audio in real time using PCM sine-wave generation, avoiding any runtime audio file dependency. Tone slides are implemented using frequency interpolation over sample frames.
@@ -753,8 +786,8 @@ All analytics charts are hand-coded using Java2D `Graphics2D`:
 
 ### End Users (Native Windows Installer)
 - **OS**: Windows 10 or later (64-bit)
-- **RAM**: 256 MB minimum
-- **Storage**: ~80 MB installed
+- **RAM**: not formally measured (a small Swing application; 256 MB or more recommended)
+- **Storage**: ~60 MB installed (the portable build measures 59 MB on disk)
 - Java: **None required** — bundled in the installer
 
 ### Developers
@@ -762,6 +795,27 @@ All analytics charts are hand-coded using Java2D `Graphics2D`:
 - **OS**: Windows (packaging), any platform (source compilation)
 - **Optional for MSI build**: [WiX Toolset v3.11](https://wixtoolset.org/)
 - **Optional for code signing**: Windows SDK (`signtool.exe`)
+
+---
+
+## Known Limitations
+
+Behaviours that differ from what you might expect. Each is tracked in [docs/task.md](docs/task.md) with its ID.
+
+| Area | Limitation | Task |
+|---|---|---|
+| Analytics | The Accuracy Trend chart shows the *oldest* 20 sessions once a profile has more than 20 | BUG-01 |
+| Results | The Suggested Path button can fire several times after multiple quizzes in one run; "Step up" returns to Home without changing the level | BUG-02 |
+| Quiz | Leaving a quiz early (Esc, or Guide → Back) leaves the per-second tick sound running | BUG-03 |
+| Daily Challenge | Played-once-per-day is enforced by the Home button only; Analytics and Results can start it again (and re-award +8 stars) | BUG-04 |
+| Stars | One star balance is shared by every profile on the computer; **Reset History** also clears stars and shop items | BUG-05, BUG-13 |
+| Badges | No unlock sound or bonus stars | BUG-06 |
+| Hints | Some measurement and ratio questions show a generic or percentage-style hint | BUG-07 |
+| Tour | Skipping the tour does not remember the choice | BUG-09 |
+| Export | Exporting a report always opens the print dialog | BUG-12 |
+| Data | Data is bound to the Windows account and there is no backup/restore | FEAT-04 |
+| Build | The build scripts do not pass `-encoding UTF-8`; use JDK 21 (UTF-8 by default) or add the flag | DEBT-02 |
+| Quality | There are no automated tests yet | DEBT-01 |
 
 ---
 
