@@ -63,6 +63,11 @@ class QuestionGeneratorInvariantTest {
         expect("Fractions", "Hard", PCT_OF_QUANTITY, RATIO_MISSING_PART, FRAC_PRODUCT_OF_QUANTITY);
         MIGRATED.add("Special");
         MIGRATED.add("Fractions");
+
+        expect("Patterns", "Easy", PAT_ARITHMETIC, PAT_ALTERNATING_STEPS);
+        expect("Patterns", "Medium", PAT_GROWING_STEP, PAT_GEOMETRIC, PAT_ALTERNATING_OPS);
+        expect("Patterns", "Hard", PAT_FIBONACCI, PAT_SQUARES_OFFSET, PAT_INTERLEAVED, PAT_POLYNOMIAL);
+        MIGRATED.add("Patterns");
     }
 
     private static void expect(String category, String difficulty, Skill... skills) {

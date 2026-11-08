@@ -45,131 +45,13 @@ public class QuestionGenerator {
             case "fractions":
                 return FractionQuestions.fractions(diffLower, random);
             case "patterns":
-                return generatePatterns(diffLower);
+                return PatternQuestions.patterns(diffLower, random);
             case "algebra":
                 return generateAlgebra(diffLower);
             case "measurement":
                 return generateMeasurement(diffLower);
             default:
                 return ArithmeticQuestions.addition(diffLower, random);
-        }
-    }
-
-    private Question generatePatterns(String diff) {
-        if (diff.equals("easy")) {
-            int subType = random.nextInt(2);
-            if (subType == 0) {
-                // Arithmetic sequence with step in [-10, 10] excluding 0
-                int start = random.nextInt(30) + 10;
-                int step = random.nextInt(9) + 2; // [2, 10]
-                if (random.nextBoolean()) step = -step;
-                // prevent negative terms
-                if (step < 0 && start + 4 * step < 2) {
-                    start = start - 4 * step + 5;
-                }
-                int s1 = start;
-                int s2 = start + step;
-                int s3 = start + 2 * step;
-                int s4 = start + 3 * step;
-                return new Question("Pattern: " + s1 + ", " + s2 + ", " + s3 + ", " + s4 + ", _", s4 + step);
-            } else {
-                // Alternating step pattern: +a, -b, +a, -b... where a > b >= 1
-                int start = random.nextInt(20) + 5;
-                int a = random.nextInt(7) + 3; // [3, 9]
-                int b = random.nextInt(a - 2) + 1; // [1, a-2]
-                int s1 = start;
-                int s2 = start + a;
-                int s3 = s2 - b;
-                int s4 = s3 + a;
-                int s5 = s4 - b;
-                return new Question("Pattern: " + s1 + ", " + s2 + ", " + s3 + ", " + s4 + ", " + s5 + ", _", s5 + a);
-            }
-        } else if (diff.equals("medium")) {
-            int subType = random.nextInt(3);
-            if (subType == 0) {
-                // Progressive step pattern: step size increases by a constant k on each term
-                int start = random.nextInt(15) + 5;
-                int d = random.nextInt(5) + 1; // Initial step
-                int k = random.nextInt(3) + 1; // Increment per step
-                int s1 = start;
-                int s2 = s1 + d;
-                int s3 = s2 + (d + k);
-                int s4 = s3 + (d + 2 * k);
-                int s5 = s4 + (d + 3 * k);
-                return new Question("Pattern: " + s1 + ", " + s2 + ", " + s3 + ", " + s4 + ", " + s5 + ", _", s5 + (d + 4 * k));
-            } else if (subType == 1) {
-                // Geometric progression: start * r^n where r in [2, 4], start in [1, 5]
-                int start = random.nextInt(5) + 1;
-                int r = random.nextInt(3) + 2; // [2, 4]
-                int s1 = start;
-                int s2 = start * r;
-                int s3 = s2 * r;
-                int s4 = s3 * r;
-                return new Question("Pattern: " + s1 + ", " + s2 + ", " + s3 + ", " + s4 + ", _", s4 * r);
-            } else {
-                // Alternating operations: e.g. *r, +k, *r, +k...
-                int start = random.nextInt(4) + 2; // [2, 5]
-                int r = 2;
-                int k = random.nextInt(5) + 2; // [2, 6]
-                int s1 = start;
-                int s2 = start * r;
-                int s3 = s2 + k;
-                int s4 = s3 * r;
-                int s5 = s4 + k;
-                return new Question("Pattern: " + s1 + ", " + s2 + ", " + s3 + ", " + s4 + ", " + s5 + ", _", s5 * r);
-            }
-        } else {
-            int subType = random.nextInt(4);
-            if (subType == 0) {
-                // Fibonacci-like sequence: s1, s2, s1+s2, s2+(s1+s2)...
-                int s1 = random.nextInt(9) + 1; // [1, 9]
-                int s2 = random.nextInt(9) + 1; // [1, 9]
-                int s3 = s1 + s2;
-                int s4 = s2 + s3;
-                int s5 = s3 + s4;
-                int s6 = s4 + s5;
-                return new Question("Pattern: " + s1 + ", " + s2 + ", " + s3 + ", " + s4 + ", " + s5 + ", " + s6 + ", _", s5 + s6);
-            } else if (subType == 1) {
-                // Squared pattern with offsets: n^2 + c or n^2 - c
-                int c = random.nextInt(6) + 1; // [1, 6]
-                boolean sign = random.nextBoolean();
-                int s1 = 1 * 1 + (sign ? c : -c);
-                int s2 = 2 * 2 + (sign ? c : -c);
-                int s3 = 3 * 3 + (sign ? c : -c);
-                int s4 = 4 * 4 + (sign ? c : -c);
-                int s5 = 5 * 5 + (sign ? c : -c);
-                return new Question("Pattern: " + s1 + ", " + s2 + ", " + s3 + ", " + s4 + ", " + s5 + ", _", 6 * 6 + (sign ? c : -c));
-            } else if (subType == 2) {
-                // Alternating double sequence: A, B, A+d, B+d, A+2d, B+2d...
-                int a = random.nextInt(10) + 5;
-                int b = random.nextInt(20) + 20;
-                int d = random.nextInt(5) + 2;
-                int s1 = a;
-                int s2 = b;
-                int s3 = a + d;
-                int s4 = b + d;
-                int s5 = a + 2 * d;
-                int s6 = b + 2 * d;
-                return new Question("Pattern: " + s1 + ", " + s2 + ", " + s3 + ", " + s4 + ", " + s5 + ", " + s6 + ", _", s5 + d);
-            } else {
-                // Polynomial sequence: n*(n+1) or n^2 - n
-                boolean isMul = random.nextBoolean();
-                if (isMul) {
-                    int s1 = 1 * 2;
-                    int s2 = 2 * 3;
-                    int s3 = 3 * 4;
-                    int s4 = 4 * 5;
-                    int s5 = 5 * 6;
-                    return new Question("Pattern: " + s1 + ", " + s2 + ", " + s3 + ", " + s4 + ", " + s5 + ", _", 6 * 7);
-                } else {
-                    int s1 = 1 * 1 - 1;
-                    int s2 = 2 * 2 - 2;
-                    int s3 = 3 * 3 - 3;
-                    int s4 = 4 * 4 - 4;
-                    int s5 = 5 * 5 - 5;
-                    return new Question("Pattern: " + s1 + ", " + s2 + ", " + s3 + ", " + s4 + ", " + s5 + ", _", 6 * 6 - 6);
-                }
-            }
         }
     }
 
