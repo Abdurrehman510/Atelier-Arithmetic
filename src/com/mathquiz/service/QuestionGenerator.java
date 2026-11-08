@@ -33,13 +33,13 @@ public class QuestionGenerator {
 
         switch (catLower) {
             case "addition":
-                return generateAddition(diffLower);
+                return ArithmeticQuestions.addition(diffLower, random);
             case "difference":
-                return generateDifference(diffLower);
+                return ArithmeticQuestions.difference(diffLower, random);
             case "multiplication":
-                return generateMultiplication(diffLower);
+                return ArithmeticQuestions.multiplication(diffLower, random);
             case "division":
-                return generateDivision(diffLower);
+                return ArithmeticQuestions.division(diffLower, random);
             case "special":
                 return generateSpecial(diffLower);
             case "fractions":
@@ -51,91 +51,7 @@ public class QuestionGenerator {
             case "measurement":
                 return generateMeasurement(diffLower);
             default:
-                return generateAddition(diffLower);
-        }
-    }
-
-    private Question generateAddition(String diff) {
-        int a, b, c, d;
-        if (diff.equals("easy")) {
-            a = random.nextInt(90) + 10;
-            b = random.nextInt(90) + 10;
-            return new Question(a + " + " + b, a + b);
-        } else if (diff.equals("medium")) {
-            a = random.nextInt(900) + 100;
-            b = random.nextInt(900) + 100;
-            c = random.nextInt(900) + 100;
-            return new Question(a + " + " + b + " + " + c, a + b + c);
-        } else {
-            a = random.nextInt(9000) + 1000;
-            b = random.nextInt(9000) + 1000;
-            c = random.nextInt(900) + 100;
-            d = random.nextInt(900) + 100;
-            return new Question(a + " + " + b + " + " + c + " + " + d, a + b + c + d);
-        }
-    }
-
-    private Question generateDifference(String diff) {
-        int a, b, c, d;
-        if (diff.equals("easy")) {
-            a = random.nextInt(90) + 10;
-            b = random.nextInt(a - 5) + 5; // Ensures positive result
-            return new Question(a + " - " + b, a - b);
-        } else if (diff.equals("medium")) {
-            a = random.nextInt(900) + 100;
-            b = random.nextInt(a / 2) + 10;
-            c = random.nextInt(a - b - 10) + 5;
-            return new Question(a + " - " + b + " - " + c, a - b - c);
-        } else {
-            a = random.nextInt(9000) + 1000;
-            b = random.nextInt(a / 3) + 100;
-            c = random.nextInt(a / 3) + 50;
-            d = random.nextInt(a - b - c - 50) + 10;
-            return new Question(a + " - " + b + " - " + c + " - " + d, a - b - c - d);
-        }
-    }
-
-    private Question generateMultiplication(String diff) {
-        int a, b, c;
-        if (diff.equals("easy")) {
-            a = random.nextInt(89) + 10;
-            b = random.nextInt(9) + 2;
-            return new Question(a + " * " + b, a * b);
-        } else if (diff.equals("medium")) {
-            a = random.nextInt(89) + 10;
-            b = random.nextInt(8) + 2;
-            c = random.nextInt(4) + 2;
-            return new Question(a + " * " + b + " * " + c, a * b * c);
-        } else {
-            a = random.nextInt(899) + 100;
-            b = random.nextInt(8) + 2;
-            c = random.nextInt(8) + 2;
-            return new Question(a + " * " + b + " * " + c, a * b * c);
-        }
-    }
-
-    private Question generateDivision(String diff) {
-        int dividend, divisor, extra;
-        if (diff.equals("easy")) {
-            // easy perfect division
-            divisor = random.nextInt(12) + 2;
-            int quotient = random.nextInt(15) + 2;
-            dividend = divisor * quotient;
-            return new Question(dividend + " / " + divisor, quotient);
-        } else if (diff.equals("medium")) {
-            // medium perfect double division: (A / B) / C
-            extra = random.nextInt(8) + 2;
-            int q2 = random.nextInt(10) + 2;
-            int middle = extra * q2;
-            divisor = random.nextInt(8) + 2;
-            dividend = middle * divisor;
-            return new Question("(" + dividend + " / " + divisor + ") / " + extra, q2);
-        } else {
-            // hard perfect division with larger scale
-            divisor = random.nextInt(48) + 3;
-            int quotient = random.nextInt(90) + 10;
-            dividend = divisor * quotient;
-            return new Question(dividend + " / " + divisor, quotient);
+                return ArithmeticQuestions.addition(diffLower, random);
         }
     }
 
