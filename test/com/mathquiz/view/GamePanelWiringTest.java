@@ -5,6 +5,8 @@ import com.mathquiz.model.QuestionResult;
 import com.mathquiz.model.QuizSession;
 import com.mathquiz.model.Skill;
 import com.mathquiz.service.SoundService;
+import com.mathquiz.testutil.TestHome;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
 import javax.swing.SwingUtilities;
@@ -22,10 +24,25 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
  */
 class GamePanelWiringTest {
 
+    /** This test writes the config file through AppConfig: never against a real home (R-TST-07). */
+    @BeforeAll
+    static void requireThrowAwayHome() {
+        TestHome.requireThrowAwayHome();
+    }
+
     @Test
     void savedResultsCarrySkillDifficultyAndHintPresses() throws Exception {
         AppConfig config = AppConfig.getInstance();   // lives in the throw-away test home
+        boolean soundWasEnabled = config.isSoundEnabled();
         config.setSoundEnabled(false);
+        try {
+            playThreeQuestionsAndCheck(config);
+        } finally {
+            config.setSoundEnabled(soundWasEnabled);
+        }
+    }
+
+    private static void playThreeQuestionsAndCheck(AppConfig config) throws Exception {
         QuizNavigator nav = (QuizNavigator) Proxy.newProxyInstance(
                 QuizNavigator.class.getClassLoader(), new Class<?>[]{QuizNavigator.class}, (proxy, method, args) -> null);
         QuizSession session = new QuizSession(3, "Easy", "Addition");
