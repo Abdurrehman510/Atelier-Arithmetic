@@ -124,7 +124,7 @@
 | R-DOM-08 | Shop item IDs (`hat_top`, …) and profile names are persisted keys — never change or reuse them. | Saved purchases. | ✔ |
 | R-DOM-09 | The daily challenge MUST be playable at most once per calendar day (per decision Q4 in the PRD). | Reward integrity. | ⚠ BUG-04 |
 | R-DOM-10 | Mixed excludes Special and the advanced categories (PRD FR-QGN-03). | Spec. | ✔ |
-| R-DOM-11 | A new generator sub-type MUST be added together with an invariant test (≥ 10,000 samples, all difficulties). | Prevents broken questions reaching children. | ⚠ no tests (DEBT-01) |
+| R-DOM-11 | A new generator sub-type MUST be added together with an invariant test (≥ 10,000 samples, all difficulties). | Prevents broken questions reaching children. | ✔ `QuestionGeneratorInvariantTest` + golden master |
 
 ---
 
@@ -217,7 +217,7 @@
 |---|---|---|:---:|
 | R-TST-01 | Code MUST compile with **zero warnings**: `javac -encoding UTF-8 -cp "lib/*" -sourcepath src src/com/mathquiz/QuizApp.java -d <tmpdir>`. | Baseline verified clean. | ✔ |
 | R-TST-02 | Once the test harness exists (DEBT-01), changes to generators, grading, rewards, streaks, achievements or the adaptive engine MUST include/modify unit tests. | Regression safety. | ⚠ harness exists (`.\test.ps1`); coverage partial (DEBT-01) |
-| R-TST-03 | A generator change MUST be validated with ≥ 10,000 samples per (category × difficulty) asserting: integer answer, exact division, positivity, expected format. | R-DOM-01/02. | ⚠ |
+| R-TST-03 | A generator change MUST be validated with ≥ 10,000 samples per (category × difficulty) asserting: integer answer, exact division, positivity, expected format. | R-DOM-01/02. | ✔ |
 | R-TST-04 | UI changes MUST be exercised in light + dark, at 100 %, 125 % (default) and 150 % scale, with sound on and off. | Theme/scale/sound regressions. | — |
 | R-TST-05 | Test three data states: **first launch** (no `.atelier-arithmetic`), **existing data** (upgrade), **empty profile**. | Migrations, empty states. | — |
 | R-TST-06 | UI changes SHOULD attach before/after screenshots to the PR. | Review. | — |
@@ -275,4 +275,4 @@ Existing violations are accepted as **debt** until their task is done; they do n
 | R-DOM-09 | Daily Challenge re-entry | BUG-04 |
 | R-DAT-07 | Reset wipes stars/shop without saying so | BUG-13 |
 | R-SEC-04 | Unescaped HTML report | BUG-11 |
-| R-TST-02/03 | Tests cover grading only so far | DEBT-01 |
+| R-TST-02 | Tests cover grading and generators; rewards, streaks, achievements and the adaptive engine still open | DEBT-01 |

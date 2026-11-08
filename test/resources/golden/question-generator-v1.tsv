@@ -1,0 +1,1511 @@
+# category	difficulty	seed	index	expression	answer — generated from bf219cd; do not edit by hand
+Addition	Easy	20260101	0	88 + 96	184
+Addition	Easy	20260102	1	71 + 58	129
+Addition	Easy	20260103	2	28 + 63	91
+Addition	Easy	20260104	3	95 + 66	161
+Addition	Easy	20260105	4	57 + 89	146
+Addition	Easy	20260106	5	68 + 79	147
+Addition	Easy	20260107	6	28 + 47	75
+Addition	Easy	20260108	7	78 + 16	94
+Addition	Easy	20260109	8	40 + 39	79
+Addition	Easy	20260110	9	18 + 42	60
+Addition	Easy	20260111	0	95 + 25	120
+Addition	Easy	20260112	1	96 + 58	154
+Addition	Easy	20260113	2	53 + 26	79
+Addition	Easy	20260114	3	13 + 85	98
+Addition	Easy	20260115	4	98 + 57	155
+Addition	Easy	20260116	5	58 + 26	84
+Addition	Easy	20260117	6	38 + 25	63
+Addition	Easy	20260118	7	88 + 84	172
+Addition	Easy	20260119	8	68 + 50	118
+Addition	Easy	20260120	9	78 + 40	118
+Addition	Easy	20260121	0	33 + 36	69
+Addition	Easy	20260122	1	15 + 88	103
+Addition	Easy	20260123	2	63 + 93	156
+Addition	Easy	20260124	3	56 + 50	106
+Addition	Easy	20260125	4	18 + 35	53
+Addition	Easy	20260126	5	68 + 94	162
+Addition	Easy	20260127	6	22 + 40	62
+Addition	Easy	20260128	7	72 + 99	171
+Addition	Easy	20260129	8	84 + 15	99
+Addition	Easy	20260130	9	26 + 41	67
+Addition	Easy	20260131	0	88 + 69	157
+Addition	Easy	20260132	1	54 + 88	142
+Addition	Easy	20260133	2	62 + 25	87
+Addition	Easy	20260134	3	22 + 84	106
+Addition	Easy	20260135	4	91 + 50	141
+Addition	Easy	20260136	5	51 + 19	70
+Addition	Easy	20260137	6	32 + 18	50
+Addition	Easy	20260138	7	42 + 98	140
+Addition	Easy	20260139	8	77 + 49	126
+Addition	Easy	20260140	9	36 + 18	54
+Addition	Easy	20260141	0	81 + 14	95
+Addition	Easy	20260142	1	91 + 94	185
+Addition	Easy	20260143	2	72 + 92	164
+Addition	Easy	20260144	3	49 + 95	144
+Addition	Easy	20260145	4	11 + 28	39
+Addition	Easy	20260146	5	61 + 49	110
+Addition	Easy	20260147	6	52 + 42	94
+Addition	Easy	20260148	7	32 + 45	77
+Addition	Easy	20260149	8	84 + 68	152
+Addition	Easy	20260150	9	61 + 71	132
+Addition	Medium	20260101	0	538 + 546 + 911	1995
+Addition	Medium	20260102	1	341 + 868 + 733	1942
+Addition	Medium	20260103	2	478 + 243 + 869	1590
+Addition	Medium	20260104	3	635 + 606 + 239	1480
+Addition	Medium	20260105	4	777 + 989 + 876	2642
+Addition	Medium	20260106	5	158 + 979 + 340	1477
+Addition	Medium	20260107	6	388 + 497 + 541	1426
+Addition	Medium	20260108	7	528 + 376 + 503	1407
+Addition	Medium	20260109	8	670 + 759 + 240	1669
+Addition	Medium	20260110	9	828 + 222 + 459	1509
+Addition	Medium	20260111	0	635 + 745 + 577	1957
+Addition	Medium	20260112	1	456 + 598 + 706	1760
+Addition	Medium	20260113	2	593 + 926 + 842	2361
+Addition	Medium	20260114	3	733 + 805 + 804	2342
+Addition	Medium	20260115	4	998 + 867 + 687	2552
+Addition	Medium	20260116	5	238 + 746 + 650	1634
+Addition	Medium	20260117	6	938 + 565 + 645	2148
+Addition	Medium	20260118	7	178 + 444 + 607	1229
+Addition	Medium	20260119	8	338 + 410 + 652	1400
+Addition	Medium	20260120	9	618 + 400 + 116	1134
+Addition	Medium	20260121	0	303 + 396 + 988	1687
+Addition	Medium	20260122	1	105 + 718 + 810	1633
+Addition	Medium	20260123	2	243 + 993 + 998	2234
+Addition	Medium	20260124	3	506 + 500 + 154	1160
+Addition	Medium	20260125	4	648 + 935 + 843	2426
+Addition	Medium	20260126	5	788 + 814 + 754	2356
+Addition	Medium	20260127	6	112 + 670 + 675	1457
+Addition	Medium	20260128	7	252 + 549 + 638	1439
+Addition	Medium	20260129	8	534 + 195 + 776	1505
+Addition	Medium	20260130	9	656 + 491 + 483	1630
+Addition	Medium	20260131	0	358 + 969 + 711	2038
+Addition	Medium	20260132	1	144 + 808 + 277	1229
+Addition	Medium	20260133	2	422 + 295 + 814	1531
+Addition	Medium	20260134	3	562 + 174 + 777	1513
+Addition	Medium	20260135	4	721 + 140 + 822	1683
+Addition	Medium	20260136	5	861 + 919 + 784	2564
+Addition	Medium	20260137	6	662 + 738 + 779	2179
+Addition	Medium	20260138	7	942 + 728 + 243	1913
+Addition	Medium	20260139	8	167 + 679 + 624	1470
+Addition	Medium	20260140	9	306 + 558 + 587	1451
+Addition	Medium	20260141	0	891 + 554 + 559	2004
+Addition	Medium	20260142	1	271 + 544 + 924	1739
+Addition	Medium	20260143	2	972 + 362 + 970	2304
+Addition	Medium	20260144	3	229 + 725 + 288	1242
+Addition	Medium	20260145	4	371 + 208 + 977	1556
+Addition	Medium	20260146	5	511 + 139 + 888	1538
+Addition	Medium	20260147	6	772 + 942 + 270	1984
+Addition	Medium	20260148	7	122 + 495 + 553	1170
+Addition	Medium	20260149	8	264 + 878 + 342	1484
+Addition	Medium	20260150	9	421 + 341 + 560	1322
+Addition	Hard	20260101	0	1438 + 1446 + 911 + 539	4334
+Addition	Hard	20260102	1	3041 + 8068 + 733 + 687	12529
+Addition	Hard	20260103	2	8578 + 1143 + 869 + 235	10825
+Addition	Hard	20260104	3	9635 + 5106 + 239 + 940	15920
+Addition	Hard	20260105	4	6177 + 8189 + 876 + 862	16104
+Addition	Hard	20260106	5	7358 + 2779 + 340 + 369	10846
+Addition	Hard	20260107	6	2188 + 1397 + 541 + 665	4791
+Addition	Hard	20260108	7	3228 + 3976 + 503 + 824	8531
+Addition	Hard	20260109	8	8770 + 7059 + 240 + 746	16815
+Addition	Hard	20260110	9	9828 + 2022 + 459 + 550	12859
+Addition	Hard	20260111	0	8735 + 1645 + 577 + 710	11667
+Addition	Hard	20260112	1	1356 + 3298 + 706 + 400	5760
+Addition	Hard	20260113	2	6893 + 2726 + 842 + 900	11361
+Addition	Hard	20260114	3	7933 + 5305 + 804 + 159	14201
+Addition	Hard	20260115	4	4598 + 5367 + 687 + 735	11387
+Addition	Hard	20260116	5	5638 + 7946 + 650 + 946	15180
+Addition	Hard	20260117	6	2738 + 5065 + 645 + 431	8879
+Addition	Hard	20260118	7	3778 + 7644 + 607 + 642	12671
+Addition	Hard	20260119	8	9338 + 3110 + 652 + 106	13206
+Addition	Hard	20260120	9	1518 + 6700 + 116 + 513	8847
+Addition	Hard	20260121	0	9303 + 6696 + 988 + 970	17957
+Addition	Hard	20260122	1	1905 + 4318 + 810 + 167	7200
+Addition	Hard	20260123	2	7443 + 6393 + 998 + 666	15500
+Addition	Hard	20260124	3	8606 + 8600 + 154 + 579	17939
+Addition	Hard	20260125	4	5148 + 9035 + 843 + 501	15527
+Addition	Hard	20260126	5	6188 + 2614 + 754 + 712	10268
+Addition	Hard	20260127	6	3712 + 5170 + 675 + 378	9935
+Addition	Hard	20260128	7	4752 + 7749 + 638 + 589	13728
+Addition	Hard	20260129	8	1434 + 9195 + 776 + 707	12112
+Addition	Hard	20260130	9	2456 + 1391 + 483 + 424	4754
+Addition	Hard	20260131	0	1258 + 2769 + 711 + 475	5213
+Addition	Hard	20260132	1	2844 + 8008 + 277 + 977	12106
+Addition	Hard	20260133	2	8522 + 2095 + 814 + 773	12204
+Addition	Hard	20260134	3	9562 + 4674 + 777 + 984	15997
+Addition	Hard	20260135	4	6121 + 9140 + 822 + 500	16583
+Addition	Hard	20260136	5	7161 + 2719 + 784 + 659	11323
+Addition	Hard	20260137	6	4262 + 8838 + 779 + 144	14023
+Addition	Hard	20260138	7	5442 + 3428 + 243 + 552	9665
+Addition	Hard	20260139	8	1967 + 2479 + 624 + 932	6002
+Addition	Hard	20260140	9	3006 + 5058 + 587 + 190	8841
+Addition	Hard	20260141	0	1791 + 5054 + 559 + 647	8051
+Addition	Hard	20260142	1	2971 + 8644 + 924 + 154	12693
+Addition	Hard	20260143	2	9072 + 5762 + 970 + 540	16344
+Addition	Hard	20260144	3	1129 + 9725 + 288 + 344	11486
+Addition	Hard	20260145	4	6671 + 3808 + 977 + 266	11722
+Addition	Hard	20260146	5	7711 + 3739 + 888 + 425	12763
+Addition	Hard	20260147	6	4372 + 5442 + 270 + 679	10763
+Addition	Hard	20260148	7	3722 + 8595 + 553 + 228	13098
+Addition	Hard	20260149	8	9264 + 2678 + 342 + 150	12434
+Addition	Hard	20260150	9	1321 + 6641 + 560 + 855	9377
+Difference	Easy	20260101	0	88 - 85	3
+Difference	Easy	20260102	1	71 - 29	42
+Difference	Easy	20260103	2	28 - 6	22
+Difference	Easy	20260104	3	95 - 61	34
+Difference	Easy	20260105	4	57 - 22	35
+Difference	Easy	20260106	5	68 - 56	12
+Difference	Easy	20260107	6	28 - 26	2
+Difference	Easy	20260108	7	78 - 8	70
+Difference	Easy	20260109	8	40 - 29	11
+Difference	Easy	20260110	9	18 - 17	1
+Difference	Easy	20260111	0	95 - 20	75
+Difference	Easy	20260112	1	96 - 33	63
+Difference	Easy	20260113	2	53 - 27	26
+Difference	Easy	20260114	3	13 - 9	4
+Difference	Easy	20260115	4	98 - 88	10
+Difference	Easy	20260116	5	58 - 56	2
+Difference	Easy	20260117	6	38 - 17	21
+Difference	Easy	20260118	7	88 - 84	4
+Difference	Easy	20260119	8	68 - 45	23
+Difference	Easy	20260120	9	78 - 19	59
+Difference	Easy	20260121	0	33 - 21	12
+Difference	Easy	20260122	1	15 - 13	2
+Difference	Easy	20260123	2	63 - 20	43
+Difference	Easy	20260124	3	56 - 54	2
+Difference	Easy	20260125	4	18 - 16	2
+Difference	Easy	20260126	5	68 - 53	15
+Difference	Easy	20260127	6	22 - 18	4
+Difference	Easy	20260128	7	72 - 53	19
+Difference	Easy	20260129	8	84 - 61	23
+Difference	Easy	20260130	9	26 - 12	14
+Difference	Easy	20260131	0	88 - 10	78
+Difference	Easy	20260132	1	54 - 11	43
+Difference	Easy	20260133	2	62 - 14	48
+Difference	Easy	20260134	3	22 - 14	8
+Difference	Easy	20260135	4	91 - 73	18
+Difference	Easy	20260136	5	51 - 26	25
+Difference	Easy	20260137	6	32 - 22	10
+Difference	Easy	20260138	7	42 - 27	15
+Difference	Easy	20260139	8	77 - 44	33
+Difference	Easy	20260140	9	36 - 13	23
+Difference	Easy	20260141	0	81 - 55	26
+Difference	Easy	20260142	1	91 - 27	64
+Difference	Easy	20260143	2	72 - 40	32
+Difference	Easy	20260144	3	49 - 34	15
+Difference	Easy	20260145	4	11 - 5	6
+Difference	Easy	20260146	5	61 - 56	5
+Difference	Easy	20260147	6	52 - 19	33
+Difference	Easy	20260148	7	32 - 31	1
+Difference	Easy	20260149	8	84 - 19	65
+Difference	Easy	20260150	9	61 - 6	55
+Difference	Medium	20260101	0	538 - 248 - 56	234
+Difference	Medium	20260102	1	341 - 178 - 125	38
+Difference	Medium	20260103	2	478 - 23 - 159	296
+Difference	Medium	20260104	3	635 - 302 - 304	29
+Difference	Medium	20260105	4	777 - 143 - 421	213
+Difference	Medium	20260106	5	158 - 41 - 45	72
+Difference	Medium	20260107	6	388 - 87 - 134	167
+Difference	Medium	20260108	7	528 - 106 - 232	190
+Difference	Medium	20260109	8	670 - 114 - 25	531
+Difference	Medium	20260110	9	828 - 168 - 264	396
+Difference	Medium	20260111	0	635 - 298 - 32	305
+Difference	Medium	20260112	1	456 - 64 - 101	291
+Difference	Medium	20260113	2	593 - 88 - 162	343
+Difference	Medium	20260114	3	733 - 43 - 269	421
+Difference	Medium	20260115	4	998 - 73 - 607	318
+Difference	Medium	20260116	5	238 - 123 - 105	10
+Difference	Medium	20260117	6	938 - 202 - 370	366
+Difference	Medium	20260118	7	178 - 46 - 20	112
+Difference	Medium	20260119	8	338 - 140 - 65	133
+Difference	Medium	20260120	9	618 - 112 - 177	329
+Difference	Medium	20260121	0	303 - 101 - 137	65
+Difference	Medium	20260122	1	105 - 32 - 22	51
+Difference	Medium	20260123	2	243 - 96 - 51	96
+Difference	Medium	20260124	3	506 - 65 - 328	113
+Difference	Medium	20260125	4	648 - 89 - 145	414
+Difference	Medium	20260126	5	788 - 316 - 407	65
+Difference	Medium	20260127	6	112 - 20 - 78	14
+Difference	Medium	20260128	7	252 - 117 - 118	17
+Difference	Medium	20260129	8	534 - 174 - 231	129
+Difference	Medium	20260130	9	656 - 65 - 375	216
+Difference	Medium	20260131	0	358 - 130 - 44	184
+Difference	Medium	20260132	1	144 - 34 - 82	28
+Difference	Medium	20260133	2	422 - 74 - 237	111
+Difference	Medium	20260134	3	562 - 22 - 152	388
+Difference	Medium	20260135	4	721 - 230 - 32	459
+Difference	Medium	20260136	5	861 - 149 - 635	77
+Difference	Medium	20260137	6	662 - 227 - 9	426
+Difference	Medium	20260138	7	942 - 230 - 400	312
+Difference	Medium	20260139	8	167 - 88 - 73	6
+Difference	Medium	20260140	9	306 - 135 - 19	152
+Difference	Medium	20260141	0	891 - 389 - 344	158
+Difference	Medium	20260142	1	271 - 139 - 45	87
+Difference	Medium	20260143	2	972 - 380 - 533	59
+Difference	Medium	20260144	3	229 - 101 - 65	63
+Difference	Medium	20260145	4	371 - 43 - 216	112
+Difference	Medium	20260146	5	511 - 19 - 471	21
+Difference	Medium	20260147	6	772 - 382 - 355	35
+Difference	Medium	20260148	7	122 - 67 - 8	47
+Difference	Medium	20260149	8	264 - 80 - 85	99
+Difference	Medium	20260150	9	421 - 11 - 365	45
+Difference	Hard	20260101	0	1438 - 561 - 156 - 111	610
+Difference	Hard	20260102	1	3041 - 937 - 1052 - 897	155
+Difference	Hard	20260103	2	8578 - 1413 - 969 - 2531	3665
+Difference	Hard	20260104	3	9635 - 2064 - 3161 - 2050	2360
+Difference	Hard	20260105	4	6177 - 1657 - 387 - 2248	1885
+Difference	Hard	20260106	5	7358 - 2447 - 1022 - 2901	988
+Difference	Hard	20260107	6	2188 - 326 - 752 - 415	695
+Difference	Hard	20260108	7	3228 - 212 - 765 - 1220	1031
+Difference	Hard	20260109	8	8770 - 1509 - 1637 - 836	4788
+Difference	Hard	20260110	9	9828 - 2634 - 3325 - 3346	523
+Difference	Hard	20260111	0	8735 - 2158 - 1581 - 1028	3968
+Difference	Hard	20260112	1	1356 - 426 - 68 - 290	572
+Difference	Hard	20260113	2	6893 - 949 - 1776 - 1876	2292
+Difference	Hard	20260114	3	7933 - 885 - 2098 - 2869	2081
+Difference	Hard	20260115	4	4598 - 907 - 1025 - 45	2621
+Difference	Hard	20260116	5	5638 - 462 - 118 - 668	4390
+Difference	Hard	20260117	6	2738 - 637 - 667 - 909	525
+Difference	Hard	20260118	7	3778 - 453 - 184 - 414	2727
+Difference	Hard	20260119	8	9338 - 2546 - 1110 - 2772	2910
+Difference	Hard	20260120	9	1518 - 292 - 520 - 355	351
+Difference	Hard	20260121	0	9303 - 1495 - 752 - 1174	5882
+Difference	Hard	20260122	1	1905 - 378 - 530 - 365	632
+Difference	Hard	20260123	2	7443 - 1944 - 522 - 3115	1862
+Difference	Hard	20260124	3	8606 - 1448 - 2816 - 3733	609
+Difference	Hard	20260125	4	5148 - 1619 - 889 - 1411	1229
+Difference	Hard	20260126	5	6188 - 2080 - 974 - 418	2716
+Difference	Hard	20260127	6	3712 - 1013 - 1040 - 320	1339
+Difference	Hard	20260128	7	4752 - 513 - 1416 - 1948	875
+Difference	Hard	20260129	8	1434 - 455 - 216 - 513	250
+Difference	Hard	20260130	9	2456 - 453 - 853 - 434	716
+Difference	Hard	20260131	0	1258 - 291 - 441 - 337	189
+Difference	Hard	20260132	1	2844 - 724 - 995 - 587	538
+Difference	Hard	20260133	2	8522 - 2155 - 304 - 4477	1586
+Difference	Hard	20260134	3	9562 - 1068 - 1159 - 1704	5631
+Difference	Hard	20260135	4	6121 - 1640 - 1252 - 1674	1555
+Difference	Hard	20260136	5	7161 - 645 - 506 - 4769	1241
+Difference	Hard	20260137	6	4262 - 678 - 129 - 2334	1121
+Difference	Hard	20260138	7	5442 - 966 - 1845 - 2156	475
+Difference	Hard	20260139	8	1967 - 249 - 224 - 738	756
+Difference	Hard	20260140	9	3006 - 330 - 267 - 937	1472
+Difference	Hard	20260141	0	1791 - 191 - 392 - 275	933
+Difference	Hard	20260142	1	2971 - 1084 - 334 - 613	940
+Difference	Hard	20260143	2	9072 - 2846 - 1424 - 1170	3632
+Difference	Hard	20260144	3	1129 - 137 - 118 - 194	680
+Difference	Hard	20260145	4	6671 - 1378 - 1269 - 1766	2258
+Difference	Hard	20260146	5	7711 - 1709 - 368 - 1711	3923
+Difference	Hard	20260147	6	4372 - 1383 - 696 - 178	2115
+Difference	Hard	20260148	7	3722 - 735 - 63 - 2526	398
+Difference	Hard	20260149	8	9264 - 666 - 1412 - 2588	4598
+Difference	Hard	20260150	9	1321 - 301 - 250 - 405	365
+Multiplication	Easy	20260101	0	84 * 7	588
+Multiplication	Easy	20260102	1	15 * 5	75
+Multiplication	Easy	20260103	2	32 * 10	320
+Multiplication	Easy	20260104	3	15 * 4	60
+Multiplication	Easy	20260105	4	25 * 9	225
+Multiplication	Easy	20260106	5	63 * 8	504
+Multiplication	Easy	20260107	6	92 * 3	276
+Multiplication	Easy	20260108	7	17 * 8	136
+Multiplication	Easy	20260109	8	27 * 4	108
+Multiplication	Easy	20260110	9	11 * 7	77
+Multiplication	Easy	20260111	0	88 * 8	704
+Multiplication	Easy	20260112	1	78 * 5	390
+Multiplication	Easy	20260113	2	95 * 9	855
+Multiplication	Easy	20260114	3	20 * 5	100
+Multiplication	Easy	20260115	4	84 * 4	336
+Multiplication	Easy	20260116	5	98 * 9	882
+Multiplication	Easy	20260117	6	32 * 8	256
+Multiplication	Easy	20260118	7	46 * 4	184
+Multiplication	Easy	20260119	8	26 * 6	156
+Multiplication	Easy	20260120	9	63 * 5	315
+Multiplication	Easy	20260121	0	87 * 10	870
+Multiplication	Easy	20260122	1	17 * 8	136
+Multiplication	Easy	20260123	2	35 * 4	140
+Multiplication	Easy	20260124	3	14 * 6	84
+Multiplication	Easy	20260125	4	24 * 9	216
+Multiplication	Easy	20260126	5	38 * 5	190
+Multiplication	Easy	20260127	6	83 * 5	415
+Multiplication	Easy	20260128	7	97 * 10	970
+Multiplication	Easy	20260129	8	41 * 7	287
+Multiplication	Easy	20260130	9	85 * 6	510
+Multiplication	Easy	20260131	0	78 * 7	546
+Multiplication	Easy	20260132	1	40 * 8	320
+Multiplication	Easy	20260133	2	81 * 8	648
+Multiplication	Easy	20260134	3	95 * 4	380
+Multiplication	Easy	20260135	4	74 * 6	444
+Multiplication	Easy	20260136	5	88 * 2	176
+Multiplication	Easy	20260137	6	23 * 10	230
+Multiplication	Easy	20260138	7	60 * 9	540
+Multiplication	Easy	20260139	8	12 * 5	60
+Multiplication	Easy	20260140	9	25 * 10	250
+Multiplication	Easy	20260141	0	49 * 6	294
+Multiplication	Easy	20260142	1	86 * 5	430
+Multiplication	Easy	20260143	2	21 * 3	63
+Multiplication	Easy	20260144	3	93 * 6	558
+Multiplication	Easy	20260145	4	14 * 2	28
+Multiplication	Easy	20260146	5	28 * 5	140
+Multiplication	Easy	20260147	6	11 * 7	77
+Multiplication	Easy	20260148	7	95 * 10	950
+Multiplication	Easy	20260149	8	16 * 6	96
+Multiplication	Easy	20260150	9	88 * 9	792
+Multiplication	Medium	20260101	0	84 * 6 * 4	2016
+Multiplication	Medium	20260102	1	15 * 4 * 5	300
+Multiplication	Medium	20260103	2	32 * 6 * 5	960
+Multiplication	Medium	20260104	3	15 * 5 * 2	150
+Multiplication	Medium	20260105	4	25 * 8 * 4	800
+Multiplication	Medium	20260106	5	63 * 9 * 4	2268
+Multiplication	Medium	20260107	6	92 * 3 * 3	828
+Multiplication	Medium	20260108	7	17 * 5 * 2	170
+Multiplication	Medium	20260109	8	27 * 8 * 4	864
+Multiplication	Medium	20260110	9	11 * 7 * 4	308
+Multiplication	Medium	20260111	0	88 * 6 * 4	2112
+Multiplication	Medium	20260112	1	78 * 9 * 3	2106
+Multiplication	Medium	20260113	2	95 * 3 * 3	855
+Multiplication	Medium	20260114	3	20 * 6 * 2	240
+Multiplication	Medium	20260115	4	84 * 3 * 4	1008
+Multiplication	Medium	20260116	5	98 * 5 * 3	1470
+Multiplication	Medium	20260117	6	32 * 3 * 5	480
+Multiplication	Medium	20260118	7	46 * 5 * 4	920
+Multiplication	Medium	20260119	8	26 * 5 * 4	520
+Multiplication	Medium	20260120	9	63 * 6 * 4	1512
+Multiplication	Medium	20260121	0	87 * 3 * 4	1044
+Multiplication	Medium	20260122	1	17 * 2 * 5	170
+Multiplication	Medium	20260123	2	35 * 3 * 2	210
+Multiplication	Medium	20260124	3	14 * 8 * 4	448
+Multiplication	Medium	20260125	4	24 * 3 * 2	144
+Multiplication	Medium	20260126	5	38 * 5 * 5	950
+Multiplication	Medium	20260127	6	83 * 7 * 3	1743
+Multiplication	Medium	20260128	7	97 * 9 * 2	1746
+Multiplication	Medium	20260129	8	41 * 3 * 5	615
+Multiplication	Medium	20260130	9	85 * 9 * 2	1530
+Multiplication	Medium	20260131	0	78 * 3 * 4	936
+Multiplication	Medium	20260132	1	40 * 4 * 3	480
+Multiplication	Medium	20260133	2	81 * 5 * 5	2025
+Multiplication	Medium	20260134	3	95 * 7 * 4	2660
+Multiplication	Medium	20260135	4	74 * 7 * 3	1554
+Multiplication	Medium	20260136	5	88 * 9 * 2	1584
+Multiplication	Medium	20260137	6	23 * 7 * 5	805
+Multiplication	Medium	20260138	7	60 * 8 * 5	2400
+Multiplication	Medium	20260139	8	12 * 7 * 5	420
+Multiplication	Medium	20260140	9	25 * 9 * 4	900
+Multiplication	Medium	20260141	0	49 * 6 * 4	1176
+Multiplication	Medium	20260142	1	86 * 7 * 5	3010
+Multiplication	Medium	20260143	2	21 * 5 * 3	315
+Multiplication	Medium	20260144	3	93 * 4 * 4	1488
+Multiplication	Medium	20260145	4	14 * 7 * 2	196
+Multiplication	Medium	20260146	5	28 * 2 * 4	224
+Multiplication	Medium	20260147	6	11 * 6 * 5	330
+Multiplication	Medium	20260148	7	95 * 4 * 4	1520
+Multiplication	Medium	20260149	8	16 * 7 * 2	224
+Multiplication	Medium	20260150	9	88 * 7 * 2	1232
+Multiplication	Hard	20260101	0	327 * 6 * 6	11772
+Multiplication	Hard	20260102	1	475 * 4 * 9	17100
+Multiplication	Hard	20260103	2	436 * 6 * 9	23544
+Multiplication	Hard	20260104	3	813 * 5 * 2	8130
+Multiplication	Hard	20260105	4	867 * 8 * 6	41616
+Multiplication	Hard	20260106	5	236 * 9 * 7	14868
+Multiplication	Hard	20260107	6	306 * 3 * 5	4590
+Multiplication	Hard	20260108	7	314 * 5 * 3	4710
+Multiplication	Hard	20260109	8	368 * 8 * 6	17664
+Multiplication	Hard	20260110	9	746 * 7 * 7	36554
+Multiplication	Hard	20260111	0	528 * 6 * 7	22176
+Multiplication	Hard	20260112	1	147 * 9 * 5	6615
+Multiplication	Hard	20260113	2	108 * 3 * 5	1620
+Multiplication	Hard	20260114	3	116 * 6 * 3	2088
+Multiplication	Hard	20260115	4	959 * 3 * 6	17262
+Multiplication	Hard	20260116	5	967 * 5 * 4	19340
+Multiplication	Hard	20260117	6	169 * 3 * 9	4563
+Multiplication	Hard	20260118	7	177 * 5 * 7	6195
+Multiplication	Hard	20260119	8	601 * 5 * 6	18030
+Multiplication	Hard	20260120	9	868 * 6 * 7	36456
+Multiplication	Hard	20260121	0	761 * 3 * 7	15981
+Multiplication	Hard	20260122	1	908 * 2 * 9	16344
+Multiplication	Hard	20260123	2	870 * 3 * 2	5220
+Multiplication	Hard	20260124	3	768 * 8 * 7	43008
+Multiplication	Hard	20260125	4	822 * 3 * 3	7398
+Multiplication	Hard	20260126	5	830 * 5 * 8	33200
+Multiplication	Hard	20260127	6	381 * 7 * 4	10668
+Multiplication	Hard	20260128	7	389 * 9 * 2	7002
+Multiplication	Hard	20260129	8	702 * 3 * 8	16848
+Multiplication	Hard	20260130	9	340 * 9 * 2	6120
+Multiplication	Hard	20260131	0	602 * 3 * 6	10836
+Multiplication	Hard	20260132	1	381 * 4 * 5	7620
+Multiplication	Hard	20260133	2	602 * 5 * 9	27090
+Multiplication	Hard	20260134	3	610 * 7 * 7	29890
+Multiplication	Hard	20260135	4	134 * 7 * 5	4690
+Multiplication	Hard	20260136	5	142 * 9 * 3	3834
+Multiplication	Hard	20260137	6	244 * 7 * 8	13664
+Multiplication	Hard	20260138	7	511 * 8 * 9	36792
+Multiplication	Hard	20260139	8	196 * 7 * 9	12348
+Multiplication	Hard	20260140	9	203 * 9 * 7	12789
+Multiplication	Hard	20260141	0	995 * 6 * 7	41790
+Multiplication	Hard	20260142	1	363 * 7 * 8	20328
+Multiplication	Hard	20260143	2	465 * 5 * 5	11625
+Multiplication	Hard	20260144	3	842 * 4 * 6	20208
+Multiplication	Hard	20260145	4	896 * 7 * 2	12544
+Multiplication	Hard	20260146	5	904 * 2 * 7	12656
+Multiplication	Hard	20260147	6	756 * 6 * 8	36288
+Multiplication	Hard	20260148	7	343 * 4 * 7	9604
+Multiplication	Hard	20260149	8	397 * 7 * 2	5558
+Multiplication	Hard	20260150	9	774 * 7 * 3	16254
+Division	Easy	20260101	0	104 / 8	13
+Division	Easy	20260102	1	15 / 3	5
+Division	Easy	20260103	2	80 / 8	10
+Division	Easy	20260104	3	117 / 9	13
+Division	Easy	20260105	4	42 / 7	6
+Division	Easy	20260106	5	132 / 12	11
+Division	Easy	20260107	6	18 / 2	9
+Division	Easy	20260108	7	80 / 10	8
+Division	Easy	20260109	8	128 / 8	16
+Division	Easy	20260110	9	40 / 10	4
+Division	Easy	20260111	0	18 / 9	2
+Division	Easy	20260112	1	50 / 10	5
+Division	Easy	20260113	2	9 / 3	3
+Division	Easy	20260114	3	22 / 11	2
+Division	Easy	20260115	4	48 / 12	4
+Division	Easy	20260116	5	24 / 8	3
+Division	Easy	20260117	6	24 / 12	2
+Division	Easy	20260118	7	128 / 8	16
+Division	Easy	20260119	8	144 / 12	12
+Division	Easy	20260120	9	8 / 4	2
+Division	Easy	20260121	0	169 / 13	13
+Division	Easy	20260122	1	35 / 7	5
+Division	Easy	20260123	2	130 / 13	10
+Division	Easy	20260124	3	144 / 12	12
+Division	Easy	20260125	4	120 / 10	12
+Division	Easy	20260126	5	66 / 6	11
+Division	Easy	20260127	6	4 / 2	2
+Division	Easy	20260128	7	160 / 10	16
+Division	Easy	20260129	8	28 / 4	7
+Division	Easy	20260130	9	18 / 6	3
+Division	Easy	20260131	0	128 / 8	16
+Division	Easy	20260132	1	50 / 10	5
+Division	Easy	20260133	2	24 / 12	2
+Division	Easy	20260134	3	128 / 8	16
+Division	Easy	20260135	4	132 / 11	12
+Division	Easy	20260136	5	77 / 7	11
+Division	Easy	20260137	6	120 / 12	10
+Division	Easy	20260138	7	60 / 4	15
+Division	Easy	20260139	8	99 / 9	11
+Division	Easy	20260140	9	40 / 4	10
+Division	Easy	20260141	0	78 / 13	6
+Division	Easy	20260142	1	55 / 5	11
+Division	Easy	20260143	2	90 / 10	9
+Division	Easy	20260144	3	132 / 11	12
+Division	Easy	20260145	4	45 / 9	5
+Division	Easy	20260146	5	55 / 5	11
+Division	Easy	20260147	6	8 / 2	4
+Division	Easy	20260148	7	84 / 12	7
+Division	Easy	20260149	8	150 / 10	15
+Division	Easy	20260150	9	33 / 11	3
+Division	Medium	20260101	0	(288 / 6) / 6	8
+Division	Medium	20260102	1	(450 / 9) / 5	10
+Division	Medium	20260103	2	(225 / 9) / 5	5
+Division	Medium	20260104	3	(96 / 2) / 6	8
+Division	Medium	20260105	4	(396 / 6) / 6	11
+Division	Medium	20260106	5	(462 / 7) / 6	11
+Division	Medium	20260107	6	(360 / 5) / 8	9
+Division	Medium	20260108	7	(192 / 3) / 8	8
+Division	Medium	20260109	8	(528 / 6) / 8	11
+Division	Medium	20260110	9	(224 / 7) / 8	4
+Division	Medium	20260111	0	(392 / 7) / 8	7
+Division	Medium	20260112	1	(400 / 5) / 8	10
+Division	Medium	20260113	2	(320 / 5) / 8	8
+Division	Medium	20260114	3	(168 / 3) / 8	7
+Division	Medium	20260115	4	(432 / 6) / 8	9
+Division	Medium	20260116	5	(256 / 4) / 8	8
+Division	Medium	20260117	6	(441 / 9) / 7	7
+Division	Medium	20260118	7	(294 / 7) / 7	6
+Division	Medium	20260119	8	(84 / 6) / 7	2
+Division	Medium	20260120	9	(98 / 7) / 7	2
+Division	Medium	20260121	0	(392 / 7) / 7	8
+Division	Medium	20260122	1	(630 / 9) / 7	10
+Division	Medium	20260123	2	(70 / 2) / 7	5
+Division	Medium	20260124	3	(98 / 7) / 7	2
+Division	Medium	20260125	4	(147 / 3) / 7	7
+Division	Medium	20260126	5	(336 / 8) / 7	6
+Division	Medium	20260127	6	(48 / 4) / 6	2
+Division	Medium	20260128	7	(132 / 2) / 6	11
+Division	Medium	20260129	8	(336 / 8) / 6	7
+Division	Medium	20260130	9	(36 / 2) / 6	3
+Division	Medium	20260131	0	(396 / 6) / 6	11
+Division	Medium	20260132	1	(250 / 5) / 5	10
+Division	Medium	20260133	2	(315 / 9) / 5	7
+Division	Medium	20260134	3	(210 / 7) / 5	6
+Division	Medium	20260135	4	(50 / 5) / 5	2
+Division	Medium	20260136	5	(198 / 3) / 6	11
+Division	Medium	20260137	6	(400 / 8) / 5	10
+Division	Medium	20260138	7	(450 / 9) / 5	10
+Division	Medium	20260139	8	(495 / 9) / 5	11
+Division	Medium	20260140	9	(350 / 7) / 5	10
+Division	Medium	20260141	0	(210 / 7) / 5	6
+Division	Medium	20260142	1	(240 / 8) / 5	6
+Division	Medium	20260143	2	(100 / 5) / 5	4
+Division	Medium	20260144	3	(210 / 6) / 5	7
+Division	Medium	20260145	4	(100 / 2) / 5	10
+Division	Medium	20260146	5	(385 / 7) / 5	11
+Division	Medium	20260147	6	(160 / 8) / 5	4
+Division	Medium	20260148	7	(343 / 7) / 7	7
+Division	Medium	20260149	8	(140 / 2) / 7	10
+Division	Medium	20260150	9	(63 / 3) / 7	3
+Division	Hard	20260101	0	3168 / 33	96
+Division	Hard	20260102	1	1624 / 28	58
+Division	Hard	20260103	2	2835 / 45	63
+Division	Hard	20260104	3	1452 / 22	66
+Division	Hard	20260105	4	1780 / 20	89
+Division	Hard	20260106	5	1975 / 25	79
+Division	Hard	20260107	6	705 / 15	47
+Division	Hard	20260108	7	368 / 23	16
+Division	Hard	20260109	8	819 / 21	39
+Division	Hard	20260110	9	1974 / 47	42
+Division	Hard	20260111	0	850 / 34	25
+Division	Hard	20260112	1	2726 / 47	58
+Division	Hard	20260113	2	416 / 16	26
+Division	Hard	20260114	3	2040 / 24	85
+Division	Hard	20260115	4	2793 / 49	57
+Division	Hard	20260116	5	234 / 9	26
+Division	Hard	20260117	6	325 / 13	25
+Division	Hard	20260118	7	1764 / 21	84
+Division	Hard	20260119	8	1850 / 37	50
+Division	Hard	20260120	9	1640 / 41	40
+Division	Hard	20260121	0	1800 / 50	36
+Division	Hard	20260122	1	3872 / 44	88
+Division	Hard	20260123	2	1302 / 14	93
+Division	Hard	20260124	3	2450 / 49	50
+Division	Hard	20260125	4	1645 / 47	35
+Division	Hard	20260126	5	658 / 7	94
+Division	Hard	20260127	6	120 / 3	40
+Division	Hard	20260128	7	1089 / 11	99
+Division	Hard	20260129	8	75 / 5	15
+Division	Hard	20260130	9	1763 / 43	41
+Division	Hard	20260131	0	1449 / 21	69
+Division	Hard	20260132	1	4136 / 47	88
+Division	Hard	20260133	2	325 / 13	25
+Division	Hard	20260134	3	1764 / 21	84
+Division	Hard	20260135	4	1800 / 36	50
+Division	Hard	20260136	5	836 / 44	19
+Division	Hard	20260137	6	882 / 49	18
+Division	Hard	20260138	7	490 / 5	98
+Division	Hard	20260139	8	1666 / 34	49
+Division	Hard	20260140	9	738 / 41	18
+Division	Hard	20260141	0	700 / 50	14
+Division	Hard	20260142	1	564 / 6	94
+Division	Hard	20260143	2	1012 / 11	92
+Division	Hard	20260144	3	3420 / 36	95
+Division	Hard	20260145	4	952 / 34	28
+Division	Hard	20260146	5	2058 / 42	49
+Division	Hard	20260147	6	1638 / 39	42
+Division	Hard	20260148	7	1665 / 37	45
+Division	Hard	20260149	8	2380 / 35	68
+Division	Hard	20260150	9	852 / 12	71
+Mixed	Easy	20260101	0	67 * 3	201
+Mixed	Easy	20260102	1	58 - 46	12
+Mixed	Easy	20260103	2	63 - 60	3
+Mixed	Easy	20260104	3	82 * 6	492
+Mixed	Easy	20260105	4	12 * 4	48
+Mixed	Easy	20260106	5	33 * 8	264
+Mixed	Easy	20260107	6	24 / 3	8
+Mixed	Easy	20260108	7	30 / 2	15
+Mixed	Easy	20260109	8	91 / 13	7
+Mixed	Easy	20260110	9	64 / 4	16
+Mixed	Easy	20260111	0	154 / 11	14
+Mixed	Easy	20260112	1	64 / 8	8
+Mixed	Easy	20260113	2	108 / 12	9
+Mixed	Easy	20260114	3	176 / 11	16
+Mixed	Easy	20260115	4	52 / 13	4
+Mixed	Easy	20260116	5	144 / 12	12
+Mixed	Easy	20260117	6	96 * 7	672
+Mixed	Easy	20260118	7	46 * 5	230
+Mixed	Easy	20260119	8	15 * 5	75
+Mixed	Easy	20260120	9	36 * 9	324
+Mixed	Easy	20260121	0	48 * 8	384
+Mixed	Easy	20260122	1	14 * 10	140
+Mixed	Easy	20260123	2	73 * 9	657
+Mixed	Easy	20260124	3	55 * 2	110
+Mixed	Easy	20260125	4	96 * 7	672
+Mixed	Easy	20260126	5	46 * 8	368
+Mixed	Easy	20260127	6	23 * 10	230
+Mixed	Easy	20260128	7	62 * 9	558
+Mixed	Easy	20260129	8	85 * 3	255
+Mixed	Easy	20260130	9	85 * 7	595
+Mixed	Easy	20260131	0	46 * 10	460
+Mixed	Easy	20260132	1	88 - 24	64
+Mixed	Easy	20260133	2	25 - 19	6
+Mixed	Easy	20260134	3	84 - 29	55
+Mixed	Easy	20260135	4	50 - 7	43
+Mixed	Easy	20260136	5	62 * 2	124
+Mixed	Easy	20260137	6	18 - 9	9
+Mixed	Easy	20260138	7	98 - 28	70
+Mixed	Easy	20260139	8	49 - 41	8
+Mixed	Easy	20260140	9	18 - 13	5
+Mixed	Easy	20260141	0	14 - 5	9
+Mixed	Easy	20260142	1	94 - 44	50
+Mixed	Easy	20260143	2	92 - 50	42
+Mixed	Easy	20260144	3	95 - 13	82
+Mixed	Easy	20260145	4	28 - 10	18
+Mixed	Easy	20260146	5	49 - 13	36
+Mixed	Easy	20260147	6	42 - 20	22
+Mixed	Easy	20260148	7	57 * 5	285
+Mixed	Easy	20260149	8	76 * 10	760
+Mixed	Easy	20260150	9	66 * 3	198
+Mixed	Medium	20260101	0	67 * 6 * 5	2010
+Mixed	Medium	20260102	1	868 - 293 - 137	438
+Mixed	Medium	20260103	2	243 - 48 - 5	190
+Mixed	Medium	20260104	3	82 * 2 * 2	328
+Mixed	Medium	20260105	4	12 * 6 * 2	144
+Mixed	Medium	20260106	5	33 * 7 * 2	462
+Mixed	Medium	20260107	6	(18 / 2) / 3	3
+Mixed	Medium	20260108	7	(225 / 9) / 5	5
+Mixed	Medium	20260109	8	(144 / 9) / 8	2
+Mixed	Medium	20260110	9	(385 / 5) / 7	11
+Mixed	Medium	20260111	0	(378 / 7) / 6	9
+Mixed	Medium	20260112	1	(360 / 5) / 9	8
+Mixed	Medium	20260113	2	(24 / 2) / 3	4
+Mixed	Medium	20260114	3	(324 / 9) / 6	6
+Mixed	Medium	20260115	4	(135 / 5) / 3	9
+Mixed	Medium	20260116	5	(30 / 3) / 5	2
+Mixed	Medium	20260117	6	96 * 9 * 2	1728
+Mixed	Medium	20260118	7	46 * 7 * 2	644
+Mixed	Medium	20260119	8	15 * 6 * 4	360
+Mixed	Medium	20260120	9	36 * 7 * 4	1008
+Mixed	Medium	20260121	0	48 * 7 * 3	1008
+Mixed	Medium	20260122	1	14 * 9 * 4	504
+Mixed	Medium	20260123	2	73 * 2 * 2	292
+Mixed	Medium	20260124	3	55 * 7 * 3	1155
+Mixed	Medium	20260125	4	96 * 3 * 3	864
+Mixed	Medium	20260126	5	46 * 8 * 3	1104
+Mixed	Medium	20260127	6	23 * 4 * 5	460
+Mixed	Medium	20260128	7	62 * 2 * 4	496
+Mixed	Medium	20260129	8	85 * 8 * 4	2720
+Mixed	Medium	20260130	9	85 * 2 * 5	850
+Mixed	Medium	20260131	0	46 * 6 * 3	828
+Mixed	Medium	20260132	1	808 - 355 - 169	284
+Mixed	Medium	20260133	2	295 - 13 - 118	164
+Mixed	Medium	20260134	3	174 - 48 - 69	57
+Mixed	Medium	20260135	4	140 - 52 - 57	31
+Mixed	Medium	20260136	5	62 * 3 * 5	930
+Mixed	Medium	20260137	6	738 - 356 - 241	141
+Mixed	Medium	20260138	7	728 - 301 - 412	15
+Mixed	Medium	20260139	8	679 - 345 - 45	289
+Mixed	Medium	20260140	9	558 - 20 - 407	131
+Mixed	Medium	20260141	0	554 - 246 - 296	12
+Mixed	Medium	20260142	1	544 - 170 - 31	343
+Mixed	Medium	20260143	2	362 - 65 - 179	118
+Mixed	Medium	20260144	3	725 - 274 - 33	418
+Mixed	Medium	20260145	4	208 - 59 - 24	125
+Mixed	Medium	20260146	5	139 - 36 - 21	82
+Mixed	Medium	20260147	6	942 - 162 - 324	456
+Mixed	Medium	20260148	7	57 * 7 * 5	1995
+Mixed	Medium	20260149	8	76 * 2 * 5	760
+Mixed	Medium	20260150	9	66 * 3 * 3	594
+Mixed	Hard	20260101	0	808 * 6 * 8	38784
+Mixed	Hard	20260102	1	8068 - 1865 - 352 - 3241	2610
+Mixed	Hard	20260103	2	1143 - 185 - 128 - 621	209
+Mixed	Hard	20260104	3	635 * 2 * 2	2540
+Mixed	Hard	20260105	4	410 * 6 * 3	7380
+Mixed	Hard	20260106	5	571 * 7 * 2	7994
+Mixed	Hard	20260107	6	1456 / 16	91
+Mixed	Hard	20260108	7	159 / 3	53
+Mixed	Hard	20260109	8	2280 / 38	60
+Mixed	Hard	20260110	9	4059 / 41	99
+Mixed	Hard	20260111	0	888 / 24	37
+Mixed	Hard	20260112	1	1596 / 21	76
+Mixed	Hard	20260113	2	800 / 25	32
+Mixed	Hard	20260114	3	1008 / 12	84
+Mixed	Hard	20260115	4	1482 / 26	57
+Mixed	Hard	20260116	5	260 / 13	20
+Mixed	Hard	20260117	6	903 * 9 * 3	24381
+Mixed	Hard	20260118	7	122 * 7 * 2	1708
+Mixed	Hard	20260119	8	653 * 6 * 7	27426
+Mixed	Hard	20260120	9	814 * 7 * 6	34188
+Mixed	Hard	20260121	0	844 * 7 * 5	29540
+Mixed	Hard	20260122	1	234 * 9 * 6	12636
+Mixed	Hard	20260123	2	695 * 2 * 3	4170
+Mixed	Hard	20260124	3	100 * 7 * 5	3500
+Mixed	Hard	20260125	4	679 * 3 * 5	10185
+Mixed	Hard	20260126	5	797 * 8 * 4	25504
+Mixed	Hard	20260127	6	410 * 4 * 8	13120
+Mixed	Hard	20260128	7	528 * 2 * 6	6336
+Mixed	Hard	20260129	8	251 * 8 * 7	14056
+Mixed	Hard	20260130	9	512 * 2 * 9	9216
+Mixed	Hard	20260131	0	398 * 6 * 4	9552
+Mixed	Hard	20260132	1	8008 - 391 - 1610 - 1497	4510
+Mixed	Hard	20260133	2	2095 - 630 - 735 - 410	320
+Mixed	Hard	20260134	3	4674 - 1423 - 1502 - 429	1320
+Mixed	Hard	20260135	4	9140 - 2688 - 2636 - 766	3050
+Mixed	Hard	20260136	5	304 * 3 * 9	8208
+Mixed	Hard	20260137	6	8838 - 1445 - 2272 - 2294	2827
+Mixed	Hard	20260138	7	3428 - 529 - 878 - 53	1968
+Mixed	Hard	20260139	8	2479 - 266 - 594 - 1511	108
+Mixed	Hard	20260140	9	5058 - 1253 - 1256 - 1540	1009
+Mixed	Hard	20260141	0	5054 - 295 - 365 - 21	4373
+Mixed	Hard	20260142	1	8644 - 2387 - 2182 - 3716	359
+Mixed	Hard	20260143	2	5762 - 1090 - 730 - 3099	843
+Mixed	Hard	20260144	3	9725 - 3041 - 1352 - 1023	4309
+Mixed	Hard	20260145	4	3808 - 140 - 621 - 1535	1512
+Mixed	Hard	20260146	5	3739 - 1236 - 613 - 1131	759
+Mixed	Hard	20260147	6	5442 - 1208 - 553 - 1931	1750
+Mixed	Hard	20260148	7	797 * 7 * 9	50211
+Mixed	Hard	20260149	8	572 * 2 * 9	10296
+Mixed	Hard	20260150	9	548 * 3 * 5	8220
+Special	Easy	20260101	0	(24 * 3) / (3 * 3)	8
+Special	Easy	20260102	1	(67 - 12) / (3 + 2)	11
+Special	Easy	20260103	2	(35 * 6) / (5 * 6)	7
+Special	Easy	20260104	3	(9 + 12) * (10 - 5)	105
+Special	Easy	20260105	4	(64 / 8) + (27 / 3)	17
+Special	Easy	20260106	5	(12 * 2) / (6 * 2)	2
+Special	Easy	20260107	6	(8 * 3) / (4 * 3)	2
+Special	Easy	20260108	7	(27 * 5) / (3 * 5)	9
+Special	Easy	20260109	8	(12 + 3) * (16 - 14)	30
+Special	Easy	20260110	9	(20 * 6) / (4 * 6)	5
+Special	Easy	20260111	0	(8 + 10) * (10 - 2)	144
+Special	Easy	20260112	1	(45 - 5) / (3 + 2)	8
+Special	Easy	20260113	2	(6 * 4) / (3 * 4)	2
+Special	Easy	20260114	3	(18 * 6) / (2 * 6)	9
+Special	Easy	20260115	4	(20 * 4) / (4 * 4)	5
+Special	Easy	20260116	5	(9 * 2) / (3 * 2)	3
+Special	Easy	20260117	6	(6 * 2) / (2 * 2)	3
+Special	Easy	20260118	7	(12 * 4) / (6 * 4)	2
+Special	Easy	20260119	8	(14 * 4) / (2 * 4)	7
+Special	Easy	20260120	9	(12 * 3) / (2 * 3)	6
+Special	Easy	20260121	0	(15 * 5) / (3 * 5)	5
+Special	Easy	20260122	1	(11 + 3) * (17 - 3)	196
+Special	Easy	20260123	2	(15 * 5) / (5 * 5)	3
+Special	Easy	20260124	3	(62 - 14) / (4 + 2)	8
+Special	Easy	20260125	4	(10 * 5) / (2 * 5)	5
+Special	Easy	20260126	5	(24 * 6) / (6 * 6)	4
+Special	Easy	20260127	6	(49 / 7) + (80 / 8)	17
+Special	Easy	20260128	7	(90 / 9) + (60 / 6)	20
+Special	Easy	20260129	8	(33 / 3) - (1 * 3)	8
+Special	Easy	20260130	9	(87 - 9) / (4 + 2)	13
+Special	Easy	20260131	0	(24 * 3) / (6 * 3)	4
+Special	Easy	20260132	1	(88 / 4) - (1 * 4)	18
+Special	Easy	20260133	2	(30 / 5) + (12 / 6)	8
+Special	Easy	20260134	3	(63 / 7) + (10 / 5)	11
+Special	Easy	20260135	4	(29 - 5) / (4 + 2)	4
+Special	Easy	20260136	5	(18 - 14) / (2 + 0)	2
+Special	Easy	20260137	6	(77 / 7) + (56 / 8)	18
+Special	Easy	20260138	7	(40 / 8) + (80 / 8)	15
+Special	Easy	20260139	8	(42 / 7) + (27 / 3)	15
+Special	Easy	20260140	9	(95 - 5) / (6 + 4)	9
+Special	Easy	20260141	0	(42 - 12) / (4 + 2)	5
+Special	Easy	20260142	1	(59 - 9) / (3 + 2)	10
+Special	Easy	20260143	2	(10 / 5) + (49 / 7)	9
+Special	Easy	20260144	3	(72 / 4) - (11 * 1)	7
+Special	Easy	20260145	4	(17 - 11) / (2 + 0)	3
+Special	Easy	20260146	5	(60 - 10) / (3 + 2)	10
+Special	Easy	20260147	6	(12 / 6) + (20 / 2)	12
+Special	Easy	20260148	7	(20 / 4) + (63 / 9)	12
+Special	Easy	20260149	8	(84 / 7) - (2 * 4)	4
+Special	Easy	20260150	9	(64 - 10) / (5 + 4)	6
+Special	Medium	20260101	0	(24 * 3) / (3 * 3)	8
+Special	Medium	20260102	1	(97 - 42) / (3 + 2)	11
+Special	Medium	20260103	2	(35 * 6) / (5 * 6)	7
+Special	Medium	20260104	3	(9 + 42) * (50 - 32)	918
+Special	Medium	20260105	4	(64 / 8) + (27 / 3)	17
+Special	Medium	20260106	5	(12 * 2) / (6 * 2)	2
+Special	Medium	20260107	6	(8 * 3) / (4 * 3)	2
+Special	Medium	20260108	7	(27 * 5) / (3 * 5)	9
+Special	Medium	20260109	8	(12 + 43) * (56 - 14)	2310
+Special	Medium	20260110	9	(20 * 6) / (4 * 6)	5
+Special	Medium	20260111	0	(48 + 30) * (20 - 4)	1248
+Special	Medium	20260112	1	(45 - 5) / (3 + 2)	8
+Special	Medium	20260113	2	(6 * 4) / (3 * 4)	2
+Special	Medium	20260114	3	(18 * 6) / (2 * 6)	9
+Special	Medium	20260115	4	(20 * 4) / (4 * 4)	5
+Special	Medium	20260116	5	(9 * 2) / (3 * 2)	3
+Special	Medium	20260117	6	(6 * 2) / (2 * 2)	3
+Special	Medium	20260118	7	(12 * 4) / (6 * 4)	2
+Special	Medium	20260119	8	(14 * 4) / (2 * 4)	7
+Special	Medium	20260120	9	(12 * 3) / (2 * 3)	6
+Special	Medium	20260121	0	(15 * 5) / (3 * 5)	5
+Special	Medium	20260122	1	(21 + 13) * (27 - 13)	476
+Special	Medium	20260123	2	(15 * 5) / (5 * 5)	3
+Special	Medium	20260124	3	(82 - 34) / (4 + 2)	8
+Special	Medium	20260125	4	(10 * 5) / (2 * 5)	5
+Special	Medium	20260126	5	(24 * 6) / (6 * 6)	4
+Special	Medium	20260127	6	(49 / 7) + (80 / 8)	17
+Special	Medium	20260128	7	(90 / 9) + (60 / 6)	20
+Special	Medium	20260129	8	(33 / 3) - (1 * 3)	8
+Special	Medium	20260130	9	(107 - 29) / (4 + 2)	13
+Special	Medium	20260131	0	(24 * 3) / (6 * 3)	4
+Special	Medium	20260132	1	(88 / 4) - (1 * 4)	18
+Special	Medium	20260133	2	(30 / 5) + (12 / 6)	8
+Special	Medium	20260134	3	(63 / 7) + (10 / 5)	11
+Special	Medium	20260135	4	(29 - 5) / (4 + 2)	4
+Special	Medium	20260136	5	(18 - 14) / (2 + 0)	2
+Special	Medium	20260137	6	(77 / 7) + (56 / 8)	18
+Special	Medium	20260138	7	(40 / 8) + (80 / 8)	15
+Special	Medium	20260139	8	(42 / 7) + (27 / 3)	15
+Special	Medium	20260140	9	(135 - 45) / (6 + 4)	9
+Special	Medium	20260141	0	(82 - 52) / (4 + 2)	5
+Special	Medium	20260142	1	(59 - 9) / (3 + 2)	10
+Special	Medium	20260143	2	(10 / 5) + (49 / 7)	9
+Special	Medium	20260144	3	(72 / 4) - (11 * 1)	7
+Special	Medium	20260145	4	(27 - 21) / (2 + 0)	3
+Special	Medium	20260146	5	(80 - 30) / (3 + 2)	10
+Special	Medium	20260147	6	(12 / 6) + (20 / 2)	12
+Special	Medium	20260148	7	(20 / 4) + (63 / 9)	12
+Special	Medium	20260149	8	(84 / 7) - (2 * 4)	4
+Special	Medium	20260150	9	(64 - 10) / (5 + 4)	6
+Special	Hard	20260101	0	(24 * 3) / (3 * 3)	8
+Special	Hard	20260102	1	(197 - 142) / (3 + 2)	11
+Special	Hard	20260103	2	(35 * 6) / (5 * 6)	7
+Special	Hard	20260104	3	(59 + 142) * (100 - 26)	14874
+Special	Hard	20260105	4	(64 / 8) + (27 / 3)	17
+Special	Hard	20260106	5	(12 * 2) / (6 * 2)	2
+Special	Hard	20260107	6	(8 * 3) / (4 * 3)	2
+Special	Hard	20260108	7	(27 * 5) / (3 * 5)	9
+Special	Hard	20260109	8	(62 + 143) * (56 - 14)	8610
+Special	Hard	20260110	9	(20 * 6) / (4 * 6)	5
+Special	Hard	20260111	0	(48 + 30) * (20 - 4)	1248
+Special	Hard	20260112	1	(45 - 5) / (3 + 2)	8
+Special	Hard	20260113	2	(6 * 4) / (3 * 4)	2
+Special	Hard	20260114	3	(18 * 6) / (2 * 6)	9
+Special	Hard	20260115	4	(20 * 4) / (4 * 4)	5
+Special	Hard	20260116	5	(9 * 2) / (3 * 2)	3
+Special	Hard	20260117	6	(6 * 2) / (2 * 2)	3
+Special	Hard	20260118	7	(12 * 4) / (6 * 4)	2
+Special	Hard	20260119	8	(14 * 4) / (2 * 4)	7
+Special	Hard	20260120	9	(12 * 3) / (2 * 3)	6
+Special	Hard	20260121	0	(15 * 5) / (3 * 5)	5
+Special	Hard	20260122	1	(21 + 113) * (77 - 63)	1876
+Special	Hard	20260123	2	(15 * 5) / (5 * 5)	3
+Special	Hard	20260124	3	(82 - 34) / (4 + 2)	8
+Special	Hard	20260125	4	(10 * 5) / (2 * 5)	5
+Special	Hard	20260126	5	(24 * 6) / (6 * 6)	4
+Special	Hard	20260127	6	(49 / 7) + (80 / 8)	17
+Special	Hard	20260128	7	(90 / 9) + (60 / 6)	20
+Special	Hard	20260129	8	(33 / 3) - (1 * 3)	8
+Special	Hard	20260130	9	(107 - 29) / (4 + 2)	13
+Special	Hard	20260131	0	(24 * 3) / (6 * 3)	4
+Special	Hard	20260132	1	(88 / 4) - (1 * 4)	18
+Special	Hard	20260133	2	(30 / 5) + (12 / 6)	8
+Special	Hard	20260134	3	(63 / 7) + (10 / 5)	11
+Special	Hard	20260135	4	(129 - 105) / (4 + 2)	4
+Special	Hard	20260136	5	(118 - 114) / (2 + 0)	2
+Special	Hard	20260137	6	(77 / 7) + (56 / 8)	18
+Special	Hard	20260138	7	(40 / 8) + (80 / 8)	15
+Special	Hard	20260139	8	(42 / 7) + (27 / 3)	15
+Special	Hard	20260140	9	(185 - 95) / (6 + 4)	9
+Special	Hard	20260141	0	(132 - 102) / (4 + 2)	5
+Special	Hard	20260142	1	(109 - 59) / (3 + 2)	10
+Special	Hard	20260143	2	(10 / 5) + (49 / 7)	9
+Special	Hard	20260144	3	(72 / 4) - (11 * 1)	7
+Special	Hard	20260145	4	(27 - 21) / (2 + 0)	3
+Special	Hard	20260146	5	(80 - 30) / (3 + 2)	10
+Special	Hard	20260147	6	(12 / 6) + (20 / 2)	12
+Special	Hard	20260148	7	(20 / 4) + (63 / 9)	12
+Special	Hard	20260149	8	(84 / 7) - (2 * 4)	4
+Special	Hard	20260150	9	(64 - 10) / (5 + 4)	6
+Fractions	Easy	20260101	0	What is 3/8 of 104?	39
+Fractions	Easy	20260102	1	What is 8/9 of 99?	88
+Fractions	Easy	20260103	2	What is 1/2 of 22?	11
+Fractions	Easy	20260104	3	What is 5/6 of 72?	60
+Fractions	Easy	20260105	4	What is 3/4 of 8?	6
+Fractions	Easy	20260106	5	What is 5/6 of 72?	60
+Fractions	Easy	20260107	6	What is 1/2 of 30?	15
+Fractions	Easy	20260108	7	What is 1/7 of 63?	9
+Fractions	Easy	20260109	8	What is 4/5 of 40?	32
+Fractions	Easy	20260110	9	What is 9/10 of 100?	90
+Fractions	Easy	20260111	0	What is 1/6 of 90?	15
+Fractions	Easy	20260112	1	What is 1/7 of 28?	4
+Fractions	Easy	20260113	2	What is 2/9 of 90?	20
+Fractions	Easy	20260114	3	What is 3/5 of 20?	12
+Fractions	Easy	20260115	4	What is 2/9 of 81?	18
+Fractions	Easy	20260116	5	What is 2/5 of 20?	8
+Fractions	Easy	20260117	6	What is 1/3 of 27?	9
+Fractions	Easy	20260118	7	What is 3/8 of 24?	9
+Fractions	Easy	20260119	8	What is 1/6 of 72?	12
+Fractions	Easy	20260120	9	What is 1/7 of 70?	10
+Fractions	Easy	20260121	0	What is 3/7 of 28?	12
+Fractions	Easy	20260122	1	What is 1/7 of 84?	12
+Fractions	Easy	20260123	2	What is 3/10 of 20?	6
+Fractions	Easy	20260124	3	What is 2/3 of 12?	8
+Fractions	Easy	20260125	4	What is 1/10 of 140?	14
+Fractions	Easy	20260126	5	What is 5/6 of 72?	60
+Fractions	Easy	20260127	6	What is 3/5 of 35?	21
+Fractions	Easy	20260128	7	What is 9/10 of 20?	18
+Fractions	Easy	20260129	8	What is 3/4 of 16?	12
+Fractions	Easy	20260130	9	What is 8/9 of 135?	120
+Fractions	Easy	20260131	0	What is 3/8 of 56?	21
+Fractions	Easy	20260132	1	What is 7/10 of 30?	21
+Fractions	Easy	20260133	2	What is 4/9 of 108?	48
+Fractions	Easy	20260134	3	What is 3/5 of 35?	21
+Fractions	Easy	20260135	4	What is 1/2 of 4?	2
+Fractions	Easy	20260136	5	What is 4/7 of 70?	40
+Fractions	Easy	20260137	6	What is 5/6 of 48?	40
+Fractions	Easy	20260138	7	What is 5/7 of 91?	65
+Fractions	Easy	20260139	8	What is 5/6 of 84?	70
+Fractions	Easy	20260140	9	What is 9/10 of 90?	81
+Fractions	Easy	20260141	0	What is 1/10 of 130?	13
+Fractions	Easy	20260142	1	What is 1/2 of 4?	2
+Fractions	Easy	20260143	2	What is 7/10 of 80?	56
+Fractions	Easy	20260144	3	What is 2/5 of 50?	20
+Fractions	Easy	20260145	4	What is 2/3 of 21?	14
+Fractions	Easy	20260146	5	What is 3/8 of 32?	12
+Fractions	Easy	20260147	6	What is 1/8 of 104?	13
+Fractions	Easy	20260148	7	What is 1/6 of 30?	5
+Fractions	Easy	20260149	8	What is 3/4 of 24?	18
+Fractions	Easy	20260150	9	What is 7/8 of 120?	105
+Fractions	Medium	20260101	0	What is the numerator of 8 2/7 as an improper fraction?	58
+Fractions	Medium	20260102	1	If you simplify 16/20 to simplest form, what is the denominator?	5
+Fractions	Medium	20260103	2	What is the numerator of 1 2/7 as an improper fraction?	9
+Fractions	Medium	20260104	3	If you simplify 6/24 to simplest form, what is the denominator?	4
+Fractions	Medium	20260105	4	Calculate 7/11 of 77	49
+Fractions	Medium	20260106	5	If you simplify 5/40 to simplest form, what is the denominator?	8
+Fractions	Medium	20260107	6	What is the numerator of 8 1/4 as an improper fraction?	33
+Fractions	Medium	20260108	7	Calculate 8/13 of 247	152
+Fractions	Medium	20260109	8	What is the numerator of 8 5/9 as an improper fraction?	77
+Fractions	Medium	20260110	9	Calculate 14/15 of 165	154
+Fractions	Medium	20260111	0	If you simplify 28/32 to simplest form, what is the denominator?	8
+Fractions	Medium	20260112	1	Calculate 7/13 of 156	84
+Fractions	Medium	20260113	2	If you simplify 24/54 to simplest form, what is the denominator?	9
+Fractions	Medium	20260114	3	What is the numerator of 6 3/7 as an improper fraction?	45
+Fractions	Medium	20260115	4	If you simplify 18/24 to simplest form, what is the denominator?	4
+Fractions	Medium	20260116	5	What is the numerator of 1 1/6 as an improper fraction?	7
+Fractions	Medium	20260117	6	If you simplify 3/24 to simplest form, what is the denominator?	8
+Fractions	Medium	20260118	7	What is the numerator of 4 1/6 as an improper fraction?	25
+Fractions	Medium	20260119	8	If you simplify 15/18 to simplest form, what is the denominator?	6
+Fractions	Medium	20260120	9	Calculate 9/10 of 180	162
+Fractions	Medium	20260121	0	Calculate 3/14 of 168	36
+Fractions	Medium	20260122	1	Calculate 7/12 of 156	91
+Fractions	Medium	20260123	2	Calculate 1/14 of 126	9
+Fractions	Medium	20260124	3	If you simplify 30/36 to simplest form, what is the denominator?	6
+Fractions	Medium	20260125	4	Calculate 5/6 of 42	35
+Fractions	Medium	20260126	5	If you simplify 28/35 to simplest form, what is the denominator?	5
+Fractions	Medium	20260127	6	What is the numerator of 5 3/8 as an improper fraction?	43
+Fractions	Medium	20260128	7	Calculate 9/11 of 154	126
+Fractions	Medium	20260129	8	Calculate 5/7 of 112	80
+Fractions	Medium	20260130	9	If you simplify 30/36 to simplest form, what is the denominator?	6
+Fractions	Medium	20260131	0	What is the numerator of 7 3/4 as an improper fraction?	31
+Fractions	Medium	20260132	1	Calculate 2/15 of 270	36
+Fractions	Medium	20260133	2	If you simplify 35/40 to simplest form, what is the denominator?	8
+Fractions	Medium	20260134	3	What is the numerator of 4 7/8 as an improper fraction?	39
+Fractions	Medium	20260135	4	What is the numerator of 5 1/8 as an improper fraction?	41
+Fractions	Medium	20260136	5	Calculate 5/11 of 209	95
+Fractions	Medium	20260137	6	If you simplify 63/70 to simplest form, what is the denominator?	10
+Fractions	Medium	20260138	7	Calculate 6/7 of 119	102
+Fractions	Medium	20260139	8	If you simplify 28/35 to simplest form, what is the denominator?	5
+Fractions	Medium	20260140	9	Calculate 9/14 of 280	180
+Fractions	Medium	20260141	0	Calculate 4/7 of 119	68
+Fractions	Medium	20260142	1	What is the numerator of 1 1/8 as an improper fraction?	9
+Fractions	Medium	20260143	2	Calculate 7/13 of 195	105
+Fractions	Medium	20260144	3	What is the numerator of 2 3/5 as an improper fraction?	13
+Fractions	Medium	20260145	4	If you simplify 6/12 to simplest form, what is the denominator?	2
+Fractions	Medium	20260146	5	What is the numerator of 2 2/3 as an improper fraction?	8
+Fractions	Medium	20260147	6	What is the numerator of 4 3/7 as an improper fraction?	31
+Fractions	Medium	20260148	7	If you simplify 18/60 to simplest form, what is the denominator?	10
+Fractions	Medium	20260149	8	Calculate 1/9 of 180	20
+Fractions	Medium	20260150	9	What is the numerator of 9 7/8 as an improper fraction?	79
+Fractions	Hard	20260101	0	What is 60% of 130?	78
+Fractions	Hard	20260102	1	The ratio of red to blue marbles is 9:4. If there are 99 red marbles, how many blue marbles are there?	44
+Fractions	Hard	20260103	2	What is 60% of 110?	66
+Fractions	Hard	20260104	3	The ratio of red to blue marbles is 2:5. If there are 24 red marbles, how many blue marbles are there?	60
+Fractions	Hard	20260105	4	What is (1/5) * (3/4) of 140?	21
+Fractions	Hard	20260106	5	The ratio of red to blue marbles is 7:9. If there are 21 red marbles, how many blue marbles are there?	27
+Fractions	Hard	20260107	6	What is 15% of 220?	33
+Fractions	Hard	20260108	7	What is (2/3) * (1/2) of 12?	4
+Fractions	Hard	20260109	8	What is 90% of 20?	18
+Fractions	Hard	20260110	9	What is (1/4) * (3/4) of 64?	12
+Fractions	Hard	20260111	0	The ratio of red to blue marbles is 7:6. If there are 28 red marbles, how many blue marbles are there?	24
+Fractions	Hard	20260112	1	What is (2/5) * (1/3) of 45?	6
+Fractions	Hard	20260113	2	The ratio of red to blue marbles is 5:3. If there are 30 red marbles, how many blue marbles are there?	18
+Fractions	Hard	20260114	3	What is 60% of 60?	36
+Fractions	Hard	20260115	4	The ratio of red to blue marbles is 5:3. If there are 75 red marbles, how many blue marbles are there?	45
+Fractions	Hard	20260116	5	What is 50% of 48?	24
+Fractions	Hard	20260117	6	The ratio of red to blue marbles is 4:3. If there are 20 red marbles, how many blue marbles are there?	15
+Fractions	Hard	20260118	7	What is 50% of 36?	18
+Fractions	Hard	20260119	8	The ratio of red to blue marbles is 6:5. If there are 24 red marbles, how many blue marbles are there?	20
+Fractions	Hard	20260120	9	What is (3/4) * (1/4) of 112?	21
+Fractions	Hard	20260121	0	What is (1/2) * (3/4) of 64?	24
+Fractions	Hard	20260122	1	What is (1/2) * (2/5) of 30?	6
+Fractions	Hard	20260123	2	What is (1/2) * (1/2) of 12?	3
+Fractions	Hard	20260124	3	The ratio of red to blue marbles is 7:8. If there are 91 red marbles, how many blue marbles are there?	104
+Fractions	Hard	20260125	4	What is (1/2) * (1/2) of 16?	4
+Fractions	Hard	20260126	5	The ratio of red to blue marbles is 8:5. If there are 112 red marbles, how many blue marbles are there?	70
+Fractions	Hard	20260127	6	What is 75% of 68?	51
+Fractions	Hard	20260128	7	What is (3/5) * (1/2) of 20?	6
+Fractions	Hard	20260129	8	What is (1/2) * (2/5) of 70?	14
+Fractions	Hard	20260130	9	The ratio of red to blue marbles is 2:9. If there are 16 red marbles, how many blue marbles are there?	72
+Fractions	Hard	20260131	0	What is 15% of 260?	39
+Fractions	Hard	20260132	1	What is (2/3) * (1/3) of 90?	20
+Fractions	Hard	20260133	2	The ratio of red to blue marbles is 9:5. If there are 27 red marbles, how many blue marbles are there?	15
+Fractions	Hard	20260134	3	What is 80% of 190?	152
+Fractions	Hard	20260135	4	What is 80% of 40?	32
+Fractions	Hard	20260136	5	What is (4/5) * (1/2) of 70?	28
+Fractions	Hard	20260137	6	The ratio of red to blue marbles is 8:7. If there are 64 red marbles, how many blue marbles are there?	56
+Fractions	Hard	20260138	7	What is (4/5) * (4/5) of 75?	48
+Fractions	Hard	20260139	8	The ratio of red to blue marbles is 9:7. If there are 126 red marbles, how many blue marbles are there?	98
+Fractions	Hard	20260140	9	What is (4/5) * (1/4) of 60?	12
+Fractions	Hard	20260141	0	What is (2/4) * (3/4) of 64?	24
+Fractions	Hard	20260142	1	What is 80% of 60?	48
+Fractions	Hard	20260143	2	What is (2/3) * (2/3) of 18?	8
+Fractions	Hard	20260144	3	What is 30% of 100?	30
+Fractions	Hard	20260145	4	The ratio of red to blue marbles is 2:7. If there are 12 red marbles, how many blue marbles are there?	42
+Fractions	Hard	20260146	5	What is 5% of 200?	10
+Fractions	Hard	20260147	6	What is 60% of 120?	72
+Fractions	Hard	20260148	7	The ratio of red to blue marbles is 7:4. If there are 14 red marbles, how many blue marbles are there?	8
+Fractions	Hard	20260149	8	What is (3/4) * (1/2) of 24?	9
+Fractions	Hard	20260150	9	What is 75% of 8?	6
+Patterns	Easy	20260101	0	Pattern: 11, 16, 14, 19, 17, _	22
+Patterns	Easy	20260102	1	Pattern: 28, 33, 38, 43, _	48
+Patterns	Easy	20260103	2	Pattern: 33, 27, 21, 15, _	9
+Patterns	Easy	20260104	3	Pattern: 11, 20, 16, 25, 21, _	30
+Patterns	Easy	20260105	4	Pattern: 14, 22, 21, 29, 28, _	36
+Patterns	Easy	20260106	5	Pattern: 24, 30, 29, 35, 34, _	40
+Patterns	Easy	20260107	6	Pattern: 22, 31, 26, 35, 30, _	39
+Patterns	Easy	20260108	7	Pattern: 21, 24, 23, 26, 25, _	28
+Patterns	Easy	20260109	8	Pattern: 24, 33, 32, 41, 40, _	49
+Patterns	Easy	20260110	9	Pattern: 7, 16, 14, 23, 21, _	30
+Patterns	Easy	20260111	0	Pattern: 10, 19, 16, 25, 22, _	31
+Patterns	Easy	20260112	1	Pattern: 23, 28, 27, 32, 31, _	36
+Patterns	Easy	20260113	2	Pattern: 11, 15, 14, 18, 17, _	21
+Patterns	Easy	20260114	3	Pattern: 10, 15, 12, 17, 14, _	19
+Patterns	Easy	20260115	4	Pattern: 12, 15, 14, 17, 16, _	19
+Patterns	Easy	20260116	5	Pattern: 11, 16, 15, 20, 19, _	24
+Patterns	Easy	20260117	6	Pattern: 10, 13, 12, 15, 14, _	17
+Patterns	Easy	20260118	7	Pattern: 9, 13, 12, 16, 15, _	19
+Patterns	Easy	20260119	8	Pattern: 15, 21, 18, 24, 21, _	27
+Patterns	Easy	20260120	9	Pattern: 5, 9, 7, 11, 9, _	13
+Patterns	Easy	20260121	0	Pattern: 21, 26, 25, 30, 29, _	34
+Patterns	Easy	20260122	1	Pattern: 23, 29, 26, 32, 29, _	35
+Patterns	Easy	20260123	2	Pattern: 18, 21, 20, 23, 22, _	25
+Patterns	Easy	20260124	3	Pattern: 5, 10, 7, 12, 9, _	14
+Patterns	Easy	20260125	4	Pattern: 20, 29, 27, 36, 34, _	43
+Patterns	Easy	20260126	5	Pattern: 19, 25, 23, 29, 27, _	33
+Patterns	Easy	20260127	6	Pattern: 15, 23, 20, 28, 25, _	33
+Patterns	Easy	20260128	7	Pattern: 14, 17, 16, 19, 18, _	21
+Patterns	Easy	20260129	8	Pattern: 20, 25, 23, 28, 26, _	31
+Patterns	Easy	20260130	9	Pattern: 16, 25, 18, 27, 20, _	29
+Patterns	Easy	20260131	0	Pattern: 14, 22, 18, 26, 22, _	30
+Patterns	Easy	20260132	1	Pattern: 65, 57, 49, 41, _	33
+Patterns	Easy	20260133	2	Pattern: 25, 20, 15, 10, _	5
+Patterns	Easy	20260134	3	Pattern: 24, 28, 32, 36, _	40
+Patterns	Easy	20260135	4	Pattern: 20, 24, 28, 32, _	36
+Patterns	Easy	20260136	5	Pattern: 24, 28, 26, 30, 28, _	32
+Patterns	Easy	20260137	6	Pattern: 47, 41, 35, 29, _	23
+Patterns	Easy	20260138	7	Pattern: 83, 73, 63, 53, _	43
+Patterns	Easy	20260139	8	Pattern: 19, 23, 27, 31, _	35
+Patterns	Easy	20260140	9	Pattern: 18, 15, 12, 9, _	6
+Patterns	Easy	20260141	0	Pattern: 14, 12, 10, 8, _	6
+Patterns	Easy	20260142	1	Pattern: 34, 27, 20, 13, _	6
+Patterns	Easy	20260143	2	Pattern: 69, 61, 53, 45, _	37
+Patterns	Easy	20260144	3	Pattern: 35, 45, 55, 65, _	75
+Patterns	Easy	20260145	4	Pattern: 28, 34, 40, 46, _	52
+Patterns	Easy	20260146	5	Pattern: 52, 45, 38, 31, _	24
+Patterns	Easy	20260147	6	Pattern: 12, 22, 32, 42, _	52
+Patterns	Easy	20260148	7	Pattern: 20, 26, 22, 28, 24, _	30
+Patterns	Easy	20260149	8	Pattern: 23, 26, 25, 28, 27, _	30
+Patterns	Easy	20260150	9	Pattern: 6, 15, 8, 17, 10, _	19
+Patterns	Medium	20260101	0	Pattern: 16, 18, 22, 28, 36, _	46
+Patterns	Medium	20260102	1	Pattern: 4, 8, 16, 32, _	64
+Patterns	Medium	20260103	2	Pattern: 13, 18, 24, 31, 39, _	48
+Patterns	Medium	20260104	3	Pattern: 2, 6, 18, 54, _	162
+Patterns	Medium	20260105	4	Pattern: 5, 10, 13, 26, 29, _	58
+Patterns	Medium	20260106	5	Pattern: 5, 10, 20, 40, _	80
+Patterns	Medium	20260107	6	Pattern: 12, 14, 18, 24, 32, _	42
+Patterns	Medium	20260108	7	Pattern: 3, 6, 11, 22, 27, _	54
+Patterns	Medium	20260109	8	Pattern: 19, 20, 23, 28, 35, _	44
+Patterns	Medium	20260110	9	Pattern: 4, 8, 14, 28, 34, _	68
+Patterns	Medium	20260111	0	Pattern: 1, 2, 4, 8, _	16
+Patterns	Medium	20260112	1	Pattern: 5, 10, 13, 26, 29, _	58
+Patterns	Medium	20260113	2	Pattern: 2, 6, 18, 54, _	162
+Patterns	Medium	20260114	3	Pattern: 5, 10, 18, 29, 43, _	60
+Patterns	Medium	20260115	4	Pattern: 3, 12, 48, 192, _	768
+Patterns	Medium	20260116	5	Pattern: 6, 7, 9, 12, 16, _	21
+Patterns	Medium	20260117	6	Pattern: 1, 4, 16, 64, _	256
+Patterns	Medium	20260118	7	Pattern: 19, 22, 28, 37, 49, _	64
+Patterns	Medium	20260119	8	Pattern: 1, 2, 4, 8, _	16
+Patterns	Medium	20260120	9	Pattern: 4, 8, 11, 22, 25, _	50
+Patterns	Medium	20260121	0	Pattern: 2, 4, 9, 18, 23, _	46
+Patterns	Medium	20260122	1	Pattern: 2, 4, 6, 12, 14, _	28
+Patterns	Medium	20260123	2	Pattern: 2, 4, 9, 18, 23, _	46
+Patterns	Medium	20260124	3	Pattern: 1, 2, 4, 8, _	16
+Patterns	Medium	20260125	4	Pattern: 2, 4, 9, 18, 23, _	46
+Patterns	Medium	20260126	5	Pattern: 5, 10, 20, 40, _	80
+Patterns	Medium	20260127	6	Pattern: 5, 6, 10, 17, 27, _	40
+Patterns	Medium	20260128	7	Pattern: 5, 10, 15, 30, 35, _	70
+Patterns	Medium	20260129	8	Pattern: 2, 4, 7, 14, 17, _	34
+Patterns	Medium	20260130	9	Pattern: 2, 8, 32, 128, _	512
+Patterns	Medium	20260131	0	Pattern: 19, 21, 24, 28, 33, _	39
+Patterns	Medium	20260132	1	Pattern: 3, 6, 10, 20, 24, _	48
+Patterns	Medium	20260133	2	Pattern: 1, 2, 4, 8, _	16
+Patterns	Medium	20260134	3	Pattern: 19, 22, 28, 37, 49, _	64
+Patterns	Medium	20260135	4	Pattern: 15, 18, 23, 30, 39, _	50
+Patterns	Medium	20260136	5	Pattern: 5, 10, 16, 32, 38, _	76
+Patterns	Medium	20260137	6	Pattern: 4, 12, 36, 108, _	324
+Patterns	Medium	20260138	7	Pattern: 5, 10, 15, 30, 35, _	70
+Patterns	Medium	20260139	8	Pattern: 5, 20, 80, 320, _	1280
+Patterns	Medium	20260140	9	Pattern: 5, 10, 14, 28, 32, _	64
+Patterns	Medium	20260141	0	Pattern: 4, 8, 14, 28, 34, _	68
+Patterns	Medium	20260142	1	Pattern: 14, 19, 25, 32, 40, _	49
+Patterns	Medium	20260143	2	Pattern: 3, 6, 8, 16, 18, _	36
+Patterns	Medium	20260144	3	Pattern: 15, 19, 25, 33, 43, _	55
+Patterns	Medium	20260145	4	Pattern: 4, 12, 36, 108, _	324
+Patterns	Medium	20260146	5	Pattern: 14, 18, 24, 32, 42, _	54
+Patterns	Medium	20260147	6	Pattern: 7, 8, 10, 13, 17, _	22
+Patterns	Medium	20260148	7	Pattern: 1, 2, 4, 8, _	16
+Patterns	Medium	20260149	8	Pattern: 4, 8, 12, 24, 28, _	56
+Patterns	Medium	20260150	9	Pattern: 6, 7, 11, 18, 28, _	41
+Patterns	Hard	20260101	0	Pattern: 11, 31, 17, 37, 23, 43, _	29
+Patterns	Hard	20260102	1	Pattern: 2, 5, 10, 17, 26, _	37
+Patterns	Hard	20260103	2	Pattern: 7, 10, 15, 22, 31, _	42
+Patterns	Hard	20260104	3	Pattern: 11, 39, 13, 41, 15, 43, _	17
+Patterns	Hard	20260105	4	Pattern: 14, 36, 18, 40, 22, 44, _	26
+Patterns	Hard	20260106	5	Pattern: 14, 20, 20, 26, 26, 32, _	32
+Patterns	Hard	20260107	6	Pattern: 0, 2, 6, 12, 20, _	30
+Patterns	Hard	20260108	7	Pattern: 0, 2, 6, 12, 20, _	30
+Patterns	Hard	20260109	8	Pattern: 2, 6, 12, 20, 30, _	42
+Patterns	Hard	20260110	9	Pattern: 2, 6, 12, 20, 30, _	42
+Patterns	Hard	20260111	0	Pattern: 2, 6, 12, 20, 30, _	42
+Patterns	Hard	20260112	1	Pattern: 2, 6, 12, 20, 30, _	42
+Patterns	Hard	20260113	2	Pattern: 0, 2, 6, 12, 20, _	30
+Patterns	Hard	20260114	3	Pattern: 2, 6, 12, 20, 30, _	42
+Patterns	Hard	20260115	4	Pattern: 0, 2, 6, 12, 20, _	30
+Patterns	Hard	20260116	5	Pattern: 0, 2, 6, 12, 20, _	30
+Patterns	Hard	20260117	6	Pattern: 10, 25, 13, 28, 16, 31, _	19
+Patterns	Hard	20260118	7	Pattern: 9, 27, 13, 31, 17, 35, _	21
+Patterns	Hard	20260119	8	Pattern: 5, 32, 8, 35, 11, 38, _	14
+Patterns	Hard	20260120	9	Pattern: 5, 36, 10, 41, 15, 46, _	20
+Patterns	Hard	20260121	0	Pattern: 11, 28, 13, 30, 15, 32, _	17
+Patterns	Hard	20260122	1	Pattern: 13, 30, 17, 34, 21, 38, _	25
+Patterns	Hard	20260123	2	Pattern: 8, 38, 11, 41, 14, 44, _	17
+Patterns	Hard	20260124	3	Pattern: 5, 34, 11, 40, 17, 46, _	23
+Patterns	Hard	20260125	4	Pattern: 10, 23, 13, 26, 16, 29, _	19
+Patterns	Hard	20260126	5	Pattern: 9, 34, 13, 38, 17, 42, _	21
+Patterns	Hard	20260127	6	Pattern: 5, 35, 10, 40, 15, 45, _	20
+Patterns	Hard	20260128	7	Pattern: 14, 38, 20, 44, 26, 50, _	32
+Patterns	Hard	20260129	8	Pattern: 10, 36, 14, 40, 18, 44, _	22
+Patterns	Hard	20260130	9	Pattern: 6, 23, 12, 29, 18, 35, _	24
+Patterns	Hard	20260131	0	Pattern: 14, 31, 16, 33, 18, 35, _	20
+Patterns	Hard	20260132	1	Pattern: 0, 3, 8, 15, 24, _	35
+Patterns	Hard	20260133	2	Pattern: 5, 8, 13, 20, 29, _	40
+Patterns	Hard	20260134	3	Pattern: 4, 7, 12, 19, 28, _	39
+Patterns	Hard	20260135	4	Pattern: -4, -1, 4, 11, 20, _	31
+Patterns	Hard	20260136	5	Pattern: 14, 24, 20, 30, 26, 36, _	32
+Patterns	Hard	20260137	6	Pattern: 4, 7, 12, 19, 28, _	39
+Patterns	Hard	20260138	7	Pattern: 6, 9, 14, 21, 30, _	41
+Patterns	Hard	20260139	8	Pattern: 5, 8, 13, 20, 29, _	40
+Patterns	Hard	20260140	9	Pattern: 4, 7, 12, 19, 28, _	39
+Patterns	Hard	20260141	0	Pattern: 6, 9, 14, 21, 30, _	41
+Patterns	Hard	20260142	1	Pattern: 2, 5, 10, 17, 26, _	37
+Patterns	Hard	20260143	2	Pattern: -4, -1, 4, 11, 20, _	31
+Patterns	Hard	20260144	3	Pattern: 3, 6, 11, 18, 27, _	38
+Patterns	Hard	20260145	4	Pattern: 0, 3, 8, 15, 24, _	35
+Patterns	Hard	20260146	5	Pattern: 5, 8, 13, 20, 29, _	40
+Patterns	Hard	20260147	6	Pattern: 4, 7, 12, 19, 28, _	39
+Patterns	Hard	20260148	7	Pattern: 10, 33, 15, 38, 20, 43, _	25
+Patterns	Hard	20260149	8	Pattern: 13, 22, 15, 24, 17, 26, _	19
+Patterns	Hard	20260150	9	Pattern: 6, 20, 8, 22, 10, 24, _	12
+Algebra	Easy	20260101	0	Solve for x: 22 - x = 12	10
+Algebra	Easy	20260102	1	Solve for x: x - 19 = -15	4
+Algebra	Easy	20260103	2	Solve for x: x - 8 = -5	3
+Algebra	Easy	20260104	3	Solve for x: 30 - x = 16	14
+Algebra	Easy	20260105	4	Solve for x: 24 - x = 11	13
+Algebra	Easy	20260106	5	Solve for x: 17 - x = 6	11
+Algebra	Easy	20260107	6	Solve for x: 2x = 4	2
+Algebra	Easy	20260108	7	Solve for x: 9x = 90	10
+Algebra	Easy	20260109	8	Solve for x: 7x = 14	2
+Algebra	Easy	20260110	9	Solve for x: 10x = 120	12
+Algebra	Easy	20260111	0	Solve for x: 2x = 18	9
+Algebra	Easy	20260112	1	Solve for x: 5x = 50	10
+Algebra	Easy	20260113	2	Solve for x: 6x = 66	11
+Algebra	Easy	20260114	3	Solve for x: 4x = 32	8
+Algebra	Easy	20260115	4	Solve for x: 4x = 8	2
+Algebra	Easy	20260116	5	Solve for x: 3x = 30	10
+Algebra	Easy	20260117	6	Solve for x: 16 - x = 11	5
+Algebra	Easy	20260118	7	Solve for x: 24 - x = 20	4
+Algebra	Easy	20260119	8	Solve for x: 28 - x = 14	14
+Algebra	Easy	20260120	9	Solve for x: 21 - x = 9	12
+Algebra	Easy	20260121	0	Solve for x: 17 - x = 13	4
+Algebra	Easy	20260122	1	Solve for x: 32 - x = 20	12
+Algebra	Easy	20260123	2	Solve for x: 17 - x = 6	11
+Algebra	Easy	20260124	3	Solve for x: 14 - x = 2	12
+Algebra	Easy	20260125	4	Solve for x: 22 - x = 13	9
+Algebra	Easy	20260126	5	Solve for x: 15 - x = 7	8
+Algebra	Easy	20260127	6	Solve for x: 14 - x = 2	12
+Algebra	Easy	20260128	7	Solve for x: 23 - x = 12	11
+Algebra	Easy	20260129	8	Solve for x: 18 - x = 11	7
+Algebra	Easy	20260130	9	Solve for x: 28 - x = 19	9
+Algebra	Easy	20260131	0	Solve for x: 17 - x = 6	11
+Algebra	Easy	20260132	1	Solve for x: x - 11 = -3	8
+Algebra	Easy	20260133	2	Solve for x: x - 4 = 3	7
+Algebra	Easy	20260134	3	Solve for x: x - 14 = -8	6
+Algebra	Easy	20260135	4	Solve for x: x - 8 = -6	2
+Algebra	Easy	20260136	5	Solve for x: 32 - x = 17	15
+Algebra	Easy	20260137	6	Solve for x: x - 3 = 7	10
+Algebra	Easy	20260138	7	Solve for x: x - 17 = -9	8
+Algebra	Easy	20260139	8	Solve for x: x - 10 = -3	7
+Algebra	Easy	20260140	9	Solve for x: x - 20 = -14	6
+Algebra	Easy	20260141	0	Solve for x: x - 5 = 7	12
+Algebra	Easy	20260142	1	Solve for x: x - 20 = -10	10
+Algebra	Easy	20260143	2	Solve for x: x - 2 = 2	4
+Algebra	Easy	20260144	3	Solve for x: x - 13 = 2	15
+Algebra	Easy	20260145	4	Solve for x: x - 5 = 9	14
+Algebra	Easy	20260146	5	Solve for x: x - 18 = -7	11
+Algebra	Easy	20260147	6	Solve for x: x - 10 = 2	12
+Algebra	Easy	20260148	7	Solve for x: 24 - x = 17	7
+Algebra	Easy	20260149	8	Solve for x: 15 - x = 9	6
+Algebra	Easy	20260150	9	Solve for x: 23 - x = 20	3
+Algebra	Medium	20260101	0	Solve for x: 33 - 4x = 5	7
+Algebra	Medium	20260102	1	Solve for x: 5x - 3 = 22	5
+Algebra	Medium	20260103	2	Solve for x: 4x - 1 = 39	10
+Algebra	Medium	20260104	3	Solve for x: 33 - 8x = 1	4
+Algebra	Medium	20260105	4	Solve for x: 76 - 7x = 13	9
+Algebra	Medium	20260106	5	Solve for x: 55 - 5x = 15	8
+Algebra	Medium	20260107	6	Solve for x: (x + 11) / 3 = 6	7
+Algebra	Medium	20260108	7	Solve for x: (x + 19) / 5 = 5	6
+Algebra	Medium	20260109	8	Solve for x: (x + 1) / 2 = 3	5
+Algebra	Medium	20260110	9	Solve for x: (x + 16) / 6 = 3	2
+Algebra	Medium	20260111	0	Solve for x: (x + 7) / 4 = 4	9
+Algebra	Medium	20260112	1	Solve for x: (x + 4) / 3 = 2	2
+Algebra	Medium	20260113	2	Solve for x: (x + 10) / 4 = 6	14
+Algebra	Medium	20260114	3	Solve for x: (x + 17) / 6 = 5	13
+Algebra	Medium	20260115	4	Solve for x: (x + 13) / 4 = 6	11
+Algebra	Medium	20260116	5	Solve for x: (x + 2) / 2 = 6	10
+Algebra	Medium	20260117	6	Solve for x: 18 - 2x = 2	8
+Algebra	Medium	20260118	7	Solve for x: 15 - 3x = 3	4
+Algebra	Medium	20260119	8	Solve for x: 37 - 5x = 7	6
+Algebra	Medium	20260120	9	Solve for x: 24 - 3x = 9	5
+Algebra	Medium	20260121	0	Solve for x: 41 - 4x = 1	10
+Algebra	Medium	20260122	1	Solve for x: 48 - 5x = 8	8
+Algebra	Medium	20260123	2	Solve for x: 20 - 2x = 12	4
+Algebra	Medium	20260124	3	Solve for x: 39 - 4x = 15	6
+Algebra	Medium	20260125	4	Solve for x: 84 - 8x = 12	9
+Algebra	Medium	20260126	5	Solve for x: 38 - 5x = 13	5
+Algebra	Medium	20260127	6	Solve for x: 44 - 7x = 9	5
+Algebra	Medium	20260128	7	Solve for x: 30 - 2x = 10	10
+Algebra	Medium	20260129	8	Solve for x: 36 - 4x = 8	7
+Algebra	Medium	20260130	9	Solve for x: 58 - 8x = 10	6
+Algebra	Medium	20260131	0	Solve for x: 50 - 7x = 1	7
+Algebra	Medium	20260132	1	Solve for x: 3x - 8 = 16	8
+Algebra	Medium	20260133	2	Solve for x: 5x - 14 = 26	8
+Algebra	Medium	20260134	3	Solve for x: 7x - 15 = 13	4
+Algebra	Medium	20260135	4	Solve for x: 2x - 11 = 1	6
+Algebra	Medium	20260136	5	Solve for x: 11 - 3x = 5	2
+Algebra	Medium	20260137	6	Solve for x: 8x - 15 = 65	10
+Algebra	Medium	20260138	7	Solve for x: 6x - 3 = 51	9
+Algebra	Medium	20260139	8	Solve for x: 7x - 8 = 27	5
+Algebra	Medium	20260140	9	Solve for x: 2x - 1 = 19	10
+Algebra	Medium	20260141	0	Solve for x: 3x - 8 = 10	6
+Algebra	Medium	20260142	1	Solve for x: 2x - 10 = 0	5
+Algebra	Medium	20260143	2	Solve for x: 4x - 6 = 6	3
+Algebra	Medium	20260144	3	Solve for x: 3x - 5 = 13	6
+Algebra	Medium	20260145	4	Solve for x: 7x - 2 = 12	2
+Algebra	Medium	20260146	5	Solve for x: 4x - 11 = 9	5
+Algebra	Medium	20260147	6	Solve for x: 2x - 10 = 4	7
+Algebra	Medium	20260148	7	Solve for x: 59 - 5x = 9	10
+Algebra	Medium	20260149	8	Solve for x: 18 - 2x = 6	6
+Algebra	Medium	20260150	9	Solve for x: 78 - 8x = 6	9
+Algebra	Hard	20260101	0	If x + y = 19 and x - y = 7, what is x?	13
+Algebra	Hard	20260102	1	Solve for x: 8x - 1 = 5x + 17	6
+Algebra	Hard	20260103	2	Solve for x: 7x - 1 = 6x + 12	13
+Algebra	Hard	20260104	3	If x + y = 16 and x - y = 6, what is x?	11
+Algebra	Hard	20260105	4	If x + y = 29 and x - y = 5, what is x?	17
+Algebra	Hard	20260106	5	If x + y = 27 and x - y = 13, what is x?	20
+Algebra	Hard	20260107	6	If x + y = 11 and 2x + y = 15, what is x?	4
+Algebra	Hard	20260108	7	If x + y = 21 and 2x + y = 28, what is x?	7
+Algebra	Hard	20260109	8	If x + y = 16 and 2x + y = 26, what is x?	10
+Algebra	Hard	20260110	9	If x + y = 30 and 2x + y = 45, what is x?	15
+Algebra	Hard	20260111	0	If x + y = 23 and 2x + y = 33, what is x?	10
+Algebra	Hard	20260112	1	If x + y = 12 and 2x + y = 17, what is x?	5
+Algebra	Hard	20260113	2	If x + y = 19 and 2x + y = 30, what is x?	11
+Algebra	Hard	20260114	3	If x + y = 29 and 2x + y = 43, what is x?	14
+Algebra	Hard	20260115	4	If x + y = 12 and 2x + y = 21, what is x?	9
+Algebra	Hard	20260116	5	If x + y = 23 and 2x + y = 35, what is x?	12
+Algebra	Hard	20260117	6	If x + y = 8 and x - y = 6, what is x?	7
+Algebra	Hard	20260118	7	If x + y = 20 and x - y = 4, what is x?	12
+Algebra	Hard	20260119	8	If x + y = 15 and x - y = 9, what is x?	12
+Algebra	Hard	20260120	9	If x + y = 19 and x - y = 9, what is x?	14
+Algebra	Hard	20260121	0	If x + y = 9 and x - y = 7, what is x?	8
+Algebra	Hard	20260122	1	If x + y = 8 and x - y = 2, what is x?	5
+Algebra	Hard	20260123	2	If x + y = 13 and x - y = 3, what is x?	8
+Algebra	Hard	20260124	3	If x + y = 27 and x - y = 7, what is x?	17
+Algebra	Hard	20260125	4	If x + y = 11 and x - y = 3, what is x?	7
+Algebra	Hard	20260126	5	If x + y = 17 and x - y = 7, what is x?	12
+Algebra	Hard	20260127	6	If x + y = 25 and x - y = 5, what is x?	15
+Algebra	Hard	20260128	7	If x + y = 37 and x - y = 3, what is x?	20
+Algebra	Hard	20260129	8	If x + y = 13 and x - y = 3, what is x?	8
+Algebra	Hard	20260130	9	If x + y = 32 and x - y = 6, what is x?	19
+Algebra	Hard	20260131	0	If x + y = 9 and x - y = 5, what is x?	7
+Algebra	Hard	20260132	1	Solve for x: 7x - 14 = 4x + 10	8
+Algebra	Hard	20260133	2	Solve for x: 10x - 27 = 6x + 1	7
+Algebra	Hard	20260134	3	Solve for x: 9x - 29 = 4x + 1	6
+Algebra	Hard	20260135	4	Solve for x: 5x - 1 = 4x + 17	18
+Algebra	Hard	20260136	5	If x + y = 21 and x - y = 19, what is x?	20
+Algebra	Hard	20260137	6	Solve for x: 11x - 4 = 6x + 16	4
+Algebra	Hard	20260138	7	Solve for x: 8x - 5 = 5x + 19	8
+Algebra	Hard	20260139	8	Solve for x: 9x - 13 = 6x + 8	7
+Algebra	Hard	20260140	9	Solve for x: 5x - 1 = 4x + 7	8
+Algebra	Hard	20260141	0	Solve for x: 9x - 3 = 6x + 12	5
+Algebra	Hard	20260142	1	Solve for x: 11x - 8 = 6x + 7	3
+Algebra	Hard	20260143	2	Solve for x: 3x - 1 = 2x + 6	7
+Algebra	Hard	20260144	3	Solve for x: 10x - 30 = 5x + 10	8
+Algebra	Hard	20260145	4	Solve for x: 6x - 12 = 4x + 2	7
+Algebra	Hard	20260146	5	Solve for x: 6x - 2 = 5x + 2	4
+Algebra	Hard	20260147	6	Solve for x: 7x - 16 = 2x + 9	5
+Algebra	Hard	20260148	7	If x + y = 16 and x - y = 4, what is x?	10
+Algebra	Hard	20260149	8	If x + y = 17 and x - y = 15, what is x?	16
+Algebra	Hard	20260150	9	If x + y = 25 and x - y = 5, what is x?	15
+Measurement	Easy	20260101	0	Convert 6 kilograms to grams	6000
+Measurement	Easy	20260102	1	Convert 39 centimeters to millimeters	390
+Measurement	Easy	20260103	2	Convert 9 kilograms to grams	9000
+Measurement	Easy	20260104	3	Convert 9 meters to centimeters	900
+Measurement	Easy	20260105	4	Convert 8 kilometers to meters	8000
+Measurement	Easy	20260106	5	Convert 7 kilograms to grams	7000
+Measurement	Easy	20260107	6	Convert 2 kilograms to grams	2000
+Measurement	Easy	20260108	7	Convert 7 kilograms to grams	7000
+Measurement	Easy	20260109	8	Convert 10 meters to centimeters	1000
+Measurement	Easy	20260110	9	Convert 6 kilograms to grams	6000
+Measurement	Easy	20260111	0	Convert 8 meters to centimeters	800
+Measurement	Easy	20260112	1	Convert 23 centimeters to millimeters	230
+Measurement	Easy	20260113	2	Convert 8 kilograms to grams	8000
+Measurement	Easy	20260114	3	Convert 4 kilograms to grams	4000
+Measurement	Easy	20260115	4	Convert 3 kilograms to grams	3000
+Measurement	Easy	20260116	5	Convert 8 kilograms to grams	8000
+Measurement	Easy	20260117	6	Convert 7 kilograms to grams	7000
+Measurement	Easy	20260118	7	Convert 3 kilograms to grams	3000
+Measurement	Easy	20260119	8	Convert 5 kilograms to grams	5000
+Measurement	Easy	20260120	9	Convert 4 kilograms to grams	4000
+Measurement	Easy	20260121	0	Convert 9 kilograms to grams	9000
+Measurement	Easy	20260122	1	Convert 7 meters to centimeters	700
+Measurement	Easy	20260123	2	Convert 3 kilograms to grams	3000
+Measurement	Easy	20260124	3	Convert 19 centimeters to millimeters	190
+Measurement	Easy	20260125	4	Convert 8 kilograms to grams	8000
+Measurement	Easy	20260126	5	Convert 4 kilograms to grams	4000
+Measurement	Easy	20260127	6	Convert 4 kilometers to meters	4000
+Measurement	Easy	20260128	7	Convert 9 kilometers to meters	9000
+Measurement	Easy	20260129	8	Convert 6 liters to milliliters	6000
+Measurement	Easy	20260130	9	Convert 9 centimeters to millimeters	90
+Measurement	Easy	20260131	0	Convert 6 kilograms to grams	6000
+Measurement	Easy	20260132	1	Convert 7 liters to milliliters	7000
+Measurement	Easy	20260133	2	Convert 7 kilometers to meters	7000
+Measurement	Easy	20260134	3	Convert 3 kilometers to meters	3000
+Measurement	Easy	20260135	4	Convert 9 centimeters to millimeters	90
+Measurement	Easy	20260136	5	Convert 22 centimeters to millimeters	220
+Measurement	Easy	20260137	6	Convert 9 kilometers to meters	9000
+Measurement	Easy	20260138	7	Convert 8 kilometers to meters	8000
+Measurement	Easy	20260139	8	Convert 4 kilometers to meters	4000
+Measurement	Easy	20260140	9	Convert 48 centimeters to millimeters	480
+Measurement	Easy	20260141	0	Convert 33 centimeters to millimeters	330
+Measurement	Easy	20260142	1	Convert 10 centimeters to millimeters	100
+Measurement	Easy	20260143	2	Convert 2 kilometers to meters	2000
+Measurement	Easy	20260144	3	Convert 5 liters to milliliters	5000
+Measurement	Easy	20260145	4	Convert 49 centimeters to millimeters	490
+Measurement	Easy	20260146	5	Convert 18 centimeters to millimeters	180
+Measurement	Easy	20260147	6	Convert 6 kilometers to meters	6000
+Measurement	Easy	20260148	7	Convert 9 kilometers to meters	9000
+Measurement	Easy	20260149	8	Convert 5 liters to milliliters	5000
+Measurement	Easy	20260150	9	Convert 38 centimeters to millimeters	380
+Measurement	Medium	20260101	0	Find the area of a square with side length 13	169
+Measurement	Medium	20260102	1	How many minutes are in 2 hours and 23 minutes?	143
+Measurement	Medium	20260103	2	Find the area of a square with side length 12	144
+Measurement	Medium	20260104	3	Convert 7 hours to minutes	420
+Measurement	Medium	20260105	4	Find the perimeter of a rectangle with length 10 and width 5	30
+Measurement	Medium	20260106	5	Find the area of a square with side length 15	225
+Measurement	Medium	20260107	6	Find the area of a square with side length 4	16
+Measurement	Medium	20260108	7	Find the area of a square with side length 7	49
+Measurement	Medium	20260109	8	Convert 5 hours to minutes	300
+Measurement	Medium	20260110	9	Find the area of a square with side length 15	225
+Measurement	Medium	20260111	0	Convert 2 hours to minutes	120
+Measurement	Medium	20260112	1	How many minutes are in 4 hours and 8 minutes?	248
+Measurement	Medium	20260113	2	Find the area of a square with side length 11	121
+Measurement	Medium	20260114	3	Find the area of a square with side length 14	196
+Measurement	Medium	20260115	4	Find the area of a square with side length 9	81
+Measurement	Medium	20260116	5	Find the area of a square with side length 12	144
+Measurement	Medium	20260117	6	Find the area of a square with side length 9	81
+Measurement	Medium	20260118	7	Find the area of a square with side length 12	144
+Measurement	Medium	20260119	8	Find the area of a square with side length 3	9
+Measurement	Medium	20260120	9	Find the area of a square with side length 11	121
+Measurement	Medium	20260121	0	Find the area of a square with side length 3	9
+Measurement	Medium	20260122	1	Convert 5 hours to minutes	300
+Measurement	Medium	20260123	2	Find the area of a square with side length 15	225
+Measurement	Medium	20260124	3	How many minutes are in 4 hours and 44 minutes?	284
+Measurement	Medium	20260125	4	Find the area of a square with side length 14	196
+Measurement	Medium	20260126	5	Find the area of a square with side length 4	16
+Measurement	Medium	20260127	6	Find the perimeter of a rectangle with length 15 and width 20	70
+Measurement	Medium	20260128	7	Find the perimeter of a rectangle with length 20 and width 19	78
+Measurement	Medium	20260129	8	Find the area of a rectangle with length 10 and width 9	90
+Measurement	Medium	20260130	9	How many minutes are in 4 hours and 34 minutes?	274
+Measurement	Medium	20260131	0	Find the area of a square with side length 4	16
+Measurement	Medium	20260132	1	Find the area of a rectangle with length 12 and width 6	72
+Measurement	Medium	20260133	2	Find the perimeter of a rectangle with length 18 and width 15	66
+Measurement	Medium	20260134	3	Find the perimeter of a rectangle with length 5 and width 14	38
+Measurement	Medium	20260135	4	How many minutes are in 3 hours and 34 minutes?	214
+Measurement	Medium	20260136	5	How many minutes are in 4 hours and 5 minutes?	245
+Measurement	Medium	20260137	6	Find the perimeter of a rectangle with length 11 and width 16	54
+Measurement	Medium	20260138	7	Find the perimeter of a rectangle with length 19 and width 20	78
+Measurement	Medium	20260139	8	Find the perimeter of a rectangle with length 6 and width 5	22
+Measurement	Medium	20260140	9	How many minutes are in 4 hours and 9 minutes?	249
+Measurement	Medium	20260141	0	How many minutes are in 3 hours and 41 minutes?	221
+Measurement	Medium	20260142	1	How many minutes are in 3 hours and 46 minutes?	226
+Measurement	Medium	20260143	2	Find the perimeter of a rectangle with length 13 and width 9	44
+Measurement	Medium	20260144	3	Find the area of a rectangle with length 4 and width 15	60
+Measurement	Medium	20260145	4	How many minutes are in 3 hours and 33 minutes?	213
+Measurement	Medium	20260146	5	How many minutes are in 1 hours and 31 minutes?	91
+Measurement	Medium	20260147	6	Find the perimeter of a rectangle with length 17 and width 11	56
+Measurement	Medium	20260148	7	Find the perimeter of a rectangle with length 20 and width 6	52
+Measurement	Medium	20260149	8	Find the area of a rectangle with length 10 and width 8	80
+Measurement	Medium	20260150	9	How many minutes are in 3 hours and 45 minutes?	225
+Measurement	Hard	20260101	0	A rectangular field has an area of 273 square meters and a length of 21 meters. What is its perimeter in meters?	68
+Measurement	Hard	20260102	1	A bottle has 436 mL of water and another has 4 L. Total mL = ?	4436
+Measurement	Hard	20260103	2	A rectangular field has an area of 288 square meters and a length of 24 meters. What is its perimeter in meters?	72
+Measurement	Hard	20260104	3	Convert 14 m and 74 cm to centimeters	1474
+Measurement	Hard	20260105	4	A square garden has a perimeter of 36 meters. What is its area in square meters?	81
+Measurement	Hard	20260106	5	A rectangular field has an area of 255 square meters and a length of 17 meters. What is its perimeter in meters?	64
+Measurement	Hard	20260107	6	A rectangular field has an area of 44 square meters and a length of 11 meters. What is its perimeter in meters?	30
+Measurement	Hard	20260108	7	A rectangular field has an area of 133 square meters and a length of 19 meters. What is its perimeter in meters?	52
+Measurement	Hard	20260109	8	Convert 5 m and 25 cm to centimeters	525
+Measurement	Hard	20260110	9	A rectangular field has an area of 420 square meters and a length of 28 meters. What is its perimeter in meters?	86
+Measurement	Hard	20260111	0	Convert 9 m and 39 cm to centimeters	939
+Measurement	Hard	20260112	1	A bottle has 796 mL of water and another has 4 L. Total mL = ?	4796
+Measurement	Hard	20260113	2	A rectangular field has an area of 264 square meters and a length of 24 meters. What is its perimeter in meters?	70
+Measurement	Hard	20260114	3	A rectangular field has an area of 266 square meters and a length of 19 meters. What is its perimeter in meters?	66
+Measurement	Hard	20260115	4	A rectangular field has an area of 180 square meters and a length of 20 meters. What is its perimeter in meters?	58
+Measurement	Hard	20260116	5	A rectangular field has an area of 192 square meters and a length of 16 meters. What is its perimeter in meters?	56
+Measurement	Hard	20260117	6	A rectangular field has an area of 99 square meters and a length of 11 meters. What is its perimeter in meters?	40
+Measurement	Hard	20260118	7	A rectangular field has an area of 228 square meters and a length of 19 meters. What is its perimeter in meters?	62
+Measurement	Hard	20260119	8	A rectangular field has an area of 21 square meters and a length of 7 meters. What is its perimeter in meters?	20
+Measurement	Hard	20260120	9	A rectangular field has an area of 176 square meters and a length of 16 meters. What is its perimeter in meters?	54
+Measurement	Hard	20260121	0	A rectangular field has an area of 21 square meters and a length of 7 meters. What is its perimeter in meters?	20
+Measurement	Hard	20260122	1	Convert 12 m and 64 cm to centimeters	1264
+Measurement	Hard	20260123	2	A rectangular field has an area of 375 square meters and a length of 25 meters. What is its perimeter in meters?	80
+Measurement	Hard	20260124	3	A bottle has 784 mL of water and another has 1 L. Total mL = ?	1784
+Measurement	Hard	20260125	4	A rectangular field has an area of 308 square meters and a length of 22 meters. What is its perimeter in meters?	72
+Measurement	Hard	20260126	5	A rectangular field has an area of 64 square meters and a length of 16 meters. What is its perimeter in meters?	40
+Measurement	Hard	20260127	6	A square garden has a perimeter of 32 meters. What is its area in square meters?	64
+Measurement	Hard	20260128	7	A square garden has a perimeter of 28 meters. What is its area in square meters?	49
+Measurement	Hard	20260129	8	Find the volume (in cubic cm) of a box with length 7 cm, width 3 cm, and height 4 cm	84
+Measurement	Hard	20260130	9	A bottle has 744 mL of water and another has 2 L. Total mL = ?	2744
+Measurement	Hard	20260131	0	A rectangular field has an area of 64 square meters and a length of 16 meters. What is its perimeter in meters?	40
+Measurement	Hard	20260132	1	Find the volume (in cubic cm) of a box with length 8 cm, width 4 cm, and height 5 cm	160
+Measurement	Hard	20260133	2	A square garden has a perimeter of 68 meters. What is its area in square meters?	289
+Measurement	Hard	20260134	3	A square garden has a perimeter of 64 meters. What is its area in square meters?	256
+Measurement	Hard	20260135	4	A bottle has 408 mL of water and another has 1 L. Total mL = ?	1408
+Measurement	Hard	20260136	5	A bottle has 793 mL of water and another has 5 L. Total mL = ?	5793
+Measurement	Hard	20260137	6	A square garden has a perimeter of 52 meters. What is its area in square meters?	169
+Measurement	Hard	20260138	7	A square garden has a perimeter of 72 meters. What is its area in square meters?	324
+Measurement	Hard	20260139	8	A square garden has a perimeter of 68 meters. What is its area in square meters?	289
+Measurement	Hard	20260140	9	A bottle has 119 mL of water and another has 4 L. Total mL = ?	4119
+Measurement	Hard	20260141	0	A bottle has 298 mL of water and another has 5 L. Total mL = ?	5298
+Measurement	Hard	20260142	1	A bottle has 762 mL of water and another has 5 L. Total mL = ?	5762
+Measurement	Hard	20260143	2	A square garden has a perimeter of 84 meters. What is its area in square meters?	441
+Measurement	Hard	20260144	3	Find the volume (in cubic cm) of a box with length 8 cm, width 5 cm, and height 2 cm	80
+Measurement	Hard	20260145	4	A bottle has 338 mL of water and another has 4 L. Total mL = ?	4338
+Measurement	Hard	20260146	5	A bottle has 168 mL of water and another has 5 L. Total mL = ?	5168
+Measurement	Hard	20260147	6	A square garden has a perimeter of 88 meters. What is its area in square meters?	484
+Measurement	Hard	20260148	7	A square garden has a perimeter of 40 meters. What is its area in square meters?	100
+Measurement	Hard	20260149	8	Find the volume (in cubic cm) of a box with length 6 cm, width 4 cm, and height 5 cm	120
+Measurement	Hard	20260150	9	A bottle has 479 mL of water and another has 2 L. Total mL = ?	2479
+Mixed	Medium	20261108	0	59 * 3 * 5	885
+Mixed	Medium	20261108	1	93 * 4 * 4	1488
+Mixed	Medium	20261108	2	58 * 8 * 2	928
+Mixed	Medium	20261108	3	25 * 9 * 2	450
+Mixed	Medium	20261108	4	39 * 8 * 2	624
+Mixed	Medium	20261108	5	73 * 9 * 5	3285
+Mixed	Medium	20261108	6	38 * 5 * 3	570
+Mixed	Medium	20261108	7	94 * 7 * 2	1316
+Mixed	Medium	20261108	8	19 * 6 * 2	228
+Mixed	Medium	20261108	9	53 * 7 * 2	742

@@ -189,7 +189,7 @@
 ### 4.3 Technical debt
 
 #### DEBT-01 — Introduce automated tests · `P1 · L`
-* **Progress 2026-11-08 (branch `feat/phase0a-foundation`):** harness in place (`.\test.ps1`, JUnit 5 console launcher 1.11.4 in `lib-test/`); target (2) QuizSession grades and remarks covered.
+* **Progress 2026-11-08 (branch `feat/phase0a-foundation`):** harness in place (`.\test.ps1`, JUnit 5 console launcher 1.11.4 in `lib-test/`); targets (1) generator invariants (10,000 samples per category × difficulty) plus a golden master of seeded output (`test/resources/golden/question-generator-v1.tsv`) and (2) QuizSession grades and remarks covered.
 * **Why:** zero tests; generators and reward/grade maths directly affect children and stored data.
 * **Plan:** add `test/` with JUnit 5 (vendored console-standalone JAR in `lib-test/` to stay offline; needs approval per R-ARC-09). First targets: (1) **`QuestionGenerator` invariants** — for each of 10 categories × 3 difficulties × ≥ 10,000 samples assert integer answer, exact division, Difference ≥ 1, algebra x ≥ 2, format prefixes, and seeded reproducibility; (2) `QuizSession` grade/remark/emoji boundaries (95, 85, 78, 65, 53, 40, 33.33); (3) `AdaptiveDifficultyEngine` windows/cool-down; (4) `RewardService.calculateAndAwardQuizReward` table-driven (PRD BR-02 examples); (5) `AnalyticsService` streak/trend/weakest logic with an in-memory or temp-dir repository; (6) `HintService` per template (BUG-07); (7) `CryptoHelper` round-trip and fallback; (8) `SessionRepository` save/load/clear/cascade against a temp DB; (9) `JsonHelper`/`CustomQuizService` round-trip incl. escapes.
 * **Enabler:** make the app directory overridable (`-Datelier.home=…`/constructor parameter) — part of DEBT-04.
