@@ -135,7 +135,7 @@
 |---|---|---|:---:|
 | R-DAT-01 | All data lives under `AppConfig.getAppDir()` (`~/.atelier-arithmetic`). | Single, documented footprint. | ✔ |
 | R-DAT-02 | Multi-row DB writes MUST be one transaction with rollback. | ACID. | ✔ |
-| R-DAT-03 | A schema change MUST ship with a migration strategy (introduce `PRAGMA user_version` first), be backward-compatible, and never drop user data. | Existing installs hold real data. | ⚠ DEBT-11 |
+| R-DAT-03 | A schema change MUST ship with a migration strategy (introduce `PRAGMA user_version` first), be backward-compatible, and never drop user data. | Existing installs hold real data. | ✔ `SchemaMigrations` (v2) |
 | R-DAT-04 | A new config key MUST have a safe default and tolerate missing/invalid values (never throw). Decide per-profile vs global and record it in architecture §7.1. | Stability. | ✔ |
 | R-DAT-05 | Per-profile settings use the key suffix `.<profile>`. | Existing convention. | ✔ |
 | R-DAT-06 | Config and quiz files SHOULD be written atomically (temp file + move) and backed up before overwrite. | Crash safety. | ⚠ DEBT-07 |

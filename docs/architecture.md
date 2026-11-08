@@ -362,10 +362,18 @@ CREATE TABLE IF NOT EXISTS session_questions (
   user_answer INTEGER NOT NULL,
   correct INTEGER NOT NULL,        -- 0/1
   time_ms INTEGER NOT NULL,
-  FOREIGN KEY (session_id) REFERENCES sessions(id) ON DELETE CASCADE
+  FOREIGN KEY (session_id) REFERENCES sessions(id) ON DELETE CASCADE,
+  -- added in schema v2 (NULL / 0 for rows saved before the upgrade):
+  skill_id TEXT,                   -- AES(Base64) of a Skill id, e.g. add.2digit.2terms
+  difficulty TEXT,                 -- AES(Base64) — level this question was generated at
+  hints_used INTEGER NOT NULL DEFAULT 0
 );
+CREATE INDEX idx_sessions_profile ON sessions(profile_name);
+CREATE INDEX idx_session_questions_session ON session_questions(session_id);
 ```
-* No indexes, no `user_version`/migrations (schema evolution is currently impossible without manual SQL — DEBT-11).
+* **Schema version** lives in `PRAGMA user_version` and is managed by `SchemaMigrations` (current: **2**). App 1.0.0 databases read 0 and are upgraded on start-up in **one transaction**: v0/1 → create the two tables if missing; v1 → v2 add the three columns and two indexes. Migrations only add — they never drop or rewrite data.
+* A database **newer** than the app (higher `user_version`) is left untouched. If an upgrade step fails, it is rolled back, one line goes to `System.err`, and `SessionRepository` runs in **legacy mode** (any version below 2: old column set) so history still loads and saves.
+* `SessionRepository(String dbPath, Supplier<String> currentProfile)` takes the file and profile explicitly (used by tests); the no-argument constructor uses `AppConfig.getAppDir()` and the active profile.
 * `PRAGMA foreign_keys = ON` is a per-connection setting; it is executed in `clear()` (the only path that relies on cascade). The pragma in `initDatabase()` affects only its throw-away connection.
 * A new JDBC connection is opened for every public call (no pool).
 * Profile filtering: `WHERE profile_name = ?` with the **encrypted** profile name. This works only because ECB encryption is deterministic.

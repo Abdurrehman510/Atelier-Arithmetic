@@ -12,6 +12,7 @@ import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
+import java.util.function.Supplier;
 
 /**
  * Reads and writes quiz session history to a unified SQLite database
@@ -33,64 +34,53 @@ public class SessionRepository {
         }
     }
 
+    private final String dbPath;
+    private final Supplier<String> currentProfile;
+    private int schemaVersion;
+
+    /** The app's database under {@link AppConfig#getAppDir()}, for the active profile. */
     public SessionRepository() {
+        this(AppConfig.getAppDir() + File.separator + "atelier_arithmetic.db",
+                () -> AppConfig.getInstance().getCurrentProfile());
+    }
+
+    /**
+     * A repository over an explicit database file (tests, tools). Creates parent folders and
+     * brings the schema up to date ({@link SchemaMigrations}).
+     */
+    public SessionRepository(String dbPath, Supplier<String> currentProfile) {
+        this.dbPath = dbPath;
+        this.currentProfile = currentProfile;
         initDatabase();
     }
 
     private Connection getConnection() throws SQLException {
-        String dbPath = AppConfig.getAppDir() + File.separator + "atelier_arithmetic.db";
         return DriverManager.getConnection("jdbc:sqlite:" + dbPath);
     }
 
     private void initDatabase() {
-        // Ensure directories exist
-        File appDir = new File(AppConfig.getAppDir());
-        if (!appDir.exists()) {
-            appDir.mkdirs();
+        File parent = new File(dbPath).getAbsoluteFile().getParentFile();
+        if (parent != null && !parent.exists()) {
+            parent.mkdirs();
         }
-
-        String createSessionsTable = 
-            "CREATE TABLE IF NOT EXISTS sessions (" +
-            "  id INTEGER PRIMARY KEY AUTOINCREMENT," +
-            "  profile_name TEXT NOT NULL," +
-            "  timestamp TEXT NOT NULL," +
-            "  category TEXT NOT NULL," +
-            "  difficulty TEXT NOT NULL," +
-            "  total_questions INTEGER NOT NULL," +
-            "  correct_answers INTEGER NOT NULL," +
-            "  percentage REAL NOT NULL," +
-            "  grade TEXT NOT NULL," +
-            "  duration_ms INTEGER NOT NULL" +
-            ");";
-
-        String createQuestionsTable =
-            "CREATE TABLE IF NOT EXISTS session_questions (" +
-            "  id INTEGER PRIMARY KEY AUTOINCREMENT," +
-            "  session_id INTEGER NOT NULL," +
-            "  expression TEXT NOT NULL," +
-            "  correct_answer INTEGER NOT NULL," +
-            "  user_answer INTEGER NOT NULL," +
-            "  correct INTEGER NOT NULL," +
-            "  time_ms INTEGER NOT NULL," +
-            "  FOREIGN KEY (session_id) REFERENCES sessions(id) ON DELETE CASCADE" +
-            ");";
-
-        try (Connection conn = getConnection();
-             Statement stmt = conn.createStatement()) {
-            stmt.execute("PRAGMA foreign_keys = ON;");
-            stmt.execute(createSessionsTable);
-            stmt.execute(createQuestionsTable);
+        try (Connection conn = getConnection()) {
+            schemaVersion = SchemaMigrations.migrate(conn);
         } catch (SQLException e) {
             System.err.println("Failed to initialize database: " + e.getMessage());
             e.printStackTrace();
         }
     }
 
+    /** Schema version after start-up migration; below 2 means legacy mode (old column set). */
+    int getSchemaVersion() {
+        return schemaVersion;
+    }
+
     /**
      * Appends the completed session to the database, encrypting all PII and sensitive parameters.
      */
     public void save(QuizSession session) {
-        String profile = AppConfig.getInstance().getCurrentProfile();
+        String profile = currentProfile.get();
         String timestamp = LocalDateTime.ofInstant(
                 Instant.ofEpochMilli(session.getSessionStartTime()),
                 ZoneId.systemDefault()).format(TIMESTAMP_FMT);
@@ -154,7 +144,7 @@ public class SessionRepository {
 
     /** Returns the raw history structure for all saved sessions of the active profile (newest first). */
     public List<Map<String, Object>> loadRaw() {
-        String profile = AppConfig.getInstance().getCurrentProfile();
+        String profile = currentProfile.get();
         List<Map<String, Object>> result = new ArrayList<>();
 
         String querySessions = 
@@ -214,7 +204,7 @@ public class SessionRepository {
 
     /** Returns the number of saved sessions for the current profile. */
     public int getSessionCount() {
-        String profile = AppConfig.getInstance().getCurrentProfile();
+        String profile = currentProfile.get();
         String query = "SELECT COUNT(*) FROM sessions WHERE profile_name = ?;";
         try (Connection conn = getConnection();
              PreparedStatement pstmt = conn.prepareStatement(query)) {
@@ -237,7 +227,7 @@ public class SessionRepository {
 
     /** Clears all saved sessions for the active profile name. */
     public void clear() {
-        String profile = AppConfig.getInstance().getCurrentProfile();
+        String profile = currentProfile.get();
         String deleteSql = "DELETE FROM sessions WHERE profile_name = ?;";
         try (Connection conn = getConnection()) {
             // Enable foreign key cascading delete to purge session_questions automatically
