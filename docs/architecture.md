@@ -134,7 +134,7 @@ Root: `D:\MathQuizApp`. Source root: `src/com/mathquiz/`.
 | `model` | `Question` | 81 | Immutable expression, `int` answer, `Skill`, solution steps; `check(input)` → `AnswerCheck` |
 | `model` | `SolutionStep` | 46 | Record: one exact `+ - * /` step; `of(op, left, right)` computes the result and rejects inexact or overflowing steps |
 | `model` | `AnswerCheck` | 27 | Record: `EMPTY / NOT_A_WHOLE_NUMBER / CORRECT / INCORRECT` plus the parsed value |
-| `model` | `QuestionResult` | 58 | Immutable per-answer record (expression, correct, user answer, correctness, ms, skill, generation difficulty, hints used) |
+| `model` | `QuestionResult` | 57 | Immutable per-answer record (expression, correct, user answer, correctness, ms, skill, generation difficulty, hints used) |
 | `model` | `Skill` | 124 | Enum of 56 persisted micro-skill IDs (one per generator sub-type, plus `custom`); `id()`, `category()`, `fromId`, `forCategory` — see [§7.6](#76-skill-catalog-persisted-keys) |
 | `model` | `QuizSession` | 117 | Session state (count, difficulty (mutable), category, start time, results); percentage, **grade, remarks, emoji** rules |
 | `service` | `QuestionGenerator` | 62 | Facade: `generate(difficulty, category)`, `generateSeeded(difficulty, category, dateSeed, index)`; owns the `Random`, the Mixed choice and the unknown-category fallback |
@@ -144,7 +144,7 @@ Root: `D:\MathQuizApp`. Source root: `src/com/mathquiz/`.
 | `service` | `PatternQuestions` | 142 | Package-private: next-term patterns |
 | `service` | `AlgebraQuestions` | 124 | Package-private: solve-for-x and simultaneous equations |
 | `service` | `MeasurementQuestions` | 112 | Package-private: conversions, time, perimeter, area, volume |
-| `service` | `QuestionSource` | 47 | `next(session, customQuestions, todaySeed)` → `Prepared(question, difficulty)`: custom → Daily Challenge → generator |
+| `service` | `QuestionSource` | 42 | `next(session, customQuestions, todaySeed)` → `Prepared(question, difficulty)`: custom → Daily Challenge → generator |
 | `service` | `SchemaMigrations` | 103 | Package-private: `PRAGMA user_version` migrations (current v2), see §7.2 |
 | `service` | `AdaptiveDifficultyEngine` | 146 | `evaluate(results, difficulty)` → `UPGRADE/DOWNGRADE/MAINTAIN`; static `upgrade/downgrade/canUpgrade/canDowngrade` |
 | `service` | `HintService` | 194 | Static `generateHint(expression)` → HTML string by pattern matching |

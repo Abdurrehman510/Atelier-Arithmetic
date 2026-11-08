@@ -60,6 +60,7 @@
 | 2026-11-08 | `001e501` (README, DEPLOYMENT, docs), `6bffb63` (Help) | **DOC-01 done** — README corrected against the code (85 edits: tour 24 steps, 3-column grid, sound menu, shared stars, no badge bonus, adaptive dialog, exact question ranges, heatmap/history counts, profile-name and gate rules, grade remarks, 13-section Help, runtime/installed sizes, COPPA wording) plus new *Known Limitations* and *Further documentation* sections. **DOC-02 done** — in-app Help rewritten (13 sections: all 10 categories, hints/level prompts/shortcuts, stars/badges/shop, accurate settings/sound/daily/analytics text; lines hard-wrapped and body width pinned so the page no longer overflows horizontally — the original page rendered 1,498 px wide, now 674 px). `DEPLOYMENT.md` runtime-size claim corrected (46 MB measured). |
 | 2026-11-08 | `dc406b2` | Tour category step now says 10 disciplines (was 6) |
 | 2026-11-08 | `dc406b2`, `6bffb63`, `001e501` | **DOC-03 done** — pending changes committed as three commits on a branch, fast-forwarded into `main`, rebased onto `origin/main` (`5cf9403`, README contact edit) without conflicts, and pushed (`5cf9403..001e501`) |
+| 2026-11-08 | `bf219cd` … `bc4f606` (branch `feat/phase0a-foundation`, not yet merged) | **Phase 0A (FEAT-11 foundation):** JUnit 5 harness + `test.ps1` (DEBT-01 partial); `-encoding UTF-8` builds (DEBT-02 partial); golden master + 10,000-sample generator invariants; `Skill` catalog (55 + custom); `SolutionStep`/`AnswerCheck`/`Question.check`; generator split into six classes (`QuestionGenerator` 576 → 62 lines); `PRAGMA user_version` schema v2 with migrations (**DEBT-11 done**); per-question skill, generation difficulty and hint opens saved (**FEAT-02 storage done**); `QuestionSource`. 92 tests green. |
 
 ---
 
@@ -189,7 +190,7 @@
 ### 4.3 Technical debt
 
 #### DEBT-01 — Introduce automated tests · `P1 · L`
-* **Progress 2026-11-08 (branch `feat/phase0a-foundation`):** harness in place (`.\test.ps1`, JUnit 5 console launcher 1.11.4 in `lib-test/`); targets (1) generator invariants (10,000 samples per category × difficulty) plus a golden master of seeded output (`test/resources/golden/question-generator-v1.tsv`) and (2) QuizSession grades and remarks covered.
+* **Progress 2026-11-08 (branch `feat/phase0a-foundation`):** harness in place (`.\test.ps1`, JUnit 5 console launcher 1.11.4 in `lib-test/`); targets (1) generator invariants (10,000 samples per category × difficulty) plus a golden master of seeded output (`test/resources/golden/question-generator-v1.tsv`), (2) QuizSession grades and remarks and (8) `SessionRepository` save/load/migrations against temp DBs covered; also `QuestionSource` and a `GamePanel` wiring test. Still open: targets (3) adaptive engine, (4) rewards, (5) analytics/streaks, (6) hints, (7) crypto, (9) JSON/custom quizzes.
 * **Why:** zero tests; generators and reward/grade maths directly affect children and stored data.
 * **Plan:** add `test/` with JUnit 5 (vendored console-standalone JAR in `lib-test/` to stay offline; needs approval per R-ARC-09). First targets: (1) **`QuestionGenerator` invariants** — for each of 10 categories × 3 difficulties × ≥ 10,000 samples assert integer answer, exact division, Difference ≥ 1, algebra x ≥ 2, format prefixes, and seeded reproducibility; (2) `QuizSession` grade/remark/emoji boundaries (95, 85, 78, 65, 53, 40, 33.33); (3) `AdaptiveDifficultyEngine` windows/cool-down; (4) `RewardService.calculateAndAwardQuizReward` table-driven (PRD BR-02 examples); (5) `AnalyticsService` streak/trend/weakest logic with an in-memory or temp-dir repository; (6) `HintService` per template (BUG-07); (7) `CryptoHelper` round-trip and fallback; (8) `SessionRepository` save/load/clear/cascade against a temp DB; (9) `JsonHelper`/`CustomQuizService` round-trip incl. escapes.
 * **Enabler:** make the app directory overridable (`-Datelier.home=…`/constructor parameter) — part of DEBT-04.
@@ -227,6 +228,7 @@
 * Use a single-thread executor and reuse/size-limit audio lines; mark threads daemon; remove or wire the four unused sounds (BUG-06). **Accept:** rapid hovering never creates more than N concurrent lines.
 
 #### DEBT-11 — Database schema versioning · `P2 · S`
+* **Done 2026-11-08 (`d3fc468`, branch `feat/phase0a-foundation`):** `SchemaMigrations` with `PRAGMA user_version` (v2), indexes, one-transaction upgrade, legacy mode on failure; tests use a v1 fixture and a real upgrade from the `baseline-2026-11-08` build was verified (see §10).
 * Add `PRAGMA user_version`, a `Migrations` list, indexes, and an upgrade test using a v1 fixture DB. **Accept:** opening a v1 DB upgrades silently and keeps data.
 
 #### DEBT-12 — Remove deprecated `Date` constructor usage · `P3 · S`
@@ -254,7 +256,7 @@
 | ID | Pri | Proposal | Notes |
 |---|---|---|---|
 | FEAT-01 | P2 | Profile management: rename, delete, per-profile stars/daily date/settings | Depends on BUG-05 decision |
-| FEAT-02 | P3 | Track hint usage per question (store, show in Review/Analytics) | Schema change → DEBT-11 first |
+| FEAT-02 | P3 | Track hint usage per question (store, show in Review/Analytics) | **Storage done 2026-11-08** (`bc4f606`: `hints_used` per question, schema v2). Showing it in Review/Analytics is still open |
 | FEAT-03 | P3 | De-duplicate questions within a session; mastery-based difficulty progression | Needs generator tests |
 | FEAT-04 | P2 | Backup/restore (export/import) of history & settings; makes machine moves possible | Mitigates PRD risk R1; interacts with DEBT-08 |
 | FEAT-05 | P2 | Accessibility pass: AA-compliant text colours, visible focus, keyboard-operable tour, accessible names, high-contrast theme | See design §3.5, §14 |
@@ -385,3 +387,6 @@ Run on a **throw-away Windows user profile** or with `-Duser.home=<temp>` so rea
 | Application was **not** executed during the audit | Run-time behaviour is inferred from code; TC-xx cases confirm it |
 | README + Help fixes (2026-11-08) | 85 README edits and the Help rewrite applied by all-or-nothing scripts (every anchor matched exactly once; CRLF preserved); `javac -encoding UTF-8` exit 0; `HelpPanel` rendered **off-screen** (headless): 674 px wide, widest label 572 px → fits the 720 px minimum window. **Not yet seen in a live window** — run TC-53 |
 | Git integration (2026-11-08) | Three commits made on branch `docs/readme-help-corrections`, fast-forwarded into `main`; `main` was 3 ahead / 1 behind `origin/main` (`5cf9403`), rebased with no conflicts; recompiled (exit 0); remote's contact edit confirmed present; pushed `5cf9403..001e501`; afterwards 0 ahead / 0 behind |
+| Phase 0A (2026-11-08, branch `feat/phase0a-foundation`) | `.\test.ps1`: **92 tests, 0 failed**. Zero-warning compile (R-TST-01) after every task. Each new test was seen failing first (or, for characterisation tests, failing on an injected defect that was then reverted). Golden master unchanged across the whole generator split. |
+| Real upgrade check (2026-11-08) | The `baseline-2026-11-08` code (built from the tag) saved 2 sessions into a throw-away home; the new code then opened it: `user_version` 0 → 2, both sessions visible with `skillId=null, difficulty=null, hintsUsed=0`, analytics and achievements computed normally, and a new save stored `skillId=alg.two_step_sub_from, difficulty=Medium, hintsUsed=1`. |
+| Not yet done for Phase 0A | Live-window click-through (Task 10 Step 7, Task 11 Steps 3–4: first launch, new profile empty states, task.md §7 regression cases). No desktop control in the build session — owner to run before merging. |
