@@ -60,7 +60,7 @@
 | R-ARC-03 | Business rules (scoring, grading, rewards, streaks, achievements, recommendations, question generation, hint text) MUST live in `model`/`service`, never in a panel. | Single responsibility; unit-testable. | ⚠ streak maths duplicated in `WelcomePanel`; next-step rules in `ResultsPanel` (DEBT-06) |
 | R-ARC-04 | Collaborators MUST be passed in through constructors. New code MUST NOT call `new SessionRepository()`, `AppConfig.getInstance()` or `new AnalyticsService(...)` inside a view or service when `QuizFrame` already owns one. | Avoids hidden state, redundant DB init, and enables tests. | ⚠ DEBT-04 |
 | R-ARC-05 | Each screen is one `JPanel`, created once, registered as a `CARD_*` constant in `QuizFrame`, and exposes `applyTheme()` that `updateAllThemes()` calls. | Consistent theming/navigation. | ✔ |
-| R-ARC-06 | A class SHOULD stay under ~500 lines; split when it exceeds. | Maintainability. | ⚠ `WelcomePanel` 1,142, `AnalyticsPanel` 844, `ResultsPanel` 636, `GamePanel` 563, `QuestionGenerator` 576 |
+| R-ARC-06 | A class SHOULD stay under ~500 lines; split when it exceeds. | Maintainability. | ⚠ `WelcomePanel` 1,142, `AnalyticsPanel` 844, `ResultsPanel` 636, `GamePanel` 563 (`QuestionGenerator` split 2026-11-08) |
 | R-ARC-07 | A constant (category list, difficulty names, badge count, app version) MUST have one definition. | Prevents drift. | ⚠ categories in 3 places; "10" badges hard-coded; version in 2 places (DEBT-05, REL-01) |
 | R-ARC-08 | Persisted data goes through `AppConfig` (settings) or `SessionRepository` (history). Files outside `AppConfig.getAppDir()` are written only on an explicit user action (save dialog). | Predictable data footprint. | ✔ |
 | R-ARC-09 | Do not introduce a dependency (JAR, JDK module) without maintainer approval, licence check, pinned version, and updates to `package.ps1` (`build/input`, `--add-modules`). | Offline, small, reproducible. | ✔ |
@@ -268,7 +268,7 @@ Existing violations are accepted as **debt** until their task is done; they do n
 | Rule | Where | Task |
 |---|---|---|
 | R-ARC-01/04 | `AppTheme`→`SoundService`, `TourManager`→view, `ParentalGate`→Swing, `SessionRepository`→`AppConfig` singleton, panels creating services | DEBT-04 |
-| R-ARC-06 | Five classes > 500 LOC | DEBT-05 |
+| R-ARC-06 | Four classes > 500 LOC | DEBT-05 |
 | R-ARC-07 | Duplicate category/token/version definitions | DEBT-05, REL-01 |
 | R-COD-06 | Silent persistence failures | DEBT-07 |
 | R-UI-06 | Unscaled dynamic content | BUG-14 |

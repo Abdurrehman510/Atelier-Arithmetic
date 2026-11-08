@@ -137,7 +137,13 @@ Root: `D:\MathQuizApp`. Source root: `src/com/mathquiz/`.
 | `model` | `QuestionResult` | 35 | Immutable per-answer record (expression, correct, user answer, correctness, ms) |
 | `model` | `Skill` | 124 | Enum of 56 persisted micro-skill IDs (one per generator sub-type, plus `custom`); `id()`, `category()`, `fromId`, `forCategory` — see [§7.6](#76-skill-catalog-persisted-keys) |
 | `model` | `QuizSession` | 117 | Session state (count, difficulty (mutable), category, start time, results); percentage, **grade, remarks, emoji** rules |
-| `service` | `QuestionGenerator` | 576 | `generate(difficulty, category)`, `generateSeeded(difficulty, category, dateSeed, index)`; one private generator per category |
+| `service` | `QuestionGenerator` | 62 | Facade: `generate(difficulty, category)`, `generateSeeded(difficulty, category, dateSeed, index)`; owns the `Random`, the Mixed choice and the unknown-category fallback |
+| `service` | `ArithmeticQuestions` | 115 | Package-private: Addition, Difference, Multiplication, Division (skills + solution steps) |
+| `service` | `OrderOfOperationsQuestions` | 89 | Package-private: Special (five bracket forms) |
+| `service` | `FractionQuestions` | 126 | Package-private: fractions, percentages, ratios |
+| `service` | `PatternQuestions` | 142 | Package-private: next-term patterns |
+| `service` | `AlgebraQuestions` | 124 | Package-private: solve-for-x and simultaneous equations |
+| `service` | `MeasurementQuestions` | 112 | Package-private: conversions, time, perimeter, area, volume |
 | `service` | `AdaptiveDifficultyEngine` | 146 | `evaluate(results, difficulty)` → `UPGRADE/DOWNGRADE/MAINTAIN`; static `upgrade/downgrade/canUpgrade/canDowngrade` |
 | `service` | `HintService` | 194 | Static `generateHint(expression)` → HTML string by pattern matching |
 | `service` | `RewardService` | 168 | Star balance, shop unlock/equip delegation to `AppConfig`, `calculateAndAwardQuizReward()` → `RewardResult` |
