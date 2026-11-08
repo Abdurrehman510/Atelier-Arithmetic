@@ -131,9 +131,11 @@ Root: `D:\MathQuizApp`. Source root: `src/com/mathquiz/`.
 | `com.mathquiz` | `QuizApp` | 54 | `main`: installs default uncaught-exception handler (log + dialog), sets AA properties and system L&F, opens `QuizFrame` on the EDT |
 | `config` | `AppConfig` | 234 | Singleton (`getInstance`) over an AES-encrypted `Properties` file; typed getters/setters for every setting (each setter saves immediately); `getAppDir()` = `~/.atelier-arithmetic` |
 | `config` | `AppTheme` | 99 | Static light/dark palettes and semantic getters (`getBgPrimary/Card/TextDark/TextMuted/BorderClr/AccentGold`); `scaleComponentFont()` recursively scales fonts and attaches hover/click sounds to buttons |
-| `model` | `Question` | 23 | Immutable expression + `int` answer |
+| `model` | `Question` | 81 | Immutable expression, `int` answer, `Skill`, solution steps; `check(input)` → `AnswerCheck` |
+| `model` | `SolutionStep` | 46 | Record: one exact `+ - * /` step; `of(op, left, right)` computes the result and rejects inexact or overflowing steps |
+| `model` | `AnswerCheck` | 27 | Record: `EMPTY / NOT_A_WHOLE_NUMBER / CORRECT / INCORRECT` plus the parsed value |
 | `model` | `QuestionResult` | 35 | Immutable per-answer record (expression, correct, user answer, correctness, ms) |
-| `model` | `Skill` | 126 | Enum of 56 persisted micro-skill IDs (one per generator sub-type, plus `custom`); `id()`, `category()`, `fromId`, `forCategory` — see [§7.6](#76-skill-catalog-persisted-keys) |
+| `model` | `Skill` | 124 | Enum of 56 persisted micro-skill IDs (one per generator sub-type, plus `custom`); `id()`, `category()`, `fromId`, `forCategory` — see [§7.6](#76-skill-catalog-persisted-keys) |
 | `model` | `QuizSession` | 117 | Session state (count, difficulty (mutable), category, start time, results); percentage, **grade, remarks, emoji** rules |
 | `service` | `QuestionGenerator` | 576 | `generate(difficulty, category)`, `generateSeeded(difficulty, category, dateSeed, index)`; one private generator per category |
 | `service` | `AdaptiveDifficultyEngine` | 146 | `evaluate(results, difficulty)` → `UPGRADE/DOWNGRADE/MAINTAIN`; static `upgrade/downgrade/canUpgrade/canDowngrade` |

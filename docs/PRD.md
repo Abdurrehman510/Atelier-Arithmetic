@@ -176,7 +176,7 @@ See [non-goals](#22-non-goals-v100). Additionally *not present today* (gaps, not
 ### 6.5 Question engine (`FR-QGN`)
 | ID | Requirement | St |
 |---|---|:---:|
-| FR-QGN-01 | A `Question` shall consist of an expression `String` and an `int` correct answer. | I |
+| FR-QGN-01 | A `Question` shall consist of an expression `String`, an `int` correct answer, the `Skill` it practises and an exact step-by-step solution (empty for custom questions, whose skill is `custom`). Checking typed input (trim, then whole-number parse) belongs to `Question.check`. | I |
 | FR-QGN-02 | Every generated answer shall be an integer; every division/ratio/percentage/fraction question shall be constructed so the result is exact; Difference results shall be ≥ 1. Full per-category spec: [§9](#9-question-generation-specification). | I |
 | FR-QGN-03 | **Mixed** shall pick uniformly among Addition, Difference, Multiplication, Division for *each question* (Special and the four advanced categories are excluded). | I |
 | FR-QGN-04 | An unknown category name shall fall back to Addition. | I |
