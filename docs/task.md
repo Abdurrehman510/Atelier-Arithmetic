@@ -256,11 +256,12 @@
 | FEAT-03 | P3 | De-duplicate questions within a session; mastery-based difficulty progression | Needs generator tests |
 | FEAT-04 | P2 | Backup/restore (export/import) of history & settings; makes machine moves possible | Mitigates PRD risk R1; interacts with DEBT-08 |
 | FEAT-05 | P2 | Accessibility pass: AA-compliant text colours, visible focus, keyboard-operable tour, accessible names, high-contrast theme | See design §3.5, §14 |
-| FEAT-06 | P3 | macOS/Linux packaging with `jpackage` (sqlite-jdbc already bundles natives) | Emoji font handling differs |
+| FEAT-06 | P3 (raise to P1 when premium work starts) | macOS/Linux packaging with `jpackage` (sqlite-jdbc already bundles natives) | Emoji font handling differs. Owner decision 2026-11-08: Windows + macOS at launch (needs macOS to build; the owner has no Apple device, so use a CI macOS runner and a cloud Mac or tester Macs for testing; Apple Developer account, notarization); see premium-roadmap X1 |
 | FEAT-07 | P3 | Localisation (needs DEBT-14) | |
 | FEAT-08 | P3 | Teacher reports: multi-session PDF/HTML for a profile | |
 | FEAT-09 | P3 | Heatmap intensity + tooltips; trend chart tooltips | |
 | FEAT-10 | P3 | Optional parent PIN instead of / in addition to the math puzzle | Decision on gate strength |
+| FEAT-11 | P2 | Premium (Family Plus) track: foundation (task model, skill tags, richer session data), Thinking Profile, parent insights | Not committed scope; see [premium-roadmap.md](premium-roadmap.md). Phase 0 plans: `docs/superpowers/plans/2026-11-08-phase0a-*.md` and `…-phase0b-*.md`. Phase 0 needs DEBT-01, DEBT-02 (encoding), DEBT-11; DEBT-04/DEBT-14 come later (Phase 1 UI, localisation) |
 
 ---
 
@@ -274,6 +275,7 @@
 | **M4 — Maintainability** | Pay down structure | DEBT-03, 04, 05, 06, 09, 10, 12, BUG-14, BUG-16, 17, REL-01 | Rules R-ARC-* hold; Analytics < 1 s with 500 sessions |
 | **M5 — Release hardening** | Ship 1.0.x | REL-02, 03, 04, 05, DEBT-13 | Signed MSI + ZIP verified on clean VMs |
 | **M6 — Enhancements** | Grow | DEBT-08, FEAT-04, FEAT-05, FEAT-0x | Per-feature PRD updates |
+| **M7 — Premium foundation** | Prepare for Family Plus | DEBT-01 (harness, generators, grading), DEBT-02 (encoding), DEBT-11, FEAT-02 (storage), FEAT-06, FEAT-11 | premium-roadmap Phase 0 exit criteria; plans 0A and 0B in `docs/superpowers/plans/` |
 
 \* requires a decision from PRD §16 first (Q2, Q3, Q4, Q8).
 

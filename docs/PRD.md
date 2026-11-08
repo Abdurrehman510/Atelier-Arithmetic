@@ -103,7 +103,7 @@ A self-contained app that:
 Profiles · session setup · 10-category question engine · gameplay with timer, hints, adaptive-difficulty prompts · grading and results dashboard · answer review · HTML report export (+ print) · star rewards and 12-item mascot shop · 10 achievements · daily challenge and streaks · analytics dashboard (line chart, radar chart, heatmap, KPIs) · Smart Practice · custom quiz builder/loader · guided tour (24 steps) and help guide · dark mode, font scaling (100/125/150 %), programmatic sound with mute/volume · parental gate · encrypted local persistence · global crash handler/log · Windows packaging and code-signing scripts.
 
 ### 4.2 Out of scope
-See [non-goals](#22-non-goals-v100). Additionally *not present today* (gaps, not non-goals): profile rename/delete, data backup/restore, hint-usage tracking, achievement-unlock notifications — see [task.md](task.md).
+See [non-goals](#22-non-goals-v100). Additionally *not present today* (gaps, not non-goals): profile rename/delete, data backup/restore, hint-usage tracking, achievement-unlock notifications — see [task.md](task.md). The premium (Family Plus) commercial direction is **proposed, not committed scope**; see [premium-roadmap.md](premium-roadmap.md).
 
 ---
 

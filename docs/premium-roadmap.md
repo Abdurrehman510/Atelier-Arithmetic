@@ -2,7 +2,7 @@
 
 | | |
 |---|---|
-| **Status** | Draft v1. A brainstorm turned into a roadmap. **Not an approved design.** Nothing here is built. |
+| **Status** | Draft v2 (owner decisions added 2026-11-08). A brainstorm turned into a roadmap. **Not an approved design.** Nothing here is built. |
 | **Date** | 2026-11-08 |
 | **Audience** | Product owner / builder |
 | **Source** | EdTech strategy + child-development brainstorm, grounded in a read of the current codebase |
@@ -10,6 +10,24 @@
 
 ---
 
+## Decisions summary (v2, 2026-11-08) — read this first
+
+**Owner intent:** a long-term, end-to-end commercial product for premium parents who buy on quality and measurable outcomes, built to maximise revenue, with 2–3 USPs rivals cannot easily copy.
+
+| Topic | Decision | Status |
+|---|---|---|
+| Buyer | Premium, enrichment-minded parents of children aged 8–15 who judge a product by outcomes, not price | Owner |
+| USPs | (1) Measured **Thinking Profile**: baseline, re-test every 8–12 weeks, plain-language outcome report. (2) The **"why" coach**: error diagnosis plus the Mistake Lab. (3) **Original reasoning games** (Function Machines, Balance Lab, Constraint Castle). Supporting: offline privacy, printable worksheets | Proposed; validate with parents |
+| Countries | Wave 1: US, UK, Canada, Australia, Singapore. Wave 2: UAE/Gulf, New Zealand, Ireland. Later: affluent urban India, non-English markets | Delegated to me; based on judgment, not verified statistics |
+| Platform | **Windows + macOS** at launch. Tablets and Chromebooks later (keep the engine reusable). **The owner has no Apple device (2026-11-08)**, so Mac builds and testing need CI or a cloud Mac; see X1 | Owner decided; plan open |
+| Pricing | Annual-first flat family plan (up to about 3 children), higher-priced monthly option, medium-to-high range. Test annual **$149 vs $199** and monthly **$19 vs $24** on the website. Premium tier with expert-reviewed report later. No lifetime plan at launch. 14-day trial | Proposed; hypotheses, not data |
+| Payments | Merchant of record (e.g. Paddle) for global tax; occasional online licence check with an offline grace period; no child data sent | Proposed |
+| Expert access | **None yet.** Recruit a maths educator and an educational psychologist/psychometrician before the Thinking Profile ships (D.6, decision D6) | Open |
+| Claims | Measured skill progress only. No IQ, brain-training or clinical claims. No "the app caused it" without a controlled pilot | Policy |
+
+**Supersedes:** the $79 pricing bet in G.3, which was anchored on mass-market apps. The reasoning on discounts, trials and paywalls in Part G still holds.
+
+---
 ## Part A — Strategy
 
 ### A.1 Goal
@@ -102,12 +120,24 @@ Sizes are relative: **S** (days), **M** (1–2 weeks), **L** (several weeks), **
 
 | Phase | Theme | Features | Why this order |
 |---|---|---|---|
-| **0** | Foundation | G0, A1 (initial set), A8, schema changes (Part E) | Everything else depends on these. No visible feature on its own. |
-| **1** | The paid hook | P1, P2, P3, P10, P11, P12, P14 (basics), P16, C1, A7, C6, C7 | The two hypotheses to prove first: parents pay for *explained errors* and *printable targeted worksheets* |
-| **2** | Adaptive v2 | A2–A6, P4–P9, P13 | Needs the Phase 0 data and enough sessions to be meaningful |
+| **0** | Foundation | G0, A1 (initial set), A8, schema changes (Part E), X1, X3 | Everything else depends on these. No visible feature on its own. Plans: `docs/superpowers/plans/2026-11-08-phase0a-test-harness-and-question-foundation.md` and `…-phase0b-macos-build-pipeline.md` |
+| **1** | The paid hook | P1, P2, P3, P10, P11, P12, P14 (basics), P16, C1, A7, C6, C7, T1–T3 (interim, expert-reviewed) | The two hypotheses to prove first: parents pay for *explained errors* and *printable targeted worksheets* |
+| **2** | Adaptive v2 | A2–A6, P4–P9, P13, T4 (pilot study) | Needs the Phase 0 data and enough sessions to be meaningful |
 | **3** | New mechanics | G1, G2, G3, G4–G8, C2–C5 | Highest development cost; build after the hook is validated |
 | **4** | Progression and community | R1–R7, R8, R9, R11, then R10, then P15 | R10 is the only part needing a server and legal review; do it last |
 | **L** | Launch track (parallel to Phase 1) | L1–L4 (Part G.6) | Launch v1 on Phase 1 scope only; Phases 3–4 ship as later releases |
+| **X** | Platform, updates and expertise | X1 Mac packaging, X2 update channel, X3 recruit assessment advisors | Win + Mac is a launch requirement; the Thinking Profile cannot ship without X3 |
+
+**Track X notes**
+- **X1 — macOS packaging.** Extends FEAT-06. `jpackage` can only build a DMG on macOS, and the app must be signed and notarized (Apple Developer account, paid annual membership). **The owner has no Apple device (2026-11-08)**, so the plan is:
+  - Build, sign and notarize in CI on a macOS runner (e.g. GitHub Actions), with the signing certificate stored as a secret.
+  - Test on a rented cloud Mac, or on Macs belonging to pilot families or testers. Cover Apple silicon and Intel, emoji and font rendering, and the installer warning flow.
+  - Buy a used Mac only if the Mac pipeline proves worth it.
+  - Do not advertise Mac support until the app has run on real Mac hardware.
+  - Apple Developer enrolment may need an Apple device or app for identity verification; check before planning dates.
+  - Suggestion (owner decides): run early access on Windows and add Mac before the full launch.
+- **X2 — Update channel.** Premium customers expect smooth updates and content packs (author's suggestion).
+- **X3 — Assessment advisors.** At least one maths educator and one educational psychologist or psychometrician, as paid contractors or advisors.
 
 **Phase exit criteria (proposed)**
 - **0:** Existing quizzes run unchanged on the new `Task` model; new columns populated for every answered question; unit tests on solution traces.
@@ -249,6 +279,23 @@ Open with a 30-second plain-language summary. Charts sit underneath.
 | **R10** | Optional online layer | Opt-in, parent-gated. Static read-only JSON on a CDN for challenge announcements and content packs; a "Global Community Quest" anonymous counter; percentile bands from aggregate score buckets with **no IDs**. **Legal review required** (COPPA / GDPR-K treat some persistent identifiers as personal data) |
 | **R11** | Local co-op | *Asymmetric Puzzle* (two children each see half the clues and must talk) and *Parent–Child Duo*; class "quest code" extending the Custom Quiz Builder |
 
+### D.6 Measured outcomes — USP 1 (the Thinking Profile)
+
+**What it is.** A baseline assessment, then a re-test every 8–12 weeks with an equivalent form, and a plain-language outcome report. It measures **skill progress on trained reasoning skills** (number and operations reasoning, patterns and algebraic thinking, spatial reasoning, logic and deduction, estimation). It is **not** an IQ or cognitive test and must never be described as one.
+
+| ID | Feature | Notes |
+|---|---|---|
+| **T1** | Baseline assessment | About 15–20 minutes, adaptive length, parallel forms for later re-tests. Items and scoring designed with the advisors (X3). Interim version: built from published curriculum-standard progressions and original items |
+| **T2** | Re-assessment and change detection | Every 8–12 weeks; growth shown against the child's own baseline; show "too small to call" when a change is within measurement noise (honesty is part of the trust) |
+| **T3** | Outcome report (PDF) | Baseline versus now, skills gained, plan for the next 12 weeks. The shareable premium artifact; works with the worksheets (P10) |
+| **T4** | Pilot study | 30–50 children, 8–12 weeks, pre/post with parallel forms, ideally a waitlist control group, measures fixed in advance, independent review where possible, publish methods and results including null results |
+| **T5** | Expert-reviewed report (later, premium tier) | A human educator reviews the report; an upsell and a trust signal |
+
+**The expert gap (no advisor yet).**
+1. **Recruit before shipping T1–T3 publicly (X3).** A maths educator for content and progression; an educational psychologist or psychometrician for validity and reliability. Compensation (fee, equity or revenue share) is the owner's call.
+2. **Interim approach.** Build from published curriculum progressions and original items; keep the claim narrow ("progress on practised topics"); calibrate item difficulty from pilot data.
+3. **What a pilot can and cannot prove.** Without a control group, say "measured progress", not "the app caused this progress".
+4. **No outcome claims** in marketing until the pilot data exists, and a claims review before publication (Part A.4).
 ---
 
 ## Part E — Data model and architecture (proposal)
@@ -309,6 +356,8 @@ Khan's free Parent Dashboard means **a progress dashboard on its own is not a pa
 Updated one-liner: *The adaptive maths-thinking coach that tells you why your child is stuck and hands you this week's worksheet, with no account and nothing leaving your computer.*
 
 ### G.3 Pricing and packaging (hypotheses, from the `pricing` and `offers` skills)
+
+> **Superseded in part (2026-11-08).** The owner's premium positioning replaces the $79 annual and one-time-licence arms below. Current plan: annual-first flat family price, test **$149 vs $199** per year and **$19 vs $24** per month, priced against tutoring and enrichment rather than mass-market apps. The reasoning below on discounts, value metric, gating, trials and paywalls still applies. See the Decisions summary at the top.
 
 - **Anchors (third-party, unverified):** IXL about $79/year for one subject; Prodigy Core about $58.95/year. Floor of differentiation: Khan, free. Price between the next-best alternative and the value delivered, never by matching competitors.
 - **First price is a bet to learn from, not an optimum.** Starting bets to test: **Arm A**, a flat annual family price near **$79**; **Arm B**, a one-time licence at roughly **2–2.5× the annual price**. The skill's rule of thumb is to start higher and avoid the ultra-low "$9 trap", which creates false traction and attracts the customers who churn most. These numbers are derived from the anchors above, not from demand data.
@@ -398,6 +447,10 @@ Updated one-liner: *The adaptive maths-thinking coach that tells you why your ch
 | Category coupon culture pulls the price down | No acquisition discounts; sibling, upgrade and capped founding-family offers only |
 | Hard-paywall conversion data comes from mobile subscription apps | Treat as unproven for desktop; stay freemium and revisit with real numbers |
 | Competitor facts go stale or are wrong (several already changed) | Dated, sourced facts only; re-verify before any public copy |
+| No assessment expert yet | Recruit advisors (X3, D6); do not ship T1–T3 or outcome claims without them |
+| The pilot may not show the gains we promise | Run T4 early; promise only what the data supports; publish honestly |
+| macOS build and testing with no Apple device (the owner has none) | CI macOS runner for builds; cloud Mac or tester Macs for testing; no Mac promise until tested on real hardware; check Apple Developer enrolment requirements (X1) |
+| Tablets and Chromebooks are excluded at launch | Keep generators, skill model and assessment engine UI-independent so a tablet or web client can follow |
 
 ---
 
@@ -406,7 +459,9 @@ Updated one-liner: *The adaptive maths-thinking coach that tells you why your ch
 | ID | Decision | Recommendation (not final) |
 |---|---|---|
 | D1 | Free vs Family Plus split | Keep the child-facing learning loop free (practice, hints, basic Mistake Lab, current adaptive rules); charge for parent insights, worksheets, skill-level adaptive engine, mechanic packs and multi-child (G.3) |
-| D2 | Platform reach: cross-platform packaging before launch? | Decide before committing to launch spend; the app ships as a Windows MSI today |
+| D2 | Platform reach | **Decided 2026-11-08: Windows + macOS at launch.** Tablets and Chromebooks later. The owner has no Apple device; open point: Windows-only early access, with Mac added before full launch (X1)? |
 | D3 | Which curricula to tag first (Common Core, UK NC, Singapore, IB, CBSE)? | Pick the one or two where the first paying parents are |
-| D4 | Licence model and sales channel | Test annual family vs one-time licence; direct MSI sale vs Microsoft Store (check store terms) |
+| D4 | Licence model and sales channel | Annual-first flat family plan with a higher-priced monthly option, sold direct through a merchant of record (e.g. Paddle); no lifetime plan at launch; app stores later if at all (check terms) |
 | D5 | Online community feature (R10): wanted at all? | Defer until the offline positioning has proven itself; needs legal review |
+| D6 | Assessment experts (none yet) | Recruit a maths educator and an educational psychologist or psychometrician as paid advisors; compensation is the owner's call (D.6) |
+| D7 | Final launch countries | Wave 1 proposed: US, UK, Canada, Australia, Singapore; confirm after a legal check on children's privacy law |
