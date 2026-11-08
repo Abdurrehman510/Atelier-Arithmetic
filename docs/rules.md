@@ -72,7 +72,7 @@
 | ID | Rule | Why | Now |
 |---|---|---|:---:|
 | R-COD-01 | Packages: `com.mathquiz.{config,model,service,util,view,view.tour}`. One public top-level class per file named like the class. | Existing layout. | ✔ |
-| R-COD-02 | Source files are UTF-8 and MUST be compiled with `-encoding UTF-8`. For BMP symbols that must render on every font (e.g. ★) prefer `★` escapes. | Emoji literals exist in sources. | ⚠ DEBT-02 |
+| R-COD-02 | Source files are UTF-8 and MUST be compiled with `-encoding UTF-8`. For BMP symbols that must render on every font (e.g. ★) prefer `★` escapes. | Emoji literals exist in sources. | ✔ (`run.bat`, `package.ps1`, `test.ps1`) |
 | R-COD-03 | Use only APIs available in **JDK 17** (supported baseline). Raising the baseline needs a documented decision. | Packaging uses 17/21. | ✔ |
 | R-COD-04 | Style: 4-space indent, K&R braces, `camelCase` members, `PascalCase` types, `UPPER_SNAKE_CASE` constants, no wildcard imports in new files, no unused imports. | Matches existing code. | ✔ mostly |
 | R-COD-05 | Model classes (`Question`, `QuestionResult`) are immutable; only `QuizSession` has documented mutable state (`difficulty`, results list). | Safe sharing. | ✔ |
@@ -184,7 +184,7 @@
 
 | ID | Rule | Why | Now |
 |---|---|---|:---:|
-| R-BLD-01 | Compile with `-encoding UTF-8` in `run.bat`, `package.ps1` and any CI. | Emoji in sources. | ⚠ DEBT-02 |
+| R-BLD-01 | Compile with `-encoding UTF-8` in `run.bat`, `package.ps1` and any CI. | Emoji in sources. | ✔ |
 | R-BLD-02 | Release builds use JDK 21 (or 17), `JAVA_HOME` set; record the JDK version in release notes. | Reproducibility. | — |
 | R-BLD-03 | The product version has **one** source and is applied to `package.ps1`, `HelpPanel`, installer names and docs. | Consistency. | ⚠ REL-01 |
 | R-BLD-04 | Generated outputs (`bin/`, `build/`, `dist/`, `logo.ico`) are never committed; `lib/*.jar` is the only committed binary. | Repo hygiene. | ✔ |
@@ -216,7 +216,7 @@
 | ID | Rule | Why | Now |
 |---|---|---|:---:|
 | R-TST-01 | Code MUST compile with **zero warnings**: `javac -encoding UTF-8 -cp "lib/*" -sourcepath src src/com/mathquiz/QuizApp.java -d <tmpdir>`. | Baseline verified clean. | ✔ |
-| R-TST-02 | Once the test harness exists (DEBT-01), changes to generators, grading, rewards, streaks, achievements or the adaptive engine MUST include/modify unit tests. | Regression safety. | ⚠ no tests |
+| R-TST-02 | Once the test harness exists (DEBT-01), changes to generators, grading, rewards, streaks, achievements or the adaptive engine MUST include/modify unit tests. | Regression safety. | ⚠ harness exists (`.\test.ps1`); coverage partial (DEBT-01) |
 | R-TST-03 | A generator change MUST be validated with ≥ 10,000 samples per (category × difficulty) asserting: integer answer, exact division, positivity, expected format. | R-DOM-01/02. | ⚠ |
 | R-TST-04 | UI changes MUST be exercised in light + dark, at 100 %, 125 % (default) and 150 % scale, with sound on and off. | Theme/scale/sound regressions. | — |
 | R-TST-05 | Test three data states: **first launch** (no `.atelier-arithmetic`), **existing data** (upgrade), **empty profile**. | Migrations, empty states. | — |
@@ -269,11 +269,10 @@ Existing violations are accepted as **debt** until their task is done; they do n
 | R-ARC-01/04 | `AppTheme`→`SoundService`, `TourManager`→view, `ParentalGate`→Swing, `SessionRepository`→`AppConfig` singleton, panels creating services | DEBT-04 |
 | R-ARC-06 | Five classes > 500 LOC | DEBT-05 |
 | R-ARC-07 | Duplicate category/token/version definitions | DEBT-05, REL-01 |
-| R-COD-02 / R-BLD-01 | No `-encoding` flag | DEBT-02 |
 | R-COD-06 | Silent persistence failures | DEBT-07 |
 | R-UI-06 | Unscaled dynamic content | BUG-14 |
 | R-UI-13 | Listener accumulation in `ResultsPanel` | BUG-02 |
 | R-DOM-09 | Daily Challenge re-entry | BUG-04 |
 | R-DAT-07 | Reset wipes stars/shop without saying so | BUG-13 |
 | R-SEC-04 | Unescaped HTML report | BUG-11 |
-| R-TST-02/03 | No tests | DEBT-01 |
+| R-TST-02/03 | Tests cover grading only so far | DEBT-01 |

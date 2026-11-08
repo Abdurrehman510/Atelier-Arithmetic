@@ -29,7 +29,7 @@ This document explains **how Atelier Arithmetic is built**: structure, runtime b
 | Build | `javac` / `jar` scripts | No Maven/Gradle; `run.bat` (dev), `package.ps1` (release) |
 | Packaging | `jlink` (via jpackage) + `jpackage` + WiX 3.11 | Bundled minimal JRE; MSI or portable ZIP |
 | Signing | `signtool.exe` | SHA-256 + RFC 3161 timestamp |
-| Tests | **none** | see DEBT-01 |
+| Tests | JUnit 5 — console launcher 1.11.4, test-only in `lib-test/`, never packaged | `.\test.ps1` compiles `src/` and `test/` with `--release 17` and runs every test with a throw-away `user.home` (`build/test/home`). Coverage is growing under DEBT-01 |
 | Size | 36 Java files, ≈ 9,700 lines | |
 
 ## 3. System context
