@@ -4,7 +4,7 @@
 |---|---|
 | Document version | 1.0 |
 | Date | 2026-11-08 |
-| Baseline | Git `main` @ `aaed02c`; working tree has one uncommitted change (`TourManager.java`) |
+| Baseline | Audit baseline: Git `main` @ `aaed02c`. Since then `main` gained the README/Help/docs commits `dc406b2`, `6bffb63`, `001e501` (pushed to `origin/main`) |
 | Evidence standard | Every defect below was confirmed by reading the cited code; **none were reproduced at run-time** unless stated. File/line references are for the baseline and will drift. |
 | Related | [PRD.md](PRD.md) · [architecture.md](architecture.md) · [rules.md](rules.md) · [design.md](design.md) · [role_skills.md](role_skills.md) |
 
@@ -26,8 +26,8 @@
 | Item | State |
 |---|---|
 | Product version | 1.0.0 (feature-complete for the 1.0 scope in PRD §4.1) |
-| Last commit | `aaed02c` — 2026-07-13 — "docs: add About the Author section to README.md" |
-| Uncommitted | `README.md` (DOC-01), `src/com/mathquiz/view/HelpPanel.java` (DOC-02), `DEPLOYMENT.md` (size claim), the new `docs/` folder, and `src/com/mathquiz/service/TourManager.java` (tour text "6 disciplines" → "10 arithmetic disciplines"). Needs committing — DOC-03 |
+| Last commit | `07f6979` — 2026-11-08 — "docs: add premium Family Plus roadmap with marketing review" (not part of this audit; the README/Help/docs work is `dc406b2`, `6bffb63`, `001e501`, and this register was updated in the commit after `07f6979`) |
+| Uncommitted | Nothing from this audit |
 | Build | Clean compile on JDK 21.0.1, 0 warnings (verified 2026-11-08) |
 | Automated tests | **None** |
 | Existing artefacts | `dist/atelier-arithmetic.jar`, `dist/AtelierArithmetic/` (app-image), `dist/AtelierArithmetic-v1.0.0-Portable.zip` (46.5 MB). **No MSI** built yet. |
@@ -56,8 +56,10 @@
 | 2026-07-13 | `68e85d5` | Question-generation redesign for remaining four categories; analytics reset consistency |
 | 2026-07-13 | `974e8da` | Packaging (`package.ps1`), ICO converter, signing script |
 | 2026-07-13 | `c17e418`, `aaed02c` | README rewrite; author section |
-| 2026-11-08 | *(uncommitted)* | Documentation set `docs/` created from a full code audit (this file and 5 companions) |
-| 2026-11-08 | *(uncommitted)* | **DOC-01 done** — README corrected against the code (85 edits: tour 24 steps, 3-column grid, sound menu, shared stars, no badge bonus, adaptive dialog, exact question ranges, heatmap/history counts, profile-name and gate rules, grade remarks, 13-section Help, runtime/installed sizes, COPPA wording) plus new *Known Limitations* and *Further documentation* sections. **DOC-02 done** — in-app Help rewritten (13 sections: all 10 categories, hints/level prompts/shortcuts, stars/badges/shop, accurate settings/sound/daily/analytics text; lines hard-wrapped and body width pinned so the page no longer overflows horizontally — the original page rendered 1,498 px wide, now 674 px). `DEPLOYMENT.md` runtime-size claim corrected (46 MB measured). |
+| 2026-11-08 | `001e501` | Documentation set `docs/` created from a full code audit (this file and 5 companions) |
+| 2026-11-08 | `001e501` (README, DEPLOYMENT, docs), `6bffb63` (Help) | **DOC-01 done** — README corrected against the code (85 edits: tour 24 steps, 3-column grid, sound menu, shared stars, no badge bonus, adaptive dialog, exact question ranges, heatmap/history counts, profile-name and gate rules, grade remarks, 13-section Help, runtime/installed sizes, COPPA wording) plus new *Known Limitations* and *Further documentation* sections. **DOC-02 done** — in-app Help rewritten (13 sections: all 10 categories, hints/level prompts/shortcuts, stars/badges/shop, accurate settings/sound/daily/analytics text; lines hard-wrapped and body width pinned so the page no longer overflows horizontally — the original page rendered 1,498 px wide, now 674 px). `DEPLOYMENT.md` runtime-size claim corrected (46 MB measured). |
+| 2026-11-08 | `dc406b2` | Tour category step now says 10 disciplines (was 6) |
+| 2026-11-08 | `dc406b2`, `6bffb63`, `001e501` | **DOC-03 done** — pending changes committed as three commits on a branch, fast-forwarded into `main`, rebased onto `origin/main` (`5cf9403`, README contact edit) without conflicts, and pushed (`5cf9403..001e501`) |
 
 ---
 
@@ -180,7 +182,6 @@
 
 | ID | Pri · Size | Task | Acceptance |
 |---|---|---|---|
-| **DOC-03** | P2 · S | Commit the pending changes in two commits: `docs: correct README against the code and add docs/ set` (README.md, DEPLOYMENT.md, docs/) and `fix(help): align in-app Help text with the app` (HelpPanel.java, plus the `TourManager.java` text fix as its own `fix(tour): …` commit) | `git status` clean |
 | **DOC-04** | P2 · ongoing | Keep `docs/` in sync (R-DOC-02): every behaviour/schema/number change updates PRD/architecture in the same commit; review this register at each release | Release checklist item ticked |
 | **DOC-05** | P1 · S · *Blocked (decision Q8)* | Add a `LICENSE` file (README says MIT) with the correct copyright holder; add `.gitattributes` (R-GIT-07) | File present; README link works |
 | **DOC-06** | P2 · S | Correct the guided-tour copy in `TourManager.initialize` (it also needs a visual check): game submit step promises "visual mascot feedback" (none exists); results step says high scores "animate the owl mascot" and show "remarks" (the dashboard shows grade + emoji; remarks appear only in the exported report); analytics step calls the charts "interactive"; timer step says timing is "graphed in analytics" (only averages are shown); Quiz Builder step says "compile" | Every tour message describes behaviour that exists |
@@ -244,6 +245,7 @@
 | **REL-04** | **P0 before any release** · M | Smoke-test on a clean Windows 10 and 11 VM **without Java** (run §7 cases, esp. sound, SQLite native load, emoji rendering, print dialog) | All §7 release-blocking cases pass |
 | **REL-05** | P1 · S | Stop passing PINs/passwords as plain CLI args (read from env or secure prompt); `.gitignore` `*.pfx *.p12 *.key`; remove unused `-CryptoProvider` parameter | No secret appears in shell history/process list |
 | **REL-06** | P3 · S | `CHANGELOG.md` + release notes template; record JDK version and artefact hashes | Present for 1.0.1 |
+| **REL-07** | P3 · S | Point the `origin` remote at the new repository URL — GitHub reports the repository moved to `https://github.com/Abdurrehman510/Atelier-Arithmetic.git` (pushes to the old `MathQuizApp.git` URL still work through the redirect); update clone instructions/links if any | `git remote -v` shows the new URL; push succeeds without the "repository moved" notice |
 
 ### 4.5 Proposed enhancements (not committed scope)
 
@@ -266,7 +268,7 @@
 
 | Milestone | Theme | Contents | Exit criteria |
 |---|---|---|---|
-| **M1 — Trust and correctness** | Fix what is visibly wrong | BUG-01, 02, 03, 04*, 07, 13*; DOC-03, 05*, 06 (DOC-01/02 done) | Defects verified fixed by §7 cases; README accurate |
+| **M1 — Trust and correctness** | Fix what is visibly wrong | BUG-01, 02, 03, 04*, 07, 13*; DOC-05*, 06 (DOC-01/02/03 done) | Defects verified fixed by §7 cases; README accurate |
 | **M2 — Safety nets** | Make change safe | DEBT-01 (generators, grading, rewards first), DEBT-02, DEBT-07, BUG-09, 10, 11, 15 | Tests run in one command; no silent data loss paths |
 | **M3 — Data consistency** | Rewards and profiles | BUG-05*, BUG-06, DEBT-11, FEAT-01 | Per-profile economy; achievements rewarded once |
 | **M4 — Maintainability** | Pay down structure | DEBT-03, 04, 05, 06, 09, 10, 12, BUG-14, BUG-16, 17, REL-01 | Rules R-ARC-* hold; Analytics < 1 s with 500 sessions |
@@ -378,3 +380,4 @@ Run on a **throw-away Windows user profile** or with `-Duser.home=<temp>` so rea
 | Unused methods (grep call-sites) | `awardAchievementBonus`, `playAchievement`, `playStreak`, `playCategorySelect`, `playNotification`, `AnalyticsService.getMasteredCategories`, `getDailyChallengesCompleted` |
 | Application was **not** executed during the audit | Run-time behaviour is inferred from code; TC-xx cases confirm it |
 | README + Help fixes (2026-11-08) | 85 README edits and the Help rewrite applied by all-or-nothing scripts (every anchor matched exactly once; CRLF preserved); `javac -encoding UTF-8` exit 0; `HelpPanel` rendered **off-screen** (headless): 674 px wide, widest label 572 px → fits the 720 px minimum window. **Not yet seen in a live window** — run TC-53 |
+| Git integration (2026-11-08) | Three commits made on branch `docs/readme-help-corrections`, fast-forwarded into `main`; `main` was 3 ahead / 1 behind `origin/main` (`5cf9403`), rebased with no conflicts; recompiled (exit 0); remote's contact edit confirmed present; pushed `5cf9403..001e501`; afterwards 0 ahead / 0 behind |
