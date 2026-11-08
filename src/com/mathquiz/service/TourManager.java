@@ -135,7 +135,7 @@ public class TourManager {
 
         // ── CATEGORY CARD STEPS ──
         steps.add(new TourStep("categories", registry.get("categoryGrid"),
-                "Pick one of the 6 disciplines! Use arrow keys to navigate and " +
+                "Pick one of the 10 arithmetic disciplines! Use arrow keys to navigate and " +
                 "press Space or Enter to select cards without the mouse.",
                 TourStep.BubblePosition.TOP_CENTER,
                 TourStep.MascotExpression.POINTING));
