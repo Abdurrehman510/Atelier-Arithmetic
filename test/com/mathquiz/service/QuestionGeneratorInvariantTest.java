@@ -53,6 +53,16 @@ class QuestionGeneratorInvariantTest {
         expect("Division", "Hard", DIV_2DIGIT_QUOTIENT);
         MIGRATED.addAll(CORE);
         MIGRATED.add("Mixed");
+
+        for (String difficulty : GoldenMasterWriter.DIFFICULTIES) {
+            expect("Special", difficulty, ORD_SUM_TIMES_DIFF, ORD_DIFF_OVER_SUM, ORD_QUOTIENT_SUM,
+                    ORD_PRODUCT_OVER_PRODUCT, ORD_QUOTIENT_MINUS_PRODUCT);
+        }
+        expect("Fractions", "Easy", FRAC_OF_QUANTITY);
+        expect("Fractions", "Medium", FRAC_MIXED_TO_IMPROPER, FRAC_SIMPLIFY, FRAC_OF_QUANTITY);
+        expect("Fractions", "Hard", PCT_OF_QUANTITY, RATIO_MISSING_PART, FRAC_PRODUCT_OF_QUANTITY);
+        MIGRATED.add("Special");
+        MIGRATED.add("Fractions");
     }
 
     private static void expect(String category, String difficulty, Skill... skills) {

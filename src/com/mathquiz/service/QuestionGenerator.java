@@ -41,9 +41,9 @@ public class QuestionGenerator {
             case "division":
                 return ArithmeticQuestions.division(diffLower, random);
             case "special":
-                return generateSpecial(diffLower);
+                return OrderOfOperationsQuestions.special(diffLower, random);
             case "fractions":
-                return generateFractions(diffLower);
+                return FractionQuestions.fractions(diffLower, random);
             case "patterns":
                 return generatePatterns(diffLower);
             case "algebra":
@@ -52,151 +52,6 @@ public class QuestionGenerator {
                 return generateMeasurement(diffLower);
             default:
                 return ArithmeticQuestions.addition(diffLower, random);
-        }
-    }
-
-    private Question generateSpecial(String diff) {
-        // Compound expressions direct from original code logic
-        int type = random.nextInt(5);
-        int scale = diff.equals("easy") ? 10 : (diff.equals("medium") ? 50 : 150);
-
-        switch (type) {
-            case 0: { // (A + B) * (C - D)
-                int a = random.nextInt(scale) + 3;
-                int b = random.nextInt(scale) + 3;
-                int c = random.nextInt(scale) + 10;
-                int d = random.nextInt(c - 2) + 1;
-                return new Question("(" + a + " + " + b + ") * (" + c + " - " + d + ")", (a + b) * (c - d));
-            }
-            case 1: { // (A - B) / (C + D) - perfect division
-                int denominator = random.nextInt(9) + 2;
-                int quotient = random.nextInt(12) + 2;
-                int numerator = denominator * quotient;
-                int a = numerator + random.nextInt(scale) + 5;
-                int b = a - numerator;
-                int c = denominator / 2 + 1;
-                int d = denominator - c;
-                return new Question("(" + a + " - " + b + ") / (" + c + " + " + d + ")", quotient);
-            }
-            case 2: { // (A / B) + (C / D) - perfect division sum
-                int b = random.nextInt(8) + 2;
-                int q1 = random.nextInt(10) + 2;
-                int a = b * q1;
-
-                int d = random.nextInt(8) + 2;
-                int q2 = random.nextInt(10) + 2;
-                int c = d * q2;
-
-                return new Question("(" + a + " / " + b + ") + (" + c + " / " + d + ")", q1 + q2);
-            }
-            case 3: { // (A * B) / (C * D) - perfect division
-                int c = random.nextInt(5) + 2;
-                int d = random.nextInt(5) + 2;
-                int denom = c * d;
-                int quotient = random.nextInt(8) + 2;
-                int numer = denom * quotient;
-                
-                // factors of numer: a and b
-                int a = c * quotient;
-                int b = d;
-                return new Question("(" + a + " * " + b + ") / (" + c + " * " + d + ")", quotient);
-            }
-            case 4:
-            default: { // (A / B) - (C * D)
-                int b = random.nextInt(8) + 2;
-                int q1 = random.nextInt(15) + 10;
-                int a = b * q1;
-
-                int d = random.nextInt(4) + 1;
-                int c = random.nextInt(q1 / d - 1) + 1;
-                
-                return new Question("(" + a + " / " + b + ") - (" + c + " * " + d + ")", q1 - (c * d));
-            }
-        }
-    }
-
-    private int gcd(int a, int b) {
-        return b == 0 ? a : gcd(b, a % b);
-    }
-
-    private Question generateFractions(String diff) {
-        if (diff.equals("easy")) {
-            // Find a/b of c, denominator b in [2, 10], coprime a, and multiplier in [2, 15]
-            int b = random.nextInt(9) + 2; // [2, 10]
-            int a = random.nextInt(b - 1) + 1; // [1, b-1]
-            while (gcd(a, b) != 1) {
-                a = random.nextInt(b - 1) + 1;
-            }
-            int multiplier = random.nextInt(14) + 2; // [2, 15]
-            int c = b * multiplier;
-            return new Question("What is " + a + "/" + b + " of " + c + "?", a * multiplier);
-        } else if (diff.equals("medium")) {
-            int subType = random.nextInt(3);
-            if (subType == 0) {
-                // mixed number to improper fraction numerator: A B/C -> A*C + B
-                int c = random.nextInt(8) + 3; // [3, 10]
-                int b = random.nextInt(c - 1) + 1; // [1, c-1]
-                while (gcd(b, c) != 1) {
-                    b = random.nextInt(c - 1) + 1;
-                }
-                int a = random.nextInt(9) + 1; // [1, 9]
-                return new Question("What is the numerator of " + a + " " + b + "/" + c + " as an improper fraction?", a * c + b);
-            } else if (subType == 1) {
-                // fraction simplification (find simplified denominator): simplify A/B to a/b, answer is b
-                int b = random.nextInt(9) + 2; // [2, 10]
-                int a = random.nextInt(b - 1) + 1; // [1, b-1]
-                while (gcd(a, b) != 1) {
-                    a = random.nextInt(b - 1) + 1;
-                }
-                int d = random.nextInt(7) + 2; // [2, 8] scaling factor
-                return new Question("If you simplify " + (a * d) + "/" + (b * d) + " to simplest form, what is the denominator?", b);
-            } else {
-                // intermediate fraction of value: a/b of c, with larger denominators [5, 15] and multipliers [5, 20]
-                int b = random.nextInt(11) + 5; // [5, 15]
-                int a = random.nextInt(b - 1) + 1;
-                while (gcd(a, b) != 1) {
-                    a = random.nextInt(b - 1) + 1;
-                }
-                int mult = random.nextInt(16) + 5; // [5, 20]
-                return new Question("Calculate " + a + "/" + b + " of " + (b * mult), a * mult);
-            }
-        } else {
-            int subType = random.nextInt(3);
-            if (subType == 0) {
-                // Percentages: p% of x (integer answer)
-                int[] pcts = {5, 10, 15, 20, 25, 30, 40, 50, 60, 70, 75, 80, 90, 110, 120, 150};
-                int p = pcts[random.nextInt(pcts.length)];
-                int multiplier;
-                if (p % 25 == 0) {
-                    multiplier = (random.nextInt(20) + 2) * 4; // Multiple of 4
-                } else if (p % 10 == 0) {
-                    multiplier = (random.nextInt(20) + 2) * 10; // Multiple of 10
-                } else {
-                    multiplier = (random.nextInt(12) + 2) * 20; // Multiple of 20 for 5 or 15
-                }
-                int x = multiplier;
-                return new Question("What is " + p + "% of " + x + "?", (x * p) / 100);
-            } else if (subType == 1) {
-                // Ratios: A:B ratio. If A is X, what is B?
-                int b = random.nextInt(8) + 2; // [2, 9]
-                int a = random.nextInt(8) + 2;
-                while (gcd(a, b) != 1 || a == b) {
-                    a = random.nextInt(8) + 2;
-                }
-                int factor = random.nextInt(14) + 2; // [2, 15]
-                int valA = a * factor;
-                int valB = b * factor;
-                return new Question("The ratio of red to blue marbles is " + a + ":" + b + ". If there are " + valA + " red marbles, how many blue marbles are there?", valB);
-            } else {
-                // Advanced fraction multiplication: (a/b) * (c/d) of E
-                int b = random.nextInt(4) + 2; // [2, 5]
-                int d = random.nextInt(4) + 2; // [2, 5]
-                int a = random.nextInt(b - 1) + 1;
-                int c = random.nextInt(d - 1) + 1;
-                int multiplier = random.nextInt(9) + 2; // [2, 10]
-                int E = (b * d) * multiplier;
-                return new Question("What is (" + a + "/" + b + ") * (" + c + "/" + d + ") of " + E + "?", a * c * multiplier);
-            }
         }
     }
 
