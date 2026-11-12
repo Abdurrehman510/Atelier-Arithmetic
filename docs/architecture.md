@@ -286,7 +286,7 @@ sequenceDiagram
 * **State:** `activeSession`, `currentQuestion`, `questionStartTime`, `awaitingNext`, `customQuestions` (null for generated quizzes), `questionTimer` (1 s Swing timer).
 * **Question source precedence:** custom list → Daily Challenge (seeded Mixed) → generator by session category/difficulty — implemented in `QuestionSource.next(session, customQuestions, todaySeed)`, which also returns the difficulty used. `GamePanel` keeps that difficulty and the count of hint opens before submit, checks input with `Question.check`, and records both in the `QuestionResult`.
 * **Submit state machine:** `awaitingNext=false` → validate → record → `awaitingNext=true` (button "NEXT QUESTION →") → next press → `loadNextQuestion()`.
-* **Timer lifecycle defect:** started in `resetTimer()` (each question), stopped only in `handleSubmit()` and when the session ends. Leaving by Esc/Guide/tour does not stop it (BUG-03).
+* **Timer lifecycle:** started in `resetTimer()` (each question); stopped in `handleSubmit()`, at session end, and — since the BUG-03 fix — whenever the game card is hidden (a `componentHidden` listener), which covers Esc, Guide, the tour and any future exit.
 * **Key bindings** (`WHEN_IN_FOCUSED_WINDOW`): `Esc` (confirm exit), `F1` and `Ctrl+H` (hint).
 
 ### 6.6 Tour subsystem

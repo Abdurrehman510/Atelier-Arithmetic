@@ -193,8 +193,8 @@ See [non-goals](#22-non-goals-v100). Additionally *not present today* (gaps, not
 | FR-GAM-05 | Feedback: correct → "✅ Correct! Great job!" (green) + success arpeggio; wrong → "❌ Wrong. The correct answer was: *X*" (red) + descending buzz. | I |
 | FR-GAM-06 | After feedback the button reads "NEXT QUESTION →"; pressing it loads the next question or, after the last, finishes the session. | I |
 | FR-GAM-07 | A tick sound shall play each second (very quiet). | I |
-| FR-GAM-08 | **Esc** shall ask "Do you want to exit the current quiz and return to categories?"; **Yes** navigates to Categories and the session is discarded (not saved). | **P** (timer keeps running — BUG-03) |
-| FR-GAM-09 | "❓ Guide" shall open Help; Back from Help during a game returns to **Home**, abandoning the session. | **P** (BUG-03) |
+| FR-GAM-08 | **Esc** shall ask "Do you want to exit the current quiz and return to categories?"; **Yes** navigates to Categories and the session is discarded (not saved), and the question timer and its tick sound stop. | I (BUG-03 fixed 2026-11-12) |
+| FR-GAM-09 | "❓ Guide" shall open Help; Back from Help during a game returns to **Home**, abandoning the session; the question timer stops as soon as the game screen is left. | I (BUG-03 fixed 2026-11-12) |
 
 ### 6.7 Hints (`FR-HNT`)
 | ID | Requirement | St |

@@ -42,9 +42,39 @@ class GamePanelWiringTest {
         }
     }
 
-    private static void playThreeQuestionsAndCheck(AppConfig config) throws Exception {
-        QuizNavigator nav = (QuizNavigator) Proxy.newProxyInstance(
+    /**
+     * BUG-03: leaving the game screen (Esc → Yes, Guide → Back, the tour) used to leave the question
+     * timer — and its tick sound — running on every other screen. CardLayout hides the panel when
+     * another screen is shown, which is what {@code setVisible(false)} does here.
+     */
+    @Test
+    void tickingStopsWhenTheGameScreenIsHidden() throws Exception {
+        AppConfig config = AppConfig.getInstance();
+        boolean soundWasEnabled = config.isSoundEnabled();
+        config.setSoundEnabled(false);
+        try {
+            GamePanel[] panel = new GamePanel[1];
+            SwingUtilities.invokeAndWait(() -> {
+                panel[0] = new GamePanel(stubNavigator(), new SoundService(config));
+                panel[0].startSession(new QuizSession(3, "Easy", "Addition"));
+                panel[0].setVisible(false);
+            });
+            Thread.sleep(1500);   // the timer ticks every 1000 ms
+            String[] label = new String[1];
+            SwingUtilities.invokeAndWait(() -> label[0] = panel[0].getTimerLabel().getText());
+            assertEquals("⏱ 0s", label[0], "the question timer kept ticking after the game screen was left");
+        } finally {
+            config.setSoundEnabled(soundWasEnabled);
+        }
+    }
+
+    private static QuizNavigator stubNavigator() {
+        return (QuizNavigator) Proxy.newProxyInstance(
                 QuizNavigator.class.getClassLoader(), new Class<?>[]{QuizNavigator.class}, (proxy, method, args) -> null);
+    }
+
+    private static void playThreeQuestionsAndCheck(AppConfig config) throws Exception {
+        QuizNavigator nav = stubNavigator();
         QuizSession session = new QuizSession(3, "Easy", "Addition");
 
         SwingUtilities.invokeAndWait(() -> {

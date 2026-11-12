@@ -91,6 +91,14 @@ public class GamePanel extends JPanel {
         build();
         initTimer();
         setupKeyBindings();
+        // BUG-03: every way of leaving this screen (Esc, Guide, tour, results) hides the card,
+        // so stop the per-question timer and its tick sound here rather than at each exit.
+        addComponentListener(new ComponentAdapter() {
+            @Override
+            public void componentHidden(ComponentEvent e) {
+                stopTimer();
+            }
+        });
     }
 
 

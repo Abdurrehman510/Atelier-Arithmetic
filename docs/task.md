@@ -82,7 +82,8 @@
 * **Accept:** after three consecutive quizzes, one click triggers exactly one navigation; after a ≥ 85 % Easy quiz the Home difficulty combo shows Medium (or the label is changed).
 * **Docs:** PRD FR-RES-04, BR-08.
 
-#### BUG-03 — Question timer (and its tick sound) keeps running after a quiz is abandoned · `P1 · S`
+#### BUG-03 — Question timer (and its tick sound) keeps running after a quiz is abandoned · `P1 · S` · **Done 2026-11-12**
+* **Fixed:** `GamePanel` stops its timer whenever the game card is hidden (covers Esc, Guide → Back, the tour). Reported by the owner during the Phase 0A manual check; test `GamePanelWiringTest.tickingStopsWhenTheGameScreenIsHidden` (failed with "⏱ 1s" before the fix).
 * **Evidence:** `GamePanel` starts the Swing `Timer` in `resetTimer()` for each question; it is stopped only in `handleSubmit()` and at session end (`GamePanel.java` 290–308, 312–316, 386). Esc → *Yes* (`setupKeyBindings`, 485–500) navigates away without stopping it; so do "❓ Guide" → Back (→ Home) and the tour's mock session (`QuizFrame.showCardForTour`).
 * **Impact:** a tick sound every second and timer events on unrelated screens until a new session starts.
 * **Fix:** stop the timer on abandon (add a `GamePanel.cancelSession()` called from the Esc handler and on card change), and when the tour switches away.
@@ -316,7 +317,7 @@ Run on a **throw-away Windows user profile** or with `-Duser.home=<temp>` so rea
 | TC-16 **RB** | Play flow | Answer right then wrong | Feedback strings exactly as design §2.2; sounds; button text toggles; timer stops on submit, resets on next |
 | TC-17 | Input errors | Submit empty, `abc`, `-5` | Empty/abc → red messages, question not consumed; `-5` accepted as an answer |
 | TC-18 | Hints | Hint via button, F1, Ctrl+H on Addition(2-digit), Division, bracket, Pattern, Algebra, Measurement | Appropriate hint box; hides on next question. **Now:** area/perimeter/volume/ratio/numerator show the percentage hint (BUG-07) |
-| TC-19 | Esc | Esc → No; Esc → Yes | No → stays; Yes → Categories; session not in history. **Now:** tick sound/timer continue (BUG-03) |
+| TC-19 | Esc | Esc → No; Esc → Yes | No → stays; Yes → Categories; session not in history; no tick sound afterwards (BUG-03 fixed) |
 | TC-20 | Adaptive up | Easy, 10 questions, answer 5 correct in a row | "Level Up?" dialog after 5th (needs ≥ 4 answered); Yes → later questions Medium; results show Medium; Hard session never prompts to upgrade |
 | TC-21 | Adaptive down | Medium: Q1 correct, Q2–Q4 wrong | "Adjust Level?" after Q4; Easy never prompts to downgrade |
 | TC-22 | Cool-down | After a prompt, continue streak | Next prompt not before 5 answers later |
