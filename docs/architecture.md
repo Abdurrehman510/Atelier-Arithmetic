@@ -144,8 +144,10 @@ Root: `D:\MathQuizApp`. Source root: `src/com/mathquiz/`.
 | `service` | `PatternQuestions` | 142 | Package-private: next-term patterns |
 | `service` | `AlgebraQuestions` | 124 | Package-private: solve-for-x and simultaneous equations |
 | `service` | `MeasurementQuestions` | 112 | Package-private: conversions, time, perimeter, area, volume |
-| `service` | `NextStepAdvisor` | 50 | `recommend(session)` → Results "Suggested Path" (`STEP_UP` with target difficulty / `DAILY_CHALLENGE` / `SMART_PRACTICE`), PRD BR-08 |
+| `service` | `NextStepAdvisor` | 42 | `recommend(session)` → Results "Suggested Path" (`STEP_UP` with target difficulty / `DAILY_CHALLENGE` / `SMART_PRACTICE`), PRD BR-08 |
 | `service` | `ReportBuilder` | 106 | `toHtml(session, base64Logo)` → the exported HTML report; `escape(text)` for every dynamic value (R-SEC-04) |
+| `service` | `ProfileNames` | 63 | Profile-name rules (`validate`) and the always-valid "Spark Mascot Name" suggestion (`spark`) |
+| `service` | `QuestionCounts` | 36 | Question-count rule 1–100 (`validate`), decision Q6 |
 | `service` | `QuestionSource` | 42 | `next(session, customQuestions, todaySeed)` → `Prepared(question, difficulty)`: custom → Daily Challenge → generator |
 | `service` | `SchemaMigrations` | 103 | Package-private: `PRAGMA user_version` migrations (current v2), see §7.2 |
 | `service` | `AdaptiveDifficultyEngine` | 146 | `evaluate(results, difficulty)` → `UPGRADE/DOWNGRADE/MAINTAIN`; static `upgrade/downgrade/canUpgrade/canDowngrade` |
@@ -165,8 +167,10 @@ Root: `D:\MathQuizApp`. Source root: `src/com/mathquiz/`.
 | `view` | `QuizFrame` | 447 | JFrame; owns services & panels; implements `QuizNavigator`; theme/scale orchestration; tour wiring |
 | `view` | `WelcomePanel` | 1142 | Home dashboard, profile menu/dialog, sound menu, theme & scale toggles, calendar strip, streak logic (duplicate) |
 | `view` | `CategoryPanel` | 330 | 10 category cards, keyboard navigation |
+| `view` | `GridNavigation` | 35 | Package-private: arrow-key movement in the category grid (same column, stop at edges) |
 | `view` | `GamePanel` | 563 | Quiz loop, timer, hint box, adaptive prompts, key bindings |
-| `view` | `ResultsPanel` | 636 | 4-card results dashboard, HTML export, print |
+| `view` | `ResultsPanel` | 636 | 4-card results dashboard, HTML export, optional print |
+| `view` | `ReportPrintable` | 90 | Package-private: paginated plain-text printout of a session |
 | `view` | `ReviewPanel` | 268 | Colour-coded answer table |
 | `view` | `HelpPanel` | 383 | 13 help sections (HTML body width pinned to 440 CSS px ≈ 572 px so the page fits the 720 px minimum window) |
 | `view` | `AnalyticsPanel` | 844 | Dashboard + inner `LineChartPanel`, `RadarChartPanel` (Java2D) |

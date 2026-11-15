@@ -804,17 +804,11 @@ Behaviours that differ from what you might expect. Each is tracked in [docs/task
 
 | Area | Limitation | Task |
 |---|---|---|
-| Analytics | The Accuracy Trend chart shows the *oldest* 20 sessions once a profile has more than 20 | BUG-01 |
-| Results | The Suggested Path button can fire several times after multiple quizzes in one run; "Step up" returns to Home without changing the level | BUG-02 |
-| Quiz | Leaving a quiz early (Esc, or Guide → Back) leaves the per-second tick sound running | BUG-03 |
 | Daily Challenge | Played-once-per-day is enforced by the Home button only; Analytics and Results can start it again (and re-award +8 stars) | BUG-04 |
 | Stars | One star balance is shared by every profile on the computer; **Reset History** also clears stars and shop items | BUG-05, BUG-13 |
 | Badges | No unlock sound or bonus stars | BUG-06 |
-| Hints | Some measurement and ratio questions show a generic or percentage-style hint | BUG-07 |
-| Tour | Skipping the tour does not remember the choice | BUG-09 |
 | Data | Data is bound to the Windows account and there is no backup/restore | FEAT-04 |
-| Build | The build scripts do not pass `-encoding UTF-8`; use JDK 21 (UTF-8 by default) or add the flag | DEBT-02 |
-| Quality | There are no automated tests yet | DEBT-01 |
+| Quality | Automated tests (`.\test.ps1`) cover question generation, grading, storage and several screens; rewards, streaks and achievements are not yet covered | DEBT-01 |
 
 ---
 
