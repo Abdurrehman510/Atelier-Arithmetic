@@ -339,10 +339,10 @@ Uninstalling the app leaves this folder in place.
 | `soundVolume` | int 0–100 | `70` | global | Sound menu presets (100/75/50/25) |
 | `darkMode` | bool | `false` | global | theme toggle |
 | `fontSizeScale` | double | `1.25` | global | scale toggle (1.0 / 1.25 / 1.5) |
-| `lastDailyChallengeDate` | `yyyyMMdd` | `""` | **global** | `QuizFrame.finishQuiz` |
+| `lastDailyChallengeDate.<profile>` | `yyyyMMdd` | `""` | per profile (was global until BUG-05; migrated to the active profile on first start) | `QuizFrame.finishQuiz` |
 | `currentProfile` | string | `Guest` | global | profile switch |
 | `profiles` | comma-separated | `Guest` | global | `addProfile` |
-| `starBalance` | int ≥ 0 | `0` | **global** | `RewardService` |
+| `starBalance.<profile>` | int ≥ 0 | `0` | per profile (was global until BUG-05; migrated to the active profile on first start) | `RewardService` |
 | `unlockedItems.<profile>` | comma-separated IDs | `""` | per profile | `addUnlockedItem` |
 | `equippedItem.<profile>` | item ID or `none` | `none` | per profile | `setEquippedItem` |
 

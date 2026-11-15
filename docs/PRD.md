@@ -154,7 +154,7 @@ See [non-goals](#22-non-goals-v100). Additionally *not present today* (gaps, not
 | FR-PRF-03 | The create dialog shall show the privacy notice *"To protect child safety, please do not use your real first or last name!…"*. | I |
 | FR-PRF-04 | A profile name shall be accepted only if, after trimming, it is non-empty, matches `[a-zA-Z0-9_ ]+` (letters, digits, underscore, **space**) and is ≤ **15** characters; otherwise an error dialog is shown. An existing name is not duplicated (it is simply switched to). | I |
 | FR-PRF-05 | A "🎭 Spark Mascot Name" button shall fill the field with `<Adjective> <Animal>` chosen from 12 adjectives × 12 animals, limited to the 139 pairs of at most 15 characters, so every suggestion is accepted (`ProfileNames`). | I (BUG-08 fixed 2026-11-15) |
-| FR-PRF-06 | **Per-profile data:** quiz sessions (DB), unlocked shop items, equipped item. **Global (shared by all profiles):** star balance, daily-challenge completion date, sound/theme/scale settings, tour-seen flag, custom quizzes. | **P** (star balance global — BUG-05) |
+| FR-PRF-06 | **Per-profile data:** quiz sessions (DB), star balance, daily-challenge completion date, unlocked shop items, equipped item. **Global (shared by all profiles):** sound/theme/scale settings, tour-seen flag, custom quizzes. On the first start after upgrading from 1.0.0, the old shared star balance and daily date move to the profile that is active then. | I (BUG-05 fixed 2026-11-15, decision Q2) |
 | FR-PRF-07 | Profile rename/delete. | **N** (FEAT-01) |
 
 ### 6.3 Session setup — Home screen (`FR-SET`)
@@ -238,7 +238,7 @@ Rules in [BR-02](#82-star-rewards-br-02).
 |---|---|:---:|
 | FR-RWD-01 | After each completed quiz (any category incl. Daily, Smart Practice, Custom) stars shall be computed per BR-02 and added to the balance; balance never negative. | I |
 | FR-RWD-02 | Balance shall be visible on Home (top bar and shop card) and in the Shop header. | I |
-| FR-RWD-03 | Balance shall be per profile. | **N** (global — BUG-05) |
+| FR-RWD-03 | Balance shall be per profile (`starBalance.<profile>`). | I (BUG-05 fixed 2026-11-15) |
 | FR-RWD-04 | Unlocking an achievement shall award +15 stars. | **N** (method `awardAchievementBonus` exists but is never called — BUG-06) |
 
 ### 6.13 Mascot Shop (`FR-SHP`)
@@ -259,7 +259,7 @@ Rules in [BR-02](#82-star-rewards-br-02).
 | ID | Requirement | St |
 |---|---|:---:|
 | FR-DLY-01 | The Daily Challenge shall be a **10-question, Medium, category "Daily Challenge"** session whose questions come from `generateSeeded(difficulty, "Mixed", seed = yyyyMMdd as long, index)`; hence all users on the same date get identical questions (unless the adaptive prompt changes difficulty mid-run). | I |
-| FR-DLY-02 | Completing it shall record today's date globally and award +8 bonus stars (BR-02). The Home button then shows "✅ Completed" (disabled) for the rest of that calendar day. | I |
+| FR-DLY-02 | Completing it shall record today's date for the active profile and award +8 bonus stars (BR-02). The Home button then shows "✅ Completed" (disabled) for the rest of that calendar day. | I |
 | FR-DLY-03 | The challenge shall be playable once per day. | **P** (Analytics and Results screens can start it again and re-award +8 — BUG-04) |
 | FR-DLY-04 | Streak rules: [BR-05](#85-streaks-br-05). Home shows `🔥 n Day Streak` and a 7-day strip (today and the previous 6 days; ● played / ○ not). | I |
 

@@ -97,7 +97,7 @@
 * **Accept:** after completing the challenge, no entry point starts it again until the next calendar day.
 * **Docs:** PRD FR-DLY-03.
 
-#### BUG-05 — Star balance is global, not per profile · `P1 · M` · *Blocked (decision Q2)*
+#### BUG-05 — Star balance is global, not per profile · `P1 · M` · **Done 2026-11-15** (decision Q2: per profile; `starBalance.<profile>` and `lastDailyChallengeDate.<profile>` with one-time migration of the shared keys; `AppConfigTest`)
 * **Evidence:** `AppConfig.getStarBalance/setStarBalance` use the plain key `starBalance` (140–151) while unlocked/equipped items use `.<profile>` suffixes. README claims per-profile.
 * **Impact:** siblings share/spend one wallet while history and shop items are separate; `resetAllData` zeros the shared balance (QuizFrame 431).
 * **Fix (if per-profile chosen):** key `starBalance.<profile>` with one-time migration of the legacy key to the active profile; make `lastDailyChallengeDate` per profile as well. If shared is intended: document it and show "Family stars".

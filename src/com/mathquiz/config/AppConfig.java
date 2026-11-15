@@ -18,6 +18,7 @@ public class AppConfig {
     private static final String CFG_FILE = APP_DIR + File.separator + "config.properties";
 
     private final Properties props = new Properties();
+    private final String cfgFile;
 
     private static AppConfig instance;
 
@@ -29,8 +30,44 @@ public class AppConfig {
     }
 
     public AppConfig() {
+        this(CFG_FILE);
+    }
+
+    /** A config backed by an explicit file (tests). The file's folder is created if missing. */
+    public AppConfig(String cfgFile) {
+        this.cfgFile = cfgFile;
         ensureDirectoryExists();
         load();
+        migrateSharedKeysToActiveProfile();
+    }
+
+    /** Keys that app 1.0.0 stored once for the whole computer and that are now per profile (BUG-05, Q2/Q4). */
+    private static final String[] FORMERLY_SHARED_KEYS = {"starBalance", "lastDailyChallengeDate"};
+
+    /**
+     * One-time upgrade: a shared value from app 1.0.0 moves to the profile that is active at the first
+     * start of this version (so no stars are lost); other profiles start fresh. The shared key is removed.
+     */
+    private void migrateSharedKeysToActiveProfile() {
+        boolean changed = false;
+        for (String key : FORMERLY_SHARED_KEYS) {
+            String shared = props.getProperty(key);
+            if (shared != null) {
+                if (props.getProperty(profileKey(key)) == null) {
+                    props.setProperty(profileKey(key), shared);
+                }
+                props.remove(key);
+                changed = true;
+            }
+        }
+        if (changed) {
+            save();
+        }
+    }
+
+    /** {@code base.<current profile>}, the convention for per-profile keys (rules.md R-DAT-05). */
+    private String profileKey(String base) {
+        return base + "." + getCurrentProfile();
     }
 
 
@@ -78,12 +115,13 @@ public class AppConfig {
         save();
     }
 
+    /** Day ({@code yyyyMMdd}) the current profile last completed the Daily Challenge; "" if never. */
     public String getLastDailyChallengeDate() {
-        return props.getProperty("lastDailyChallengeDate", "");
+        return props.getProperty(profileKey("lastDailyChallengeDate"), "");
     }
 
     public void setLastDailyChallengeDate(String dateStr) {
-        props.setProperty("lastDailyChallengeDate", dateStr);
+        props.setProperty(profileKey("lastDailyChallengeDate"), dateStr);
         save();
     }
 
@@ -139,14 +177,14 @@ public class AppConfig {
 
     public int getStarBalance() {
         try {
-            return Integer.parseInt(props.getProperty("starBalance", "0"));
+            return Integer.parseInt(props.getProperty(profileKey("starBalance"), "0"));   // per profile (BUG-05)
         } catch (NumberFormatException e) {
             return 0;
         }
     }
 
     public void setStarBalance(int balance) {
-        props.setProperty("starBalance", Integer.toString(Math.max(0, balance)));
+        props.setProperty(profileKey("starBalance"), Integer.toString(Math.max(0, balance)));
         save();
     }
 
@@ -194,12 +232,13 @@ public class AppConfig {
 
     private void ensureDirectoryExists() {
         try {
-            Files.createDirectories(Paths.get(APP_DIR));
+            Path parent = Paths.get(cfgFile).toAbsolutePath().getParent();
+            Files.createDirectories(parent != null ? parent : Paths.get(APP_DIR));
         } catch (IOException ignored) {}
     }
 
     private void load() {
-        File f = new File(CFG_FILE);
+        File f = new File(cfgFile);
         if (!f.exists()) return;
         try {
             byte[] bytes = Files.readAllBytes(f.toPath());
@@ -219,7 +258,7 @@ public class AppConfig {
             props.store(sw, "Atelier Arithmetic — Secure Config");
             String plainText = sw.toString();
             String cipherText = com.mathquiz.util.CryptoHelper.encrypt(plainText);
-            try (FileOutputStream fos = new FileOutputStream(CFG_FILE)) {
+            try (FileOutputStream fos = new FileOutputStream(cfgFile)) {
                 fos.write(cipherText.getBytes(java.nio.charset.StandardCharsets.UTF_8));
             }
         } catch (IOException e) {
