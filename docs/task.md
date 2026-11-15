@@ -144,7 +144,7 @@
 * **Accept:** expression `<b>x</b>` renders literally.
 * **Docs:** PRD FR-EXP-03.
 
-#### BUG-12 — Export always opens the print dialog; print output truncated · `P3 · S`
+#### BUG-12 — Export always opens the print dialog; print output truncated · `P3 · S` · **Done 2026-11-15** (print is a Yes/No choice after saving; `ReportPrintable` paginates every question; `ReportPrintableTest`; tour text updated)
 * **Evidence:** `handleExportReport` ends with `triggerNativePrint()` (586); the printable draws at most 20 rows (617).
 * **Fix:** separate "Export HTML" and "Print" actions; paginate printing.
 * **Accept:** exporting does not open a print dialog; printing handles > 20 questions.

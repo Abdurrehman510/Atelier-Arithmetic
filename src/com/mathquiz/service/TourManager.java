@@ -177,8 +177,8 @@ public class TourManager {
                 TourStep.MascotExpression.EXCITED));
 
         steps.add(new TourStep("results", registry.get("printBtn"),
-                "Click Export Report to write a beautifully laid out HTML parent sheet " +
-                "or trigger your system printing dialog to print physical sheets.",
+                "Click Export Report to save a beautifully laid out HTML parent sheet. " +
+                "Archie then asks if you would like to print it too.",
                 TourStep.BubblePosition.TOP_CENTER,
                 TourStep.MascotExpression.THINKING));
 

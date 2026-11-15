@@ -511,14 +511,18 @@ public class ResultsPanel extends JPanel {
 
             try {
                 java.nio.file.Files.writeString(dest.toPath(), html, java.nio.charset.StandardCharsets.UTF_8);
-                JOptionPane.showMessageDialog(this,
-                        "Report exported successfully!\nSaved to: " + dest.getAbsolutePath(),
-                        "Success", JOptionPane.INFORMATION_MESSAGE);
             } catch (java.io.IOException ex) {
                 JOptionPane.showMessageDialog(this, "Failed to write file!", "Error", JOptionPane.ERROR_MESSAGE);
+                return;
             }
-
-            triggerNativePrint();
+            // BUG-12: printing is a separate choice, never automatic
+            int choice = JOptionPane.showConfirmDialog(this,
+                    "Report exported successfully!\nSaved to: " + dest.getAbsolutePath()
+                            + "\n\nWould you like to print it too?",
+                    "Report saved 🦉", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
+            if (choice == JOptionPane.YES_OPTION) {
+                triggerNativePrint();
+            }
         }
     }
 
@@ -526,38 +530,7 @@ public class ResultsPanel extends JPanel {
         java.awt.print.PrinterJob job = java.awt.print.PrinterJob.getPrinterJob();
         job.setJobName("Atelier Arithmetic Report");
 
-        job.setPrintable((g, pageFormat, pageIndex) -> {
-            if (pageIndex > 0) return java.awt.print.Printable.NO_SUCH_PAGE;
-
-            Graphics2D g2d = (Graphics2D) g;
-            g2d.translate(pageFormat.getImageableX(), pageFormat.getImageableY());
-
-            g2d.setColor(Color.BLACK);
-            g2d.setFont(new Font("Serif", Font.BOLD, 22));
-            g2d.drawString("Atelier Arithmetic Dashboard Report", 100, 100);
-
-            g2d.setFont(new Font("SansSerif", Font.PLAIN, 12));
-            g2d.drawString("Category: " + activeSession.getCategory(), 100, 130);
-            g2d.drawString("Difficulty: " + activeSession.getDifficulty(), 100, 150);
-            g2d.drawString("Grade: " + activeSession.getGrade(), 100, 170);
-            g2d.drawString("Success Rate: " + (int)activeSession.getPercentage() + "%", 100, 190);
-            g2d.drawString("Correct Answers: " + activeSession.getCorrectAnswersCount() + " / " + activeSession.getTotalQuestions(), 100, 210);
-
-            g2d.setFont(new Font("SansSerif", Font.BOLD, 12));
-            g2d.drawString("Question List Summary:", 100, 250);
-
-            g2d.setFont(new Font("SansSerif", Font.PLAIN, 11));
-            int y = 280;
-            java.util.List<QuestionResult> results = activeSession.getResults();
-            for (int i = 0; i < Math.min(results.size(), 20); i++) {
-                QuestionResult r = results.get(i);
-                String mark = r.isCorrect() ? "Correct" : "Wrong";
-                g2d.drawString((i + 1) + ".  " + r.getExpression() + " = " + r.getUserAnswer() + "  (" + mark + " - Correct: " + r.getCorrectAnswer() + ")", 100, y);
-                y += 20;
-            }
-
-            return java.awt.print.Printable.PAGE_EXISTS;
-        });
+        job.setPrintable(new ReportPrintable(activeSession));   // every question, paginated (BUG-12)
 
         boolean ok = job.printDialog();
         if (ok) {

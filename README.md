@@ -161,7 +161,7 @@ A 4-card post-session performance report:
 
 **Footer buttons:** `❓ Guide` | `📋 Review Answers` | `📄 Export Report` | `🔄 PLAY AGAIN`
 
-`Export Report` saves a self-contained HTML report and then opens the system print dialog. The grade remark (e.g. *"Very Good — Strong Performance!"*) appears in the exported report; the dashboard shows the grade with an emoji badge.
+`Export Report` saves a self-contained HTML report and then asks whether to print it too (printing lists every question, over as many pages as needed). The grade remark (e.g. *"Very Good — Strong Performance!"*) appears in the exported report; the dashboard shows the grade with an emoji badge.
 
 ---
 
@@ -812,7 +812,6 @@ Behaviours that differ from what you might expect. Each is tracked in [docs/task
 | Badges | No unlock sound or bonus stars | BUG-06 |
 | Hints | Some measurement and ratio questions show a generic or percentage-style hint | BUG-07 |
 | Tour | Skipping the tour does not remember the choice | BUG-09 |
-| Export | Exporting a report always opens the print dialog | BUG-12 |
 | Data | Data is bound to the Windows account and there is no backup/restore | FEAT-04 |
 | Build | The build scripts do not pass `-encoding UTF-8`; use JDK 21 (UTF-8 by default) or add the flag | DEBT-02 |
 | Quality | There are no automated tests yet | DEBT-01 |
