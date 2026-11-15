@@ -188,7 +188,7 @@ A comprehensive learning analytics view (parental gate protected):
 | **Recent Sessions Log** | The 4 most recent sessions: category (difficulty), score %, seconds per question, and date |
 | **Goals Checklist** | Two read-only goals (Daily Quest done today, streak alive) plus **Smart Practice** and **Daily Challenge** buttons |
 
-**Header actions:** `🗑 Reset History` (parental gate + confirmation; clears the active profile's quiz history **and** its stars and shop items) | `← Back`
+**Header actions:** `🗑 Reset History` (parental gate + confirmation; clears the active profile's quiz history — charts, streaks and badges restart from zero — while stars and Archie's accessories are kept) | `← Back`
 
 ---
 
@@ -279,7 +279,7 @@ All 10 categories use the `QuestionGenerator` service to generate **randomized q
 | **Measurement** | Metric conversions (m→cm, L→mL) | Time calculations, rectangular area/perimeter | Box volumes, multi-unit complex word problems |
 
 ### Daily Challenge Mode
-The Home Screen's **Daily Quest Tracker** launches a date-seeded 10-question daily challenge (Medium difficulty, questions drawn from the four core operations). The same questions are generated for all users on the same day (deterministic seed), and completion awards **+8 bonus stars**. Completion is recorded once per computer (not per profile); the Home button then shows ✅ Completed until the next calendar day.
+The Home Screen's **Daily Quest Tracker** launches a date-seeded 10-question daily challenge (Medium difficulty, questions drawn from the four core operations). The same questions are generated for all users on the same day (deterministic seed), and completion awards **+8 bonus stars**. Completion is recorded per profile: each child can play it once per calendar day, and the Home, Analytics and Results screens show it as done until the next day.
 
 ---
 
@@ -493,7 +493,7 @@ Atelier Arithmetic includes a built-in engagement economy that motivates consist
 
 The perfect-score bonus replaces the grade bonus (they are not added together), and the streak bonus counts today's quiz, so every completed quiz earns at least +2 streak stars.
 
-The **★ N** balance is shown in the Home screen's top bar, on the shop card and in the shop header, and is refreshed whenever you return to Home. It is stored (encrypted) in `config.properties` and is **shared by all profiles on the same computer**; the items you unlock and equip are saved per profile.
+The **★ N** balance is shown in the Home screen's top bar, on the shop card and in the shop header, and is refreshed whenever you return to Home. It is stored (encrypted) in `config.properties` and is kept **per profile**, like the items you unlock and equip. (When upgrading from 1.0.0, the old shared balance moves to the child who is active at the first start.)
 
 ### Mascot Shop — 12 Items
 
@@ -586,10 +586,10 @@ All session data is stored in an embedded SQLite database at `~/.atelier-arithme
 
 **User preferences** are stored in `~/.atelier-arithmetic/config.properties`, including:
 - Profile list and active profile
-- Star balance (shared by all profiles on the computer)
+- Star balance (per profile)
 - Unlocked and equipped shop items (per profile)
 - Sound enabled/volume, dark mode, font scale
-- Tour completion flag, last daily challenge date (shared)
+- Tour completion flag (shared); last daily challenge date (per profile)
 
 Everything lives in one folder that the uninstaller does **not** remove:
 
@@ -804,7 +804,6 @@ Behaviours that differ from what you might expect. Each is tracked in [docs/task
 
 | Area | Limitation | Task |
 |---|---|---|
-| Stars | One star balance is shared by every profile on the computer; **Reset History** also clears stars and shop items | BUG-05, BUG-13 |
 | Badges | No unlock sound or bonus stars | BUG-06 |
 | Data | Data is bound to the Windows account and there is no backup/restore | FEAT-04 |
 | Quality | Automated tests (`.\test.ps1`) cover question generation, grading, storage and several screens; rewards, streaks and achievements are not yet covered | DEBT-01 |

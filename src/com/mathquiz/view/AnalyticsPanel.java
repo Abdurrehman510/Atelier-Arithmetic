@@ -274,13 +274,26 @@ public class AnalyticsPanel extends JPanel {
         return panel;
     }
 
+    /**
+     * The Reset History confirmation. It must match exactly what {@code QuizFrame.resetAllData()}
+     * removes (rules.md R-PRD-07, decision Q3, BUG-13).
+     */
+    static String resetWarning(String profile) {
+        return "Are you sure you want to clear " + profile + "'s quiz history?\n\n"
+                + "This deletes every saved quiz, answer and time for " + profile + ".\n"
+                + "Charts, streaks and badges are worked out from that history,\n"
+                + "so they will start again from zero.\n\n"
+                + profile + "'s stars and Archie's accessories are kept.\n\n"
+                + "This cannot be undone! 🦉";
+    }
+
     private void handleResetHistory() {
         if (!com.mathquiz.service.ParentalGate.verifyParent(this)) {
             return;
         }
         int choice = JOptionPane.showConfirmDialog(
                 this,
-                "Are you sure you want to clear all your math quiz history?\nThis cannot be undone! 🦉",
+                resetWarning(com.mathquiz.config.AppConfig.getInstance().getCurrentProfile()),
                 "Reset History?",
                 JOptionPane.YES_NO_OPTION,
                 JOptionPane.WARNING_MESSAGE

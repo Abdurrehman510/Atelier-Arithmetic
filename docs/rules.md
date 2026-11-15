@@ -45,7 +45,7 @@
 | R-PRD-04 | No time pressure: the timer is informational; MUST NOT add countdowns, time limits, speed penalties or leaderboards. | Principle P4. | ✔ |
 | R-PRD-05 | Rewards MUST be earned in-app only and purely cosmetic: no real-money purchases, random paid rewards ("loot boxes"), expiring offers, or loss of owned items for inactivity. | Principle P5. | ✔ |
 | R-PRD-06 | MUST NOT add ads, third-party SDKs, social/chat features or external links that open from child-facing screens. | Child safety. | ✔ |
-| R-PRD-07 | Any new adult-only or destructive feature MUST be behind the parental gate and, if destructive, a confirmation dialog that states **everything** that will be deleted. | Principle P3. | ⚠ BUG-13 |
+| R-PRD-07 | Any new adult-only or destructive feature MUST be behind the parental gate and, if destructive, a confirmation dialog that states **everything** that will be deleted. | Principle P3. | ✔ (BUG-13 fixed) |
 | R-PRD-08 | Copy SHOULD be readable by 8–14-year-olds: short sentences, concrete verbs, supportive emoji. | Audience. | ✔ |
 | R-PRD-09 | Gameplay features MUST work without any adult gate and without the guided tour. | Usability. | ✔ |
 
@@ -122,7 +122,7 @@
 | R-DOM-06 | Rewards are awarded exactly once per **completed** session, **after** it is saved. Abandoned sessions are neither saved nor rewarded. | Streak maths and fairness. | ✔ |
 | R-DOM-07 | Stored category strings are exactly: `Addition, Difference, Multiplication, Division, Mixed, Special, Fractions, Patterns, Algebra, Measurement, Daily Challenge, Custom: <name>`. They are persisted — never rename without a data migration. | History/achievement lookup is string-based. | ✔ |
 | R-DOM-08 | Shop item IDs (`hat_top`, …) and profile names are persisted keys — never change or reuse them. | Saved purchases. | ✔ |
-| R-DOM-09 | The daily challenge MUST be playable at most once per calendar day (per decision Q4 in the PRD). | Reward integrity. | ⚠ BUG-04 |
+| R-DOM-09 | The daily challenge MUST be playable at most once per calendar day (per decision Q4 in the PRD). | Reward integrity. | ✔ `QuizFrame.startDailyChallenge` (BUG-04) |
 | R-DOM-10 | Mixed excludes Special and the advanced categories (PRD FR-QGN-03). | Spec. | ✔ |
 | R-DOM-11 | A new generator sub-type MUST be added together with an invariant test (≥ 10,000 samples, all difficulties). | Prevents broken questions reaching children. | ✔ `QuestionGeneratorInvariantTest` + golden master |
 | R-DOM-12 | `Skill` IDs (`add.2digit.2terms`, …) are persisted keys: never rename, reuse or remove one; only add new IDs. | Stored per answered question; renames orphan history. | ✔ `SkillTest` |
@@ -139,7 +139,7 @@
 | R-DAT-04 | A new config key MUST have a safe default and tolerate missing/invalid values (never throw). Decide per-profile vs global and record it in architecture §7.1. | Stability. | ✔ |
 | R-DAT-05 | Per-profile settings use the key suffix `.<profile>`. | Existing convention. | ✔ |
 | R-DAT-06 | Config and quiz files SHOULD be written atomically (temp file + move) and backed up before overwrite. | Crash safety. | ⚠ DEBT-07 |
-| R-DAT-07 | Reset/delete flows MUST disclose what is deleted and MUST affect only the active profile's data (plus any shared value explicitly named). | Trust. | ⚠ BUG-13, BUG-05 |
+| R-DAT-07 | Reset/delete flows MUST disclose what is deleted and MUST affect only the active profile's data (plus any shared value explicitly named). | Trust. | ✔ (BUG-13, BUG-05 fixed) |
 | R-DAT-08 | Logs MUST NOT contain answers, profile names or other personal data. | Privacy. | ✔ |
 | R-DAT-09 | Custom-quiz writer and reader MUST remain symmetrical; characters needing escaping (`"`, `\`) MUST round-trip. | Data integrity. | ✔ `JsonHelperTest`, `CustomQuizServiceTest` |
 
@@ -272,6 +272,4 @@ Existing violations are accepted as **debt** until their task is done; they do n
 | R-ARC-07 | Duplicate category/token/version definitions | DEBT-05, REL-01 |
 | R-COD-06 | Silent persistence failures | DEBT-07 |
 | R-UI-13 | Listener accumulation in `ResultsPanel` | BUG-02 |
-| R-DOM-09 | Daily Challenge re-entry | BUG-04 |
-| R-DAT-07 | Reset wipes stars/shop without saying so | BUG-13 |
 | R-TST-02 | Tests cover grading and generators; rewards, streaks, achievements and the adaptive engine still open | DEBT-01 |

@@ -61,7 +61,7 @@
 | Parental gate | title `Parent / Teacher Lock 🦉` — "This screen is for parents or teachers only. / Please solve this math puzzle to proceed: / ★ What is <word> times <word>? ★" |
 | Gate failure | title `Lock Active` — "Incorrect answer. Verification failed! Access restricted." |
 | Crash | title `Archie's Code Hiccup 🦉` — "Oops! Archie the Owl encountered a tiny calculation hiccup. We have saved a report. You can restart or continue playing! / Error Details: <message>" |
-| Reset | title `Reset History?` — "Are you sure you want to clear all your math quiz history? This cannot be undone! 🦉" *(does not mention stars/shop — BUG-13)* |
+| Reset | title `Reset History?` — "Are you sure you want to clear ‹profile›'s quiz history? This deletes every saved quiz, answer and time for ‹profile›. Charts, streaks and badges are worked out from that history, so they will start again from zero. ‹profile›'s stars and Archie's accessories are kept. This cannot be undone! 🦉" (BUG-13) |
 | Shop – insufficient | title `Not Enough Stars` — "You need <p> ★ stars to unlock this! You currently have <b> ★ stars. Complete more quizzes to earn stars!" |
 | Shop – confirm | title `Confirm Purchase` — `Unlock "<name>" for <p> ★ stars?` |
 | Shop – success | title `Item Unlocked!` — "🎉 <emoji> "<name>" unlocked and equipped! Archie is wearing it right now on the Home screen!" |

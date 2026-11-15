@@ -144,8 +144,8 @@ Root: `D:\MathQuizApp`. Source root: `src/com/mathquiz/`.
 | `service` | `PatternQuestions` | 142 | Package-private: next-term patterns |
 | `service` | `AlgebraQuestions` | 124 | Package-private: solve-for-x and simultaneous equations |
 | `service` | `MeasurementQuestions` | 112 | Package-private: conversions, time, perimeter, area, volume |
-| `service` | `DailyChallenge` | 27 | Once-per-day rule: `dayKey(LocalDate)` → `yyyyMMdd`, `isAvailable(lastCompletedDay, today)` (BUG-04, Q4) |
-| `service` | `NextStepAdvisor` | 49 | `recommend(session)` → Results "Suggested Path" (`STEP_UP` with target difficulty / `DAILY_CHALLENGE` / `SMART_PRACTICE`), PRD BR-08 |
+| `service` | `DailyChallenge` | 26 | Once-per-day rule: `dayKey(LocalDate)` → `yyyyMMdd`, `isAvailable(lastCompletedDay, today)` (BUG-04, Q4) |
+| `service` | `NextStepAdvisor` | 50 | `recommend(session)` → Results "Suggested Path" (`STEP_UP` with target difficulty / `DAILY_CHALLENGE` / `SMART_PRACTICE`), PRD BR-08 |
 | `service` | `ReportBuilder` | 106 | `toHtml(session, base64Logo)` → the exported HTML report; `escape(text)` for every dynamic value (R-SEC-04) |
 | `service` | `ProfileNames` | 63 | Profile-name rules (`validate`) and the always-valid "Spark Mascot Name" suggestion (`spark`) |
 | `service` | `QuestionCounts` | 36 | Question-count rule 1–100 (`validate`), decision Q6 |

@@ -466,11 +466,7 @@ public class QuizFrame extends JFrame implements QuizNavigator {
         // 1. Purge repository database
         analyticsService.clearHistory();
 
-        // 2. Reset config data for current profile
-        String profileName = config.getCurrentProfile();
-        config.setStarBalance(0);
-        config.setEquippedItem("none");
-        config.resetProfileCustomizations(profileName);
+        // 2. Stars and shop items are kept (decision Q3, BUG-13); the confirmation dialog says so
 
         // 3. Refresh all dynamic UI panels instantly
         welcomePanel.refreshDynamicData();

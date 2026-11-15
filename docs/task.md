@@ -150,7 +150,7 @@
 * **Accept:** exporting does not open a print dialog; printing handles > 20 questions.
 * **Docs:** PRD FR-EXP-02.
 
-#### BUG-13 — "Reset History" also wipes stars and shop purchases without saying so · `P1 · S` · *Blocked (decision Q3)*
+#### BUG-13 — "Reset History" also wipes stars and shop purchases without saying so · `P1 · S` · **Done 2026-11-15** (decision Q3: reset deletes only quiz history; stars and items kept; warning lists exactly that; `QuizFrameResetTest`)
 * **Evidence:** warning text (`AnalyticsPanel` 281–287) mentions only quiz history; `QuizFrame.resetAllData` (424–441) also sets `starBalance=0`, clears equipped/unlocked items.
 * **Fix:** either limit the reset to sessions, or list everything deleted in the confirmation ("…your stars and Archie's accessories too").
 * **Accept:** dialog text matches exactly what is removed.

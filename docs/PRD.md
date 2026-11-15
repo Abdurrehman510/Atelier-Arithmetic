@@ -274,7 +274,7 @@ Rules in [BR-02](#82-star-rewards-br-02).
 | FR-ANL-06 | **Recommendation** text from weakest category and weakest difficulty. **Strengths:** up to 2 categories with mean ≥ 70 %. **Weaknesses:** up to 2 categories with mean < 70 % (no overlap). Categories with no sessions are ignored. | I |
 | FR-ANL-07 | **Recent history:** the 4 most recent sessions: category (difficulty), score %, seconds/question, `MM/DD`. | I |
 | FR-ANL-08 | **Goals:** two read-only checkboxes ("Complete Daily Quest today", "Keep practice streak alive") and buttons "🎯 Smart Practice", "📅 Daily Challenge". | I |
-| FR-ANL-09 | **Reset History** (gate + confirmation) shall clear the active profile's data per FR-DAT-01. | **P** (dialog does not disclose star/shop wipe — BUG-13) |
+| FR-ANL-09 | **Reset History** (gate + confirmation) shall clear the active profile's quiz history per FR-DAT-01; the confirmation names the profile, says history (and therefore charts, streaks and badges) is deleted and that stars and Archie's accessories are kept (`AnalyticsPanel.resetWarning`). | I (BUG-13 fixed 2026-11-15) |
 
 ### 6.17 Smart Practice (`FR-SMP`)
 | ID | Requirement | St |
@@ -317,7 +317,7 @@ Rules in [BR-02](#82-star-rewards-br-02).
 ### 6.22 Data management (`FR-DAT`)
 | ID | Requirement | St |
 |---|---|:---:|
-| FR-DAT-01 | "Reset History" shall: delete the active profile's rows from `sessions` (cascade to `session_questions`); set the (global) star balance to 0; clear that profile's unlocked and equipped items; refresh Home, Analytics, Badges, Smart Practice and Shop. Other profiles' sessions are untouched. | I |
+| FR-DAT-01 | "Reset History" shall delete the active profile's rows from `sessions` (cascade to `session_questions`) and refresh Home, Analytics, Badges, Smart Practice and Shop. Stars, unlocked and equipped items are **kept** (decision Q3). Other profiles' data is untouched. | I (changed 2026-11-15, BUG-13) |
 | FR-DAT-02 | Backup/restore or export of history. | **N** (FEAT-04) |
 
 ---
