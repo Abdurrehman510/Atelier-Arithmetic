@@ -220,6 +220,12 @@ public class QuizFrame extends JFrame implements QuizNavigator {
     // =========================================================================
 
     @Override
+    public void goToWelcome(String suggestedDifficulty) {
+        welcomePanel.getDifficultyCombo().setSelectedItem(suggestedDifficulty);
+        goToWelcome();
+    }
+
+    @Override
     public void goToWelcome() {
         soundService.playTransition();
         cardLayout.show(mainPanel, CARD_WELCOME);

@@ -216,7 +216,7 @@ See [non-goals](#22-non-goals-v100). Additionally *not present today* (gaps, not
 | FR-RES-01 | Completing the last question shall: play the fanfare; if the category is "Daily Challenge" store today's date (`yyyyMMdd`) as `lastDailyChallengeDate`; **save** the session; **then** compute and award stars; populate and show Results. | I |
 | FR-RES-02 | Results shall show 4 cards. **Key Metrics:** score *x / N*, success rate (`%.1f%%`), grade with emoji, total time (`Xm Ys` or `Ys`), average speed (sum of per-question time ÷ N, `%.1fs / question`), and "★ +*n* Stars Earned!" with a tooltip breakdown. **Session Mastery:** fastest *correct* question and a "challenge area" (slowest *incorrect* question; if none incorrect, slowest correct). **Archie's Insights:** advice by accuracy (≥95 / ≥80 / ≥50 / else). **Suggested Path:** one action button ([BR-08](#88-results-next-step-rules-br-08)). | I |
 | FR-RES-03 | Footer: "❓ Guide", "📋 Review Answers", "📄 Export Report", "🔄 PLAY AGAIN" (→ Home). | I |
-| FR-RES-04 | The "Suggested Path" button shall act as specified in BR-08. | **P** (listener accumulation and no-op "step up" — BUG-02) |
+| FR-RES-04 | The "Suggested Path" button shall act as specified in BR-08 — exactly one action per click, for the latest result (`NextStepAdvisor`). | I (BUG-02 fixed 2026-11-15) |
 | FR-RES-05 | Grade/remark/emoji shall follow [BR-01](#81-grading-br-01). The remark text is shown only in the exported report (the dashboard shows grade + emoji). | I |
 
 ### 6.10 Review (`FR-REV`)
@@ -426,8 +426,8 @@ Seed = today's date as `yyyyMMdd` (long). Question *i* uses `new Random(seed*100
 ### 8.8 Results next-step rules (BR-08)
 | Condition | Prompt | Button | Intended action |
 |---|---|---|---|
-| pct ≥ 85, difficulty Easy | "You are ready for the next challenge!" | STEP UP TO MEDIUM DIFFICULTY | go Home (does **not** change the difficulty combo) |
-| pct ≥ 85, Medium | "Incredible skills! Level up to master." | STEP UP TO HARD DIFFICULTY | go Home (same limitation) |
+| pct ≥ 85, difficulty Easy | "You are ready for the next challenge!" | STEP UP TO MEDIUM DIFFICULTY | go Home with **Medium** pre-selected |
+| pct ≥ 85, Medium | "Incredible skills! Level up to master." | STEP UP TO HARD DIFFICULTY | go Home with **Hard** pre-selected |
 | pct ≥ 85, Hard | "Master class quizzer! Try the seeded daily run." | PLAY TODAY'S DAILY CHALLENGE | start Daily Challenge |
 | pct < 85 | "Review weaknesses to improve mastery!" | START SMART PRACTICE MODE | open Smart Practice |
 

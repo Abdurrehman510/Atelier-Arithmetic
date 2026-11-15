@@ -42,6 +42,7 @@ public class ResultsPanel extends JPanel {
 
     private JLabel nextActionPromptLabel;
     private JButton actionButton;
+    private com.mathquiz.service.NextStepAdvisor.NextStep nextStep;   // what actionButton does now (BUG-02)
 
     // Footer actions
     private JButton restartButton;
@@ -197,33 +198,26 @@ public class ResultsPanel extends JPanel {
     }
 
     private void generateNextSteps(QuizSession session) {
-        double pct = session.getPercentage();
-        if (pct >= 85.0) {
-            if ("Easy".equalsIgnoreCase(session.getDifficulty())) {
-                nextActionPromptLabel.setText("You are ready for the next challenge!");
-                actionButton.setText("STEP UP TO MEDIUM DIFFICULTY");
-                actionButton.addActionListener(e -> {
-                    nav.goToWelcome();
-                });
-            } else if ("Medium".equalsIgnoreCase(session.getDifficulty())) {
-                nextActionPromptLabel.setText("Incredible skills! Level up to master.");
-                actionButton.setText("STEP UP TO HARD DIFFICULTY");
-                actionButton.addActionListener(e -> {
-                    nav.goToWelcome();
-                });
-            } else {
-                nextActionPromptLabel.setText("Master class quizzer! Try the seeded daily run.");
-                actionButton.setText("PLAY TODAY'S DAILY CHALLENGE");
-                actionButton.addActionListener(e -> {
-                    nav.startDailyChallenge();
-                });
-            }
-        } else {
-            nextActionPromptLabel.setText("Review weaknesses to improve mastery!");
-            actionButton.setText("START SMART PRACTICE MODE");
-            actionButton.addActionListener(e -> {
+        nextStep = com.mathquiz.service.NextStepAdvisor.recommend(session);
+        nextActionPromptLabel.setText(nextStep.prompt());
+        actionButton.setText(nextStep.buttonLabel());
+    }
+
+    private void followNextStep() {
+        if (nextStep == null) {
+            return;
+        }
+        switch (nextStep.kind()) {
+            case STEP_UP:
+                nav.goToWelcome(nextStep.targetDifficulty());
+                break;
+            case DAILY_CHALLENGE:
+                nav.startDailyChallenge();
+                break;
+            case SMART_PRACTICE:
+            default:
                 nav.startSmartPractice();
-            });
+                break;
         }
     }
 
@@ -343,6 +337,8 @@ public class ResultsPanel extends JPanel {
         actionButton.setBorder(BorderFactory.createCompoundBorder(
                 BorderFactory.createLineBorder(AppTheme.getBorderClr(), 1),
                 new EmptyBorder(10, 16, 10, 16)));
+        // One listener for the panel's lifetime; it follows the latest recommendation (BUG-02)
+        actionButton.addActionListener(e -> followNextStep());
 
         nextStepsContent.add(nextActionPromptLabel);
         nextStepsContent.add(actionButton);

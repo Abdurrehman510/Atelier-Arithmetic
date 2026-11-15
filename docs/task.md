@@ -75,7 +75,7 @@
 * **Accept:** with 25 seeded sessions with distinct percentages, the chart's 20 points equal sessions 6–25 in chronological order; ≤ 20 sessions unchanged.
 * **Docs:** PRD FR-ANL-03.
 
-#### BUG-02 — Results "Suggested Path" button accumulates listeners; "STEP UP" buttons don't change difficulty · `P1 · S`
+#### BUG-02 — Results "Suggested Path" button accumulates listeners; "STEP UP" buttons don't change difficulty · `P1 · S` · **Done 2026-11-15** (single listener + `NextStepAdvisor`; `QuizNavigator.goToWelcome(difficulty)`; `ResultsPanelNextStepTest`, `NextStepAdvisorTest`)
 * **Evidence:** `ResultsPanel.generateNextSteps` (lines 199–228) calls `actionButton.addActionListener(...)` on every `populate()` without removing earlier ones. The two "STEP UP TO …" variants only call `nav.goToWelcome()`.
 * **Impact:** After N quizzes in one run the button fires N handlers, including stale ones from earlier branches (e.g. *goToWelcome* **and** *startSmartPractice* both run); duplicated navigation sounds/refreshes. "Step up" promises a change it does not make.
 * **Fix:** keep a single listener that reads the current recommendation from a field (or remove existing listeners first); add `QuizNavigator` support to pre-select the next difficulty (e.g. `goToWelcome(String suggestedDifficulty)`), or relabel the button.

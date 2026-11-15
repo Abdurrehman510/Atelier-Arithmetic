@@ -12,6 +12,9 @@ public interface QuizNavigator {
     /** Go back to the Welcome / setup screen. */
     void goToWelcome();
 
+    /** Go back to the Welcome screen with {@code suggestedDifficulty} pre-selected (Results "step up", BUG-02). */
+    void goToWelcome(String suggestedDifficulty);
+
     /** Advance from Welcome to the Category selection screen. */
     void goToCategories();
 
