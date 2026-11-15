@@ -131,7 +131,7 @@
 * **Accept:** Skip at step 2 → restart → no auto-tour.
 * **Docs:** PRD FR-TUR-04.
 
-#### BUG-10 — Custom quiz storage is fragile · `P2 · M`
+#### BUG-10 — Custom quiz storage is fragile · `P2 · M` · **Done 2026-11-15** (escape-aware reader, brace-safe split, `quizExists` + replace prompt, honest save result; `JsonHelperTest`, `CustomQuizServiceTest`)
 * **Evidence:** `JsonHelper.extractString` (110–117) ends the value at the first `"` and never unescapes; `escapeString` writes `\"`/`\\`. `CustomQuizService.sanitizeFilename` maps all other chars to `_` (81–83), so "Quiz 1" and "Quiz_1" collide and `saveQuiz` silently overwrites; `JsonHelper.writeFile` swallows `IOException` yet `saveQuiz` returns `true` (27–45).
 * **Fix:** proper JSON escape/unescape (or use a tiny parser), detect name collisions (confirm overwrite), return `false` on write failure.
 * **Accept:** an expression containing `"` and `\` round-trips; collision prompts; failed write shows an error.

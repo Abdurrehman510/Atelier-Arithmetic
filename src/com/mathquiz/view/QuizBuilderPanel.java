@@ -261,6 +261,16 @@ public class QuizBuilderPanel extends JPanel {
             return;
         }
 
+        // BUG-10: names are stored as file names, so "Quiz 1" and "Quiz_1" share a file; never overwrite silently
+        if (quizService.quizExists(quizName)) {
+            int choice = JOptionPane.showConfirmDialog(this,
+                    "A saved quiz already uses the name '" + quizName + "' (or a very similar name).\nReplace it with these questions?",
+                    "Replace quiz? 🦉", JOptionPane.YES_NO_OPTION, JOptionPane.WARNING_MESSAGE);
+            if (choice != JOptionPane.YES_OPTION) {
+                return;
+            }
+        }
+
         boolean ok = quizService.saveQuiz(quizName, tempQuestions);
         if (ok) {
             JOptionPane.showMessageDialog(this,
@@ -271,7 +281,9 @@ public class QuizBuilderPanel extends JPanel {
             exprField.setText("");
             answerField.setText("");
         } else {
-            JOptionPane.showMessageDialog(this, "Failed to save quiz. Verify input parameters.", "Error", JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(this,
+                    "Sorry, the quiz could not be saved. Please check that the computer has free space and try again.",
+                    "Could not save 🦉", JOptionPane.ERROR_MESSAGE);
         }
     }
 

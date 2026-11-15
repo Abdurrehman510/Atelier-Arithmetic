@@ -286,7 +286,7 @@ Rules in [BR-02](#82-star-rewards-br-02).
 | ID | Requirement | St |
 |---|---|:---:|
 | FR-CQZ-01 | The Quiz Builder (gate-protected) shall let an adult enter a quiz name (default "My Custom Quiz"), an expression (free text) and an **integer** answer, add rows to a table, remove the selected row (rows re-numbered), and save. Validation: expression and answer required; answer must be an integer; name required; ≥ 1 question. | I |
-| FR-CQZ-02 | Saved quizzes shall be stored as `~/.atelier-arithmetic/custom_quizzes/<sanitised-name>.json` where characters outside `[A-Za-z0-9_-]` become `_`. Saving an existing name **overwrites silently**; names differing only in special characters collide. | **P** (BUG-10) |
+| FR-CQZ-02 | Saved quizzes shall be stored as `~/.atelier-arithmetic/custom_quizzes/<sanitised-name>.json` where characters outside `[A-Za-z0-9_-]` become `_`. If the target file already exists (same name, or a name that sanitises to the same file), the builder asks before replacing it. Expressions round-trip exactly, including `"`, `\` and braces. A failed write is reported to the parent and the questions are kept. | I (BUG-10 fixed 2026-11-15) |
 | FR-CQZ-03 | "📂 Load Quiz" (not gated) shall list saved quizzes alphabetically in a popup; selecting one starts a session with `total = number of questions`, difficulty `Medium`, category `"Custom: <name>"`, questions in stored order. Empty list → info dialog. | I |
 | FR-CQZ-04 | The builder correctness of expression-vs-answer is the author's responsibility; the app does not evaluate expressions. Editing an existing quiz is not supported. | I |
 

@@ -16,14 +16,30 @@ public class CustomQuizService {
     private final String customQuizzesDir;
 
     public CustomQuizService() {
-        this.customQuizzesDir = AppConfig.getAppDir() + File.separator + "custom_quizzes";
+        this(AppConfig.getAppDir() + File.separator + "custom_quizzes");
+    }
+
+    /** A service over an explicit folder (tests). Creates the folder if it is missing. */
+    public CustomQuizService(String customQuizzesDir) {
+        this.customQuizzesDir = customQuizzesDir;
         File dir = new File(customQuizzesDir);
         if (!dir.exists()) {
             dir.mkdirs();
         }
     }
 
-    /** Saves a list of questions to a custom quiz JSON file. */
+    /**
+     * True when saving {@code quizName} would replace an existing quiz file. Names are stored as
+     * sanitised file names, so different names can share one file (e.g. "Quiz 1" and "Quiz_1").
+     */
+    public boolean quizExists(String quizName) {
+        if (quizName == null || quizName.trim().isEmpty()) {
+            return false;
+        }
+        return new File(customQuizzesDir, sanitizeFilename(quizName.trim()) + ".json").exists();
+    }
+
+    /** Saves a list of questions to a custom quiz JSON file; false if anything prevents the save. */
     public boolean saveQuiz(String quizName, List<Question> questions) {
         if (quizName == null || quizName.trim().isEmpty() || questions.isEmpty()) {
             return false;
@@ -40,8 +56,7 @@ public class CustomQuizService {
             list.add(map);
         }
         String json = JsonHelper.buildSessionArray(list);
-        JsonHelper.writeFile(file.getAbsolutePath(), json);
-        return true;
+        return JsonHelper.writeFile(file.getAbsolutePath(), json);
     }
 
     /** Loads and parses a custom quiz from a JSON file. */

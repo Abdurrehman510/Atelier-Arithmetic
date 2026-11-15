@@ -141,7 +141,7 @@
 | R-DAT-06 | Config and quiz files SHOULD be written atomically (temp file + move) and backed up before overwrite. | Crash safety. | ⚠ DEBT-07 |
 | R-DAT-07 | Reset/delete flows MUST disclose what is deleted and MUST affect only the active profile's data (plus any shared value explicitly named). | Trust. | ⚠ BUG-13, BUG-05 |
 | R-DAT-08 | Logs MUST NOT contain answers, profile names or other personal data. | Privacy. | ✔ |
-| R-DAT-09 | Custom-quiz writer and reader MUST remain symmetrical; characters needing escaping (`"`, `\`) MUST round-trip. | Data integrity. | ⚠ BUG-10 |
+| R-DAT-09 | Custom-quiz writer and reader MUST remain symmetrical; characters needing escaping (`"`, `\`) MUST round-trip. | Data integrity. | ✔ `JsonHelperTest`, `CustomQuizServiceTest` |
 
 ---
 

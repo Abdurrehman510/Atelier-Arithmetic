@@ -230,7 +230,7 @@ Analyses session history to identify the child's weakest category and lowest acc
 An editable table interface for building custom quiz sessions:
 - Add custom expressions with their exact expected **integer** answers (the app does not evaluate the expression; the author supplies the answer)
 - Remove questions from the table
-- Name and save the quiz set to disk via `CustomQuizService` (stored as plain JSON in `custom_quizzes/`; saving under an existing name overwrites it)
+- Name and save the quiz set to disk via `CustomQuizService` (stored as plain JSON in `custom_quizzes/`; the builder asks before replacing a quiz with the same name)
 - Load saved quizzes from the Home screen with the `📂 Load Quiz` button (not gated; the quiz runs as category `Custom: <name>` at Medium difficulty)
 - Opening the builder is protected by the Parental Gate
 
