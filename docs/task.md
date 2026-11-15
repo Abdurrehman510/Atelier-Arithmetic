@@ -111,7 +111,7 @@
 * **Accept:** unlocking "First Steps" gives +15 ★ exactly once, with sound and a visible notice; clearing history does not re-award on re-unlock *(decide: re-award or not)*.
 * **Docs:** PRD FR-RWD-04, FR-ACH-03, BR-02.
 
-#### BUG-07 — Hints for measurement/ratio/numerator questions are the wrong hint · `P1 · S`
+#### BUG-07 — Hints for measurement/ratio/numerator questions are the wrong hint · `P1 · S` · **Done 2026-11-15** (hints routed by skill; `HintServiceTest`)
 * **Evidence:** `HintService.generateHint` (25–27) routes any expression containing the substring `of` to the fraction/percentage hint. Affected generated texts include "Find the area **of** a square…", "Find the perimeter **of** a rectangle…", "…has a perimeter **of** … Meters", "…has an area **of**…", "Find the volume … **of** a box", "The ratio **of** red to blue…", "What is the numerator **of** …".
 * **Impact:** a child asking for help on an area problem is told to "divide by 100 and multiply by the percent".
 * **Fix:** route by explicit category markers (`What is a/b of`, `% of`, `Calculate a/b of`, `… of E?` for fractions) and add dedicated hints for area/perimeter/volume/ratio/numerator/time conversions; fall back to generic.

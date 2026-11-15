@@ -231,7 +231,7 @@ public class GamePanel extends JPanel {
         hintButton.addActionListener(e -> {
             if (currentQuestion != null) {
                 if (!awaitingNext) hintsUsedForCurrent++; // F1 / Ctrl+H also arrive here via doClick()
-                String hint = com.mathquiz.service.HintService.generateHint(currentQuestion.getExpression());
+                String hint = com.mathquiz.service.HintService.generateHint(currentQuestion);
                 hintTextLabel.setText(hint);
                 hintPanel.setVisible(true);
                 playCard.revalidate();

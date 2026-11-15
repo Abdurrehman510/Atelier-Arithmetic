@@ -147,7 +147,7 @@ Root: `D:\MathQuizApp`. Source root: `src/com/mathquiz/`.
 | `service` | `QuestionSource` | 42 | `next(session, customQuestions, todaySeed)` → `Prepared(question, difficulty)`: custom → Daily Challenge → generator |
 | `service` | `SchemaMigrations` | 103 | Package-private: `PRAGMA user_version` migrations (current v2), see §7.2 |
 | `service` | `AdaptiveDifficultyEngine` | 146 | `evaluate(results, difficulty)` → `UPGRADE/DOWNGRADE/MAINTAIN`; static `upgrade/downgrade/canUpgrade/canDowngrade` |
-| `service` | `HintService` | 194 | Static `generateHint(expression)` → HTML string by pattern matching |
+| `service` | `HintService` | 307 | Static `generateHint(Question)` → HTML hint chosen by the question's `Skill`; `generateHint(expression)` keeps wording-based routing for custom questions |
 | `service` | `RewardService` | 168 | Star balance, shop unlock/equip delegation to `AppConfig`, `calculateAndAwardQuizReward()` → `RewardResult` |
 | `service` | `AnalyticsService` | 434 | All aggregate stats over `SessionRepository.loadRaw()` (trend, per-category accuracy, streaks, weakest category/difficulty, heatmap, KPIs); `ALL_CATEGORIES` constant |
 | `service` | `AchievementService` | 103 | Computes the 10 `Achievement`s from history |
