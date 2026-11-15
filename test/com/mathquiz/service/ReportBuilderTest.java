@@ -32,6 +32,19 @@ class ReportBuilderTest {
     }
 
     @Test
+    void writingToAnInvalidFileNameReportsFailureInsteadOfThrowing(@org.junit.jupiter.api.io.TempDir java.nio.file.Path dir) {
+        java.io.File invalid = new java.io.File(dir.toFile(), "bad\0name.html");   // NUL is invalid on every OS
+        assertFalse(ReportBuilder.writeReport(invalid, "<html></html>"));
+    }
+
+    @Test
+    void writingAReportSavesItAsUtf8(@org.junit.jupiter.api.io.TempDir java.nio.file.Path dir) throws Exception {
+        java.io.File file = new java.io.File(dir.toFile(), "report.html");
+        assertTrue(ReportBuilder.writeReport(file, "<p>🦉 ★</p>"));
+        assertEquals("<p>🦉 ★</p>", java.nio.file.Files.readString(file.toPath(), java.nio.charset.StandardCharsets.UTF_8));
+    }
+
+    @Test
     void reportListsEveryQuestion() {
         QuizSession session = new QuizSession(25, "Easy", "Addition");
         for (int i = 0; i < 25; i++) {

@@ -509,9 +509,7 @@ public class ResultsPanel extends JPanel {
             }
             String html = com.mathquiz.service.ReportBuilder.toHtml(activeSession, base64Logo);
 
-            try {
-                java.nio.file.Files.writeString(dest.toPath(), html, java.nio.charset.StandardCharsets.UTF_8);
-            } catch (java.io.IOException ex) {
+            if (!com.mathquiz.service.ReportBuilder.writeReport(dest, html)) {   // also catches invalid file names
                 JOptionPane.showMessageDialog(this, "Failed to write file!", "Error", JOptionPane.ERROR_MESSAGE);
                 return;
             }

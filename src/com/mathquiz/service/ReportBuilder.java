@@ -15,6 +15,20 @@ public final class ReportBuilder {
     private ReportBuilder() {
     }
 
+    /**
+     * Writes the report as UTF-8. Returns false instead of throwing when the file cannot be written,
+     * including file names the operating system rejects (e.g. {@code < > | "} on Windows).
+     */
+    public static boolean writeReport(java.io.File dest, String html) {
+        try {
+            java.nio.file.Files.writeString(dest.toPath(), html, java.nio.charset.StandardCharsets.UTF_8);
+            return true;
+        } catch (java.io.IOException | java.nio.file.InvalidPathException e) {
+            System.err.println("Failed to write report: " + e.getClass().getSimpleName());
+            return false;
+        }
+    }
+
     /** Escapes text for HTML element content and quoted attributes; {@code null} becomes "". */
     public static String escape(String text) {
         if (text == null) {
