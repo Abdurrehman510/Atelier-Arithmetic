@@ -124,7 +124,7 @@
 * **Accept:** 10,000 generations are all valid.
 * **Docs:** PRD FR-PRF-05.
 
-#### BUG-09 — Skipping the tour never marks it as seen · `P2 · S`
+#### BUG-09 — Skipping the tour never marks it as seen · `P2 · S` · **Done 2026-11-15** (`TourManagerTest`)
 * **Evidence:** `TourManager.skipTour()` → `endTour(false)` → `setTourSeen(true)` only when `completed` (277–284).
 * **Impact:** a user who skips is shown the tour at every launch.
 * **Fix:** persist `tourSeen=true` on skip as well (replay remains available).

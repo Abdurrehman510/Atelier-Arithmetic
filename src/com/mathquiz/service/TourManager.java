@@ -277,9 +277,9 @@ public class TourManager {
     private void endTour(boolean completed) {
         active = false;
         overlay.hideTour();
-        if (completed) {
-            config.setTourSeen(true);
-        }
+        // Finished or skipped, the tour should not auto-start again (BUG-09); it can still be
+        // replayed from the Guide card. "completed" is kept for the call sites' readability.
+        config.setTourSeen(true);
         if (onTourEnd != null) onTourEnd.run();
     }
 }

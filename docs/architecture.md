@@ -302,7 +302,7 @@ TourManager (service)                    TourOverlay (glass pane, JPanel)       
 ```
 * Targets are real component instances captured at `initialize()` time through the registry built in `QuizFrame` (e.g. `calendarStripHolder` rather than the rebuilt strip).
 * `QuizFrame.maybeContinueTour(screen)` is called from navigation methods so a running tour can follow the user; it jumps to the **first** step of that screen.
-* `endTour(completed)`: hides overlay; persists `tourSeen=true` **only if completed** (skip does not — BUG-09); runs the `onTourEnd` callback (`welcomePanel.applyTheme()`).
+* `endTour(completed)`: hides overlay; persists `tourSeen=true` whether the tour was completed or skipped (BUG-09 fix); runs the `onTourEnd` callback (`welcomePanel.applyTheme()`).
 
 ### 6.7 Theming and scaling
 * `AppTheme` is a static holder (`darkMode`) with semantic getters. `QuizFrame.updateAllThemes()` is the single refresh point: set dark flag from config → call `applyTheme()` on all 11 panels → `AppTheme.scaleComponentFont(frame, config.getFontSizeScale(), sound)` → `SwingUtilities.updateComponentTreeUI` → `repaint`.
