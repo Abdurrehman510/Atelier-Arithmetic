@@ -42,9 +42,8 @@ public class AnalyticsService {
     public List<Double> getAccuracyTrend(int maxSessions) {
         List<Map<String, Object>> raw = repository.loadRaw();
 
-        // raw is newest-first; take up to maxSessions then reverse
-        int from = Math.max(0, raw.size() - maxSessions);
-        List<Map<String, Object>> slice = raw.subList(from, raw.size());
+        // raw is newest-first: take the newest maxSessions (the head of the list), then reverse (BUG-01)
+        List<Map<String, Object>> slice = raw.subList(0, Math.min(maxSessions, raw.size()));
 
         List<Double> result = new ArrayList<>();
         for (int i = slice.size() - 1; i >= 0; i--) {

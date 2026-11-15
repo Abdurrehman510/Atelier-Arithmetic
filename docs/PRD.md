@@ -268,7 +268,7 @@ Rules in [BR-02](#82-star-rewards-br-02).
 |---|---|:---:|
 | FR-ANL-01 | Entry from Home shall require the parental gate. | I |
 | FR-ANL-02 | **Stat cards (4):** *Overall Accuracy* = arithmetic mean of session percentages (unweighted by question count), subtitle "Best score"; *Questions Solved* = Σ totalQuestions, subtitle total practice time (`Ns` or `N.N min`); *Average Speed* = mean per-question time, subtitle fastest correct answer (answers ≤ 100 ms ignored); *Practice Streak* = current streak in days, subtitle longest streak. | I |
-| FR-ANL-03 | **Accuracy Trend:** smooth Bézier line chart of the **last 20** sessions, oldest → newest; needs ≥ 2 sessions, otherwise an empty-state message. | **P** (shows the *oldest* 20 when > 20 sessions exist — BUG-01) |
+| FR-ANL-03 | **Accuracy Trend:** smooth Bézier line chart of the **last 20** sessions, oldest → newest; needs ≥ 2 sessions, otherwise an empty-state message. | I (BUG-01 fixed 2026-11-15) |
 | FR-ANL-04 | **Category Radar:** 10-spoke radar with rings at 25/50/75/100 %; per-category value = mean percentage of that category's sessions (0 if none). Daily Challenge and Custom sessions are not plotted. | I |
 | FR-ANL-05 | **Heatmap:** 28 cells (4 rows × 7), oldest first; gold = at least one session that day, grey = none (binary, no intensity). | I |
 | FR-ANL-06 | **Recommendation** text from weakest category and weakest difficulty. **Strengths:** up to 2 categories with mean ≥ 70 %. **Weaknesses:** up to 2 categories with mean < 70 % (no overlap). Categories with no sessions are ignored. | I |

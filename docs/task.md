@@ -68,7 +68,7 @@
 
 ### 4.1 Defects
 
-#### BUG-01 — Accuracy Trend shows the *oldest* 20 sessions once more than 20 exist · `P1 · S`
+#### BUG-01 — Accuracy Trend shows the *oldest* 20 sessions once more than 20 exist · `P1 · S` · **Done 2026-11-15** (`AnalyticsServiceTest`)
 * **Evidence:** `AnalyticsService.getAccuracyTrend` (lines 42–59): `loadRaw()` is newest-first; `from = max(0, size − max)` and `subList(from, size)` selects the *end* of the list, i.e. the **oldest** `max` sessions, then iterates in reverse.
 * **Impact:** After 21+ sessions the chart stops reflecting recent progress while its title says "last 20 sessions".
 * **Fix:** take `raw.subList(0, min(max, size))` (newest) and iterate in reverse for oldest→newest.
