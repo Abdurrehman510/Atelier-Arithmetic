@@ -12,14 +12,16 @@ import java.awt.Component;
 import java.awt.Container;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.function.Function;
 
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /**
- * BUG-14: screens that rebuild their content when opened (badges, analytics, shop, smart practice)
- * must show it at the chosen text size. The frame is built but never shown.
+ * BUG-14: screens that rebuild their content (badges, analytics, shop, smart practice) must show it
+ * at the chosen text size — when opened, and when they rebuild in place (shop Equip/Buy).
+ * The frame is built but never shown.
  */
 class QuizFrameScalingTest {
 
@@ -54,29 +56,28 @@ class QuizFrameScalingTest {
         }
     }
 
-    @Test
-    void rebuiltBadgeCardsUseTheChosenTextSize() throws Exception {
+    /**
+     * Builds the main window at 150 % (no tour, no sound), lets its start-up pass run as in the app,
+     * then runs {@code action} (which returns the screen to inspect) and lists labels left at base size.
+     */
+    private static List<String> unscaledLabelsAfter(Function<QuizFrame, Container> action) throws Exception {
         AppConfig config = AppConfig.getInstance();
         boolean tourSeen = config.isTourSeen();
         boolean sound = config.isSoundEnabled();
         double scale = config.getFontSizeScale();
-        config.setTourSeen(true);          // no tour overlay
-        config.setSoundEnabled(false);     // silent test
+        config.setTourSeen(true);
+        config.setSoundEnabled(false);
         config.setFontSizeScale(1.5);
         List<String> unscaled = new ArrayList<>();
         try {
             QuizFrame[] holder = new QuizFrame[1];
-            // 1. Build the window; its start-up theme/scale pass is queued on the EDT (as in the app)
             SwingUtilities.invokeAndWait(() -> holder[0] = new QuizFrame());
-            // 2. Later, the child opens the badges screen
             SwingUtilities.invokeAndWait(() -> {
-                QuizFrame frame = holder[0];
                 try {
-                    frame.showAchievements();                       // rebuilds the badge cards
-                    AchievementsPanel badges = find(frame.getContentPane(), AchievementsPanel.class);
-                    assertNotNull(badges, "badges screen not found");
+                    Container screen = action.apply(holder[0]);
+                    assertNotNull(screen, "screen not found");
                     List<JLabel> labels = new ArrayList<>();
-                    collectLabels(badges, labels);
+                    collectLabels(screen, labels);
                     assertFalse(labels.isEmpty());
                     for (JLabel label : labels) {
                         if (label.getFont() != null && ((JComponent) label).getClientProperty("baseFontSize") == null) {
@@ -84,7 +85,7 @@ class QuizFrameScalingTest {
                         }
                     }
                 } finally {
-                    frame.dispose();
+                    holder[0].dispose();
                 }
             });
         } finally {
@@ -92,6 +93,26 @@ class QuizFrameScalingTest {
             config.setSoundEnabled(sound);
             config.setTourSeen(tourSeen);
         }
+        return unscaled;
+    }
+
+    @Test
+    void rebuiltBadgeCardsUseTheChosenTextSize() throws Exception {
+        List<String> unscaled = unscaledLabelsAfter(frame -> {
+            frame.showAchievements();                                  // rebuilds the badge cards
+            return find(frame.getContentPane(), AchievementsPanel.class);
+        });
         assertTrue(unscaled.isEmpty(), "labels shown at base size instead of 150 %: " + unscaled);
+    }
+
+    @Test
+    void shopCardsKeepTheTextSizeAfterAnInPlaceRebuild() throws Exception {
+        List<String> unscaled = unscaledLabelsAfter(frame -> {
+            frame.showMascotShop();
+            MascotShopPanel shop = find(frame.getContentPane(), MascotShopPanel.class);
+            shop.refresh();                                            // what Equip / Buy do inside the shop
+            return shop;
+        });
+        assertTrue(unscaled.isEmpty(), "shop labels shown at base size after Equip/Buy: " + unscaled);
     }
 }

@@ -115,6 +115,7 @@ public class QuizFrame extends JFrame implements QuizNavigator {
         achievementsPanel = new AchievementsPanel(this, achievementsService);
         quizBuilderPanel = new QuizBuilderPanel(this);
         mascotShopPanel  = new MascotShopPanel(this, rewardService);
+        mascotShopPanel.setAfterRebuild(() -> rescale(mascotShopPanel));   // Equip/Buy rebuild in place (BUG-14)
 
 
 
