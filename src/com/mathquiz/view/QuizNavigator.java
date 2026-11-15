@@ -61,6 +61,9 @@ public interface QuizNavigator {
     /** Start the daily seeded challenge quiz. */
     void startDailyChallenge();
 
+    /** False once the active profile has completed today's Daily Challenge (BUG-04). */
+    boolean isDailyChallengeAvailable();
+
     /** (Re-)launch the interactive guided tour from the beginning. */
     void launchTour();
 

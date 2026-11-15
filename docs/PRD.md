@@ -260,7 +260,7 @@ Rules in [BR-02](#82-star-rewards-br-02).
 |---|---|:---:|
 | FR-DLY-01 | The Daily Challenge shall be a **10-question, Medium, category "Daily Challenge"** session whose questions come from `generateSeeded(difficulty, "Mixed", seed = yyyyMMdd as long, index)`; hence all users on the same date get identical questions (unless the adaptive prompt changes difficulty mid-run). | I |
 | FR-DLY-02 | Completing it shall record today's date for the active profile and award +8 bonus stars (BR-02). The Home button then shows "✅ Completed" (disabled) for the rest of that calendar day. | I |
-| FR-DLY-03 | The challenge shall be playable once per day. | **P** (Analytics and Results screens can start it again and re-award +8 — BUG-04) |
+| FR-DLY-03 | The challenge shall be playable once per calendar day **per profile** (decision Q4). `QuizFrame.startDailyChallenge()` checks centrally and shows a friendly "already finished today" message; Home and Analytics show it as done and disabled; Results offers Smart Practice instead. | I (BUG-04 fixed 2026-11-15) |
 | FR-DLY-04 | Streak rules: [BR-05](#85-streaks-br-05). Home shows `🔥 n Day Streak` and a 7-day strip (today and the previous 6 days; ● played / ○ not). | I |
 
 ### 6.16 Analytics dashboard (`FR-ANL`)
@@ -429,6 +429,7 @@ Seed = today's date as `yyyyMMdd` (long). Question *i* uses `new Random(seed*100
 | pct ≥ 85, difficulty Easy | "You are ready for the next challenge!" | STEP UP TO MEDIUM DIFFICULTY | go Home with **Medium** pre-selected |
 | pct ≥ 85, Medium | "Incredible skills! Level up to master." | STEP UP TO HARD DIFFICULTY | go Home with **Hard** pre-selected |
 | pct ≥ 85, Hard | "Master class quizzer! Try the seeded daily run." | PLAY TODAY'S DAILY CHALLENGE | start Daily Challenge |
+| pct ≥ 85, Hard, today's challenge already done | "Master class quizzer! Sharpen another skill next." | START SMART PRACTICE MODE | open Smart Practice (BUG-04) |
 | pct < 85 | "Review weaknesses to improve mastery!" | START SMART PRACTICE MODE | open Smart Practice |
 
 ---

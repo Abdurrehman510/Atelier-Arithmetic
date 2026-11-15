@@ -501,6 +501,11 @@ public class AnalyticsPanel extends JPanel {
         dailyBtn.setFocusPainted(false);
         dailyBtn.setCursor(new Cursor(Cursor.HAND_CURSOR));
         dailyBtn.addActionListener(e -> nav.startDailyChallenge());
+        if (dailyChallengeDone) {                       // once per day per child (BUG-04)
+            dailyBtn.setText("✅ Daily Challenge done");
+            dailyBtn.setEnabled(false);
+            dailyBtn.setToolTipText("A new Daily Challenge arrives tomorrow.");
+        }
         btnRow.add(dailyBtn);
 
         goalsPanel.add(btnRow);

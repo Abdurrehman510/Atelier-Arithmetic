@@ -804,7 +804,6 @@ Behaviours that differ from what you might expect. Each is tracked in [docs/task
 
 | Area | Limitation | Task |
 |---|---|---|
-| Daily Challenge | Played-once-per-day is enforced by the Home button only; Analytics and Results can start it again (and re-award +8 stars) | BUG-04 |
 | Stars | One star balance is shared by every profile on the computer; **Reset History** also clears stars and shop items | BUG-05, BUG-13 |
 | Badges | No unlock sound or bonus stars | BUG-06 |
 | Data | Data is bound to the Windows account and there is no backup/restore | FEAT-04 |

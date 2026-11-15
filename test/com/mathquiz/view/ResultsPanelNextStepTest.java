@@ -17,6 +17,7 @@ import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNull;
 
 /** BUG-02: the Results "next step" button must fire exactly one, current recommendation. */
 class ResultsPanelNextStepTest {
@@ -27,10 +28,28 @@ class ResultsPanelNextStepTest {
     }
 
     private final List<String> calls = new ArrayList<>();
+    private boolean dailyAvailable = true;
+
+    /** BUG-04: once today's Daily Challenge is done, Results must not offer it again. */
+    @Test
+    void doesNotOfferADailyChallengeAlreadyPlayedToday() throws Exception {
+        dailyAvailable = false;
+        SwingUtilities.invokeAndWait(() -> {
+            ResultsPanel panel = new ResultsPanel(recordingNavigator());
+            panel.populate(session("Hard", 19, 20));         // 95 % on Hard
+            assertNull(findButton(panel, "PLAY TODAY'S DAILY CHALLENGE"), "daily challenge offered twice");
+            calls.clear();
+            findButton(panel, "START SMART PRACTICE").doClick();
+        });
+        assertEquals(List.of("startSmartPractice"), calls);
+    }
 
     private QuizNavigator recordingNavigator() {
         return (QuizNavigator) Proxy.newProxyInstance(QuizNavigator.class.getClassLoader(),
                 new Class<?>[]{QuizNavigator.class}, (proxy, method, args) -> {
+                    if (method.getReturnType() == boolean.class) {
+                        return dailyAvailable;                        // isDailyChallengeAvailable()
+                    }
                     calls.add(method.getName() + (args == null ? "" : Arrays.toString(args)));
                     return null;
                 });

@@ -267,9 +267,8 @@ public class QuizFrame extends JFrame implements QuizNavigator {
         }
         soundService.playFanfare();
         if (session.getCategory().equalsIgnoreCase("Daily Challenge")) {
-            java.text.SimpleDateFormat sdf = new java.text.SimpleDateFormat("yyyyMMdd");
-            String todayStr = sdf.format(new java.util.Date());
-            config.setLastDailyChallengeDate(todayStr);
+            config.setLastDailyChallengeDate(
+                    com.mathquiz.service.DailyChallenge.dayKey(java.time.LocalDate.now()));   // per profile (BUG-05)
         }
         // Save to disk
         repository.save(session);
@@ -326,7 +325,20 @@ public class QuizFrame extends JFrame implements QuizNavigator {
     }
 
     @Override
+    public boolean isDailyChallengeAvailable() {
+        return com.mathquiz.service.DailyChallenge.isAvailable(
+                config.getLastDailyChallengeDate(), java.time.LocalDate.now());
+    }
+
+    @Override
     public void startDailyChallenge() {
+        // One central check for every entry point (Home, Analytics, Results), once per day per child (BUG-04)
+        if (!isDailyChallengeAvailable()) {
+            JOptionPane.showMessageDialog(this,
+                    "You have already finished today's Daily Challenge. Great job!\nA new one arrives tomorrow.",
+                    "Daily Challenge 🦉", JOptionPane.INFORMATION_MESSAGE);
+            return;
+        }
         soundService.playQuizStart();
         String category = "Daily Challenge";
         String difficulty = "Medium";

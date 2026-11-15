@@ -198,7 +198,7 @@ public class ResultsPanel extends JPanel {
     }
 
     private void generateNextSteps(QuizSession session) {
-        nextStep = com.mathquiz.service.NextStepAdvisor.recommend(session);
+        nextStep = com.mathquiz.service.NextStepAdvisor.recommend(session, nav.isDailyChallengeAvailable());
         nextActionPromptLabel.setText(nextStep.prompt());
         actionButton.setText(nextStep.buttonLabel());
     }

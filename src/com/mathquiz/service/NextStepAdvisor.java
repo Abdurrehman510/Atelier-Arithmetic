@@ -23,7 +23,11 @@ public final class NextStepAdvisor {
     private NextStepAdvisor() {
     }
 
-    public static NextStep recommend(QuizSession session) {
+    /**
+     * @param dailyChallengeAvailable false once the active child has completed today's Daily Challenge
+     *                                (it is never offered twice in a day, BUG-04)
+     */
+    public static NextStep recommend(QuizSession session, boolean dailyChallengeAvailable) {
         if (session.getPercentage() >= STEP_UP_THRESHOLD) {
             if ("Easy".equalsIgnoreCase(session.getDifficulty())) {
                 return new NextStep(Kind.STEP_UP, "You are ready for the next challenge!",
@@ -33,8 +37,12 @@ public final class NextStepAdvisor {
                 return new NextStep(Kind.STEP_UP, "Incredible skills! Level up to master.",
                         "STEP UP TO HARD DIFFICULTY", "Hard");
             }
-            return new NextStep(Kind.DAILY_CHALLENGE, "Master class quizzer! Try the seeded daily run.",
-                    "PLAY TODAY'S DAILY CHALLENGE", null);
+            if (dailyChallengeAvailable) {
+                return new NextStep(Kind.DAILY_CHALLENGE, "Master class quizzer! Try the seeded daily run.",
+                        "PLAY TODAY'S DAILY CHALLENGE", null);
+            }
+            return new NextStep(Kind.SMART_PRACTICE, "Master class quizzer! Sharpen another skill next.",
+                    "START SMART PRACTICE MODE", null);
         }
         return new NextStep(Kind.SMART_PRACTICE, "Review weaknesses to improve mastery!",
                 "START SMART PRACTICE MODE", null);

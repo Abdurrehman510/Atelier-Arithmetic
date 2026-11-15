@@ -90,7 +90,7 @@
 * **Accept:** after Esc→Yes there is no tick sound; no `Timer` events while on any other screen.
 * **Docs:** PRD FR-GAM-08/09.
 
-#### BUG-04 — Daily Challenge can be replayed (and re-rewarded) from Analytics and Results · `P1 · S` · *Blocked (decision Q4)*
+#### BUG-04 — Daily Challenge can be replayed (and re-rewarded) from Analytics and Results · `P1 · S` · **Done 2026-11-15** (decision Q4: once per day per profile; central check in `QuizFrame.startDailyChallenge`, Analytics button disabled when done, Results offers Smart Practice; `DailyChallengeTest`, `NextStepAdvisorTest`, `ResultsPanelNextStepTest`)
 * **Evidence:** once-per-day is enforced only by the Home button (`WelcomePanel.buildCalendarStrip`, 922–932). `AnalyticsPanel` (499–504) and `ResultsPanel` (215–219) call `nav.startDailyChallenge()` unconditionally; `RewardService` (113) grants +8 for every "Daily Challenge" session.
 * **Impact:** unlimited +8 stars; contradicts Help ("Prevents double-completion daily").
 * **Fix:** enforce in `QuizFrame.startDailyChallenge()` (central) — if `lastDailyChallengeDate == today`, show an info dialog and return; hide/disable the other buttons accordingly. Decide whether the date should be per profile (see BUG-05).

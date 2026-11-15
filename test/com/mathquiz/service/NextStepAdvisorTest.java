@@ -20,7 +20,7 @@ class NextStepAdvisorTest {
 
     @Test
     void easyAtEightyFivePercentStepsUpToMedium() {
-        NextStepAdvisor.NextStep step = NextStepAdvisor.recommend(session("Easy", 17, 20));
+        NextStepAdvisor.NextStep step = NextStepAdvisor.recommend(session("Easy", 17, 20), true);
         assertEquals(NextStepAdvisor.Kind.STEP_UP, step.kind());
         assertEquals("Medium", step.targetDifficulty());
         assertEquals("STEP UP TO MEDIUM DIFFICULTY", step.buttonLabel());
@@ -28,20 +28,29 @@ class NextStepAdvisorTest {
 
     @Test
     void mediumStepsUpToHard() {
-        NextStepAdvisor.NextStep step = NextStepAdvisor.recommend(session("Medium", 19, 20));
+        NextStepAdvisor.NextStep step = NextStepAdvisor.recommend(session("Medium", 19, 20), true);
         assertEquals(NextStepAdvisor.Kind.STEP_UP, step.kind());
         assertEquals("Hard", step.targetDifficulty());
     }
 
     @Test
     void hardOffersTheDailyChallenge() {
-        NextStepAdvisor.NextStep step = NextStepAdvisor.recommend(session("Hard", 19, 20));
+        NextStepAdvisor.NextStep step = NextStepAdvisor.recommend(session("Hard", 19, 20), true);
         assertEquals(NextStepAdvisor.Kind.DAILY_CHALLENGE, step.kind());
         assertNull(step.targetDifficulty());
     }
 
+    /** BUG-04: never offer a Daily Challenge the child has already played today. */
+    @Test
+    void hardOffersSmartPracticeOnceTodaysChallengeIsDone() {
+        NextStepAdvisor.NextStep step = NextStepAdvisor.recommend(session("Hard", 19, 20), false);
+        assertEquals(NextStepAdvisor.Kind.SMART_PRACTICE, step.kind());
+        assertEquals("START SMART PRACTICE MODE", step.buttonLabel());
+    }
+
     @Test
     void belowEightyFivePercentOffersSmartPractice() {
-        assertEquals(NextStepAdvisor.Kind.SMART_PRACTICE, NextStepAdvisor.recommend(session("Easy", 84, 100)).kind());
+        assertEquals(NextStepAdvisor.Kind.SMART_PRACTICE,
+                NextStepAdvisor.recommend(session("Easy", 84, 100), true).kind());
     }
 }
