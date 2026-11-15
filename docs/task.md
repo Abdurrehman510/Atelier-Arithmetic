@@ -169,7 +169,7 @@
 * **Accept:** values above the cap are refused with a friendly message.
 * **Docs:** PRD FR-SET-02.
 
-#### BUG-16 — Category grid Up/Down navigation wraps oddly · `P3 · S`
+#### BUG-16 — Category grid Up/Down navigation wraps oddly · `P3 · S` · **Done 2026-11-15** (`GridNavigation`: same column, stop at edges; `GridNavigationTest`)
 * **Evidence:** `CategoryPanel` 208–211 uses `(idx ± 3) mod 10` on a 3-column grid with 10 items (e.g. ↓ from card 8 goes to card 1).
 * **Fix:** compute row/column; stop at the last row or wrap by column.
 * **Accept:** ↑/↓ keep the same column and clamp/wrap predictably.

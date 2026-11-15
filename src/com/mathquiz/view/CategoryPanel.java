@@ -15,6 +15,9 @@ import com.mathquiz.config.AppTheme;
  */
 public class CategoryPanel extends JPanel {
 
+    /** Cards per row in the category grid (keyboard navigation uses the same value, BUG-16). */
+    private static final int GRID_COLUMNS = 3;
+
     // ── Design tokens ────────────────────────────────────────────────────────
     private static final Color BG_PRIMARY  = new Color(250, 249, 246);
     private static final Color BG_CARD     = Color.WHITE;
@@ -91,7 +94,7 @@ public class CategoryPanel extends JPanel {
     }
 
     private JComponent buildGrid() {
-        categoryGrid = new JPanel(new GridLayout(0, 3, 16, 16));
+        categoryGrid = new JPanel(new GridLayout(0, GRID_COLUMNS, 16, 16));
         categoryGrid.setOpaque(false);
         categoryGrid.setBorder(new EmptyBorder(10, 40, 20, 40));
 
@@ -202,13 +205,13 @@ public class CategoryPanel extends JPanel {
                 int nextIdx = idx;
                 int numCats = CATEGORIES.length;
                 if (code == KeyEvent.VK_LEFT) {
-                    nextIdx = (idx - 1 + numCats) % numCats;
+                    nextIdx = GridNavigation.move(idx, GridNavigation.Direction.LEFT, GRID_COLUMNS, numCats);
                 } else if (code == KeyEvent.VK_RIGHT) {
-                    nextIdx = (idx + 1) % numCats;
+                    nextIdx = GridNavigation.move(idx, GridNavigation.Direction.RIGHT, GRID_COLUMNS, numCats);
                 } else if (code == KeyEvent.VK_UP) {
-                    nextIdx = (idx - 3 + numCats) % numCats;
+                    nextIdx = GridNavigation.move(idx, GridNavigation.Direction.UP, GRID_COLUMNS, numCats);
                 } else if (code == KeyEvent.VK_DOWN) {
-                    nextIdx = (idx + 3) % numCats;
+                    nextIdx = GridNavigation.move(idx, GridNavigation.Direction.DOWN, GRID_COLUMNS, numCats);
                 } else if (code == KeyEvent.VK_ENTER || code == KeyEvent.VK_SPACE) {
                     nav.startQuiz(cat, questionCount, difficulty);
                     return;

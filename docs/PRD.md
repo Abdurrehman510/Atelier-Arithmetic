@@ -170,7 +170,7 @@ See [non-goals](#22-non-goals-v100). Additionally *not present today* (gaps, not
 |---|---|:---:|
 | FR-CAT-01 | The screen shall show 10 cards in this order: Addition, Difference, Multiplication, Division, Mixed, Special, Fractions, Patterns, Algebra, Measurement — each with icon, name, one-line description and a START button; layout = 3 columns, vertically scrollable. | I |
 | FR-CAT-02 | Clicking START, or pressing **Enter/Space** on a focused card, shall start a quiz with the Home count and difficulty. | I |
-| FR-CAT-03 | Arrow keys shall move focus (Left/Right ±1 with wrap; Up/Down ±3 modulo 10); **Esc** returns Home; hover and focus show a gold 2-px border. | I |
+| FR-CAT-03 | Arrow keys shall move focus: Left/Right ±1 in reading order with wrap; Up/Down to the card above/below **in the same column**, staying put at the top or bottom (`GridNavigation`); **Esc** returns Home; hover and focus show a gold 2-px border. | I (BUG-16 fixed 2026-11-15) |
 | FR-CAT-04 | Footer buttons: "❓ Guide" and "← Back". | I |
 
 ### 6.5 Question engine (`FR-QGN`)
