@@ -230,7 +230,7 @@ See [non-goals](#22-non-goals-v100). Additionally *not present today* (gaps, not
 |---|---|:---:|
 | FR-EXP-01 | "📄 Export Report" shall open a save dialog (default `~/.atelier-arithmetic/math_report.html`) and write a self-contained HTML file: embedded Base64 logo, grade box, category, difficulty, totals, duration (whole seconds), and a per-question table (time in whole seconds). | I |
 | FR-EXP-02 | After saving, the system print dialog shall open automatically; the printed page is a plain-text summary of **at most the first 20 questions**. There is no way to export without the print prompt. | **P** (BUG-12) |
-| FR-EXP-03 | Dynamic text in the HTML shall be HTML-escaped. | **N** (BUG-11) |
+| FR-EXP-03 | Dynamic text in the HTML shall be HTML-escaped (`ReportBuilder.escape`); the file is written as UTF-8. | I (BUG-11 fixed 2026-11-15) |
 
 ### 6.12 Stars (`FR-RWD`)
 Rules in [BR-02](#82-star-rewards-br-02). 

@@ -137,7 +137,7 @@
 * **Accept:** an expression containing `"` and `\` round-trips; collision prompts; failed write shows an error.
 * **Docs:** PRD FR-CQZ-02.
 
-#### BUG-11 — Exported HTML is not escaped · `P2 · S`
+#### BUG-11 — Exported HTML is not escaped · `P2 · S` · **Done 2026-11-15** (`ReportBuilder` escapes every dynamic value; UTF-8 file; `ReportBuilderTest`)
 * **Evidence:** `ResultsPanel.handleExportReport` appends `getCategory()`, `getExpression()` raw (553, 568).
 * **Impact:** a custom-quiz name/expression with `<` breaks or injects markup into the local report.
 * **Fix:** HTML-escape all dynamic text.

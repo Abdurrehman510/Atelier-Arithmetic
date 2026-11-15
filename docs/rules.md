@@ -152,7 +152,7 @@
 | R-SEC-01 | New sensitive string columns MUST be encrypted through `CryptoHelper`; profile names and expressions are never stored in clear. | Privacy. | ✔ |
 | R-SEC-02 | Do not describe current encryption as strong security. It is machine-bound obfuscation (ECB, derived key). | Honesty ([architecture §8.2](architecture.md#82-honest-limits)). | ✔ |
 | R-SEC-03 | Secrets (PINs, PFX files/passwords, keys) MUST NOT be committed. `*.pfx`, `*.p12`, `*.snk`, `*.key` SHOULD be added to `.gitignore`. Prefer environment variables or secure prompts over command-line secrets. | Supply-chain safety. | ⚠ REL-05 |
-| R-SEC-04 | Any HTML written by the app MUST escape dynamic values. | Injection safety. | ⚠ BUG-11 |
+| R-SEC-04 | Any HTML written by the app MUST escape dynamic values. | Injection safety. | ✔ `ReportBuilder` |
 | R-SEC-05 | Custom file names MUST be sanitised to `[A-Za-z0-9_-]`. | Path traversal. | ✔ |
 | R-SEC-06 | When changing the crypto scheme, ship a migration that can still read old data (decrypt fallback) and test with real old files. | No data loss. | — |
 
@@ -275,5 +275,4 @@ Existing violations are accepted as **debt** until their task is done; they do n
 | R-UI-13 | Listener accumulation in `ResultsPanel` | BUG-02 |
 | R-DOM-09 | Daily Challenge re-entry | BUG-04 |
 | R-DAT-07 | Reset wipes stars/shop without saying so | BUG-13 |
-| R-SEC-04 | Unescaped HTML report | BUG-11 |
 | R-TST-02 | Tests cover grading and generators; rewards, streaks, achievements and the adaptive engine still open | DEBT-01 |

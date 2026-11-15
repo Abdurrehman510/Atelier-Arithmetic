@@ -145,6 +145,7 @@ Root: `D:\MathQuizApp`. Source root: `src/com/mathquiz/`.
 | `service` | `AlgebraQuestions` | 124 | Package-private: solve-for-x and simultaneous equations |
 | `service` | `MeasurementQuestions` | 112 | Package-private: conversions, time, perimeter, area, volume |
 | `service` | `NextStepAdvisor` | 50 | `recommend(session)` → Results "Suggested Path" (`STEP_UP` with target difficulty / `DAILY_CHALLENGE` / `SMART_PRACTICE`), PRD BR-08 |
+| `service` | `ReportBuilder` | 113 | `toHtml(session, base64Logo)` → the exported HTML report; `escape(text)` for every dynamic value (R-SEC-04) |
 | `service` | `QuestionSource` | 42 | `next(session, customQuestions, todaySeed)` → `Prepared(question, difficulty)`: custom → Daily Challenge → generator |
 | `service` | `SchemaMigrations` | 103 | Package-private: `PRAGMA user_version` migrations (current v2), see §7.2 |
 | `service` | `AdaptiveDifficultyEngine` | 146 | `evaluate(results, difficulty)` → `UPGRADE/DOWNGRADE/MAINTAIN`; static `upgrade/downgrade/canUpgrade/canDowngrade` |
