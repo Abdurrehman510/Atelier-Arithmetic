@@ -153,7 +153,7 @@ See [non-goals](#22-non-goals-v100). Additionally *not present today* (gaps, not
 | FR-PRF-02 | The top bar shall show `👤 <profile>`; clicking opens a menu listing profiles (active one marked ✓) and "➕ Create Profile…". Selecting a profile switches immediately and re-themes the UI. | I |
 | FR-PRF-03 | The create dialog shall show the privacy notice *"To protect child safety, please do not use your real first or last name!…"*. | I |
 | FR-PRF-04 | A profile name shall be accepted only if, after trimming, it is non-empty, matches `[a-zA-Z0-9_ ]+` (letters, digits, underscore, **space**) and is ≤ **15** characters; otherwise an error dialog is shown. An existing name is not duplicated (it is simply switched to). | I |
-| FR-PRF-05 | A "🎭 Spark Mascot Name" button shall fill the field with `<Adjective> <Animal>` chosen from 12 adjectives × 12 animals. | **P** (5 of 144 combinations exceed 15 chars and are rejected — BUG-08) |
+| FR-PRF-05 | A "🎭 Spark Mascot Name" button shall fill the field with `<Adjective> <Animal>` chosen from 12 adjectives × 12 animals, limited to the 139 pairs of at most 15 characters, so every suggestion is accepted (`ProfileNames`). | I (BUG-08 fixed 2026-11-15) |
 | FR-PRF-06 | **Per-profile data:** quiz sessions (DB), unlocked shop items, equipped item. **Global (shared by all profiles):** star balance, daily-challenge completion date, sound/theme/scale settings, tour-seen flag, custom quizzes. | **P** (star balance global — BUG-05) |
 | FR-PRF-07 | Profile rename/delete. | **N** (FEAT-01) |
 

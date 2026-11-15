@@ -118,7 +118,7 @@
 * **Accept:** for every generator template there is a unit test asserting the hint contains the expected key phrase; no template maps to the percentage hint except fraction/percent templates.
 * **Docs:** PRD FR-HNT-02.
 
-#### BUG-08 — "Spark Mascot Name" can generate names the dialog rejects (> 15 chars) · `P2 · S`
+#### BUG-08 — "Spark Mascot Name" can generate names the dialog rejects (> 15 chars) · `P2 · S` · **Done 2026-11-15** (`ProfileNames.spark` draws only from names that fit; validation shares the limit; `ProfileNamesTest`)
 * **Evidence:** `WelcomePanel` 768–774 (12 adjectives × 12 animals) vs validation 809. Over-length combos: *Friendly* + {Squirrel(17), Dolphin(16), Penguin(16), Cheetah(16)}, *Sparkly* + Squirrel(16) → 5/144.
 * **Fix:** rename the longest words (e.g. "Friendly"→"Kindly" or trim animals) or filter generated names to ≤ 15.
 * **Accept:** 10,000 generations are all valid.
