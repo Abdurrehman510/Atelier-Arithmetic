@@ -163,7 +163,7 @@
 * **Accept:** fonts and button sounds are identical before and after toggling the scale button, on every screen.
 * **Docs:** design §13, architecture §6.7.
 
-#### BUG-15 — No upper limit on the number of questions · `P2 · S`
+#### BUG-15 — No upper limit on the number of questions · `P2 · S` · **Done 2026-11-15** (1–100, decision Q6; `QuestionCounts`, `QuestionCountsTest`)
 * **Evidence:** `WelcomePanel.handleStart` (578–596) accepts any integer > 0.
 * **Fix:** cap (e.g. 1–100, spinner or clamp with message) — decision Q6.
 * **Accept:** values above the cap are refused with a friendly message.

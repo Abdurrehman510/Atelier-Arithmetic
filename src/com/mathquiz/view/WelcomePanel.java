@@ -90,7 +90,7 @@ public class WelcomePanel extends JPanel {
     public int getQuestionCount() {
         try {
             int v = Integer.parseInt(qCountField.getText().trim());
-            return (v > 0) ? v : 10;
+            return (v > 0) ? Math.min(v, com.mathquiz.service.QuestionCounts.MAX) : 10;   // never above the cap (BUG-15)
         } catch (NumberFormatException e) {
             return 10;
         }
@@ -576,20 +576,9 @@ public class WelcomePanel extends JPanel {
     }
 
     private void handleStart() {
-        String raw = qCountField.getText().trim();
-        int qty;
-        try {
-            qty = Integer.parseInt(raw);
-        } catch (NumberFormatException ex) {
-            JOptionPane.showMessageDialog(this,
-                    "Please enter a number for how many questions you want!",
-                    "Oops!", JOptionPane.WARNING_MESSAGE);
-            return;
-        }
-        if (qty <= 0) {
-            JOptionPane.showMessageDialog(this,
-                    "Please enter at least 1 question!",
-                    "Oops!", JOptionPane.WARNING_MESSAGE);
+        String problem = com.mathquiz.service.QuestionCounts.validate(qCountField.getText());   // 1–100 (BUG-15)
+        if (problem != null) {
+            JOptionPane.showMessageDialog(this, problem, "Oops!", JOptionPane.WARNING_MESSAGE);
             return;
         }
         nav.goToCategories();

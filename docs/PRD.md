@@ -161,7 +161,7 @@ See [non-goals](#22-non-goals-v100). Additionally *not present today* (gaps, not
 | ID | Requirement | St |
 |---|---|:---:|
 | FR-SET-01 | Home shall provide a question-count text field (default `10`) and a difficulty combo (`Easy`, `Medium`, `Hard`; default Easy). | I |
-| FR-SET-02 | "CHOOSE CATEGORY →" shall require the count to parse as an integer **> 0**; otherwise warning dialog ("Please enter a number…" / "Please enter at least 1 question!") and no navigation. There is **no upper bound**. | **P** (BUG-15) |
+| FR-SET-02 | "CHOOSE CATEGORY →" shall require the count to be a whole number from **1 to 100** (decision Q6); otherwise a warning dialog ("Please enter a number…" / "Please enter at least 1 question!" / "That's a lot! Please choose 100 questions or fewer.") and no navigation (`QuestionCounts`). | I (BUG-15 fixed 2026-11-15) |
 | FR-SET-03 | Home shall be a two-column dashboard: left = Archie header (equipped-accessory aware greeting), config card (count, difficulty, Quiz Builder, Load Quiz, Choose Category); right = four cards: **Daily Quest** (Daily Challenge button, streak, 7-day strip), **Performance & Badges** (sessions, badges `n / 10`, Analytics, Badges buttons), **Archie's Shop** (star balance, equipped item, shop button), **Smart Practice & Guide** (Practice, Tour, Guide buttons). | I |
 | FR-SET-04 | Returning to Home shall refresh star balance, equipped item, greeting, session/badge counts, streak label and calendar strip. | I |
 
@@ -641,11 +641,11 @@ Mismatches that were found between claims (README, Help text, code comments) and
 | # | Question | Owner |
 |---|---|---|
 | Q1 | Official target age range: 8–14 (code comments) or 8–17 (README)? | Product Owner |
-| Q2 | Should stars be per-profile (matching shop state) or deliberately shared (family wallet)? | Product Owner |
-| Q3 | Should "Reset History" also wipe stars/shop (current behaviour) or only sessions? | Product Owner |
-| Q4 | Should the Daily Challenge be strictly once per day, per profile? | Product Owner |
+| Q2 | Should stars be per-profile (matching shop state) or deliberately shared (family wallet)? | **Decided 2026-11-15 (owner): per profile** — to implement in BUG-05 |
+| Q3 | Should "Reset History" also wipe stars/shop (current behaviour) or only sessions? | **Decided 2026-11-15 (owner): only sessions;** keep stars and shop items, and list exactly what is deleted — to implement in BUG-13 |
+| Q4 | Should the Daily Challenge be strictly once per day, per profile? | **Decided 2026-11-15 (owner): yes, once per day per profile** — to implement in BUG-04 |
 | Q5 | Do achievements need an unlock moment (toast/sound/+15 stars)? | Product Owner / UX |
-| Q6 | Is a maximum question count (e.g. 100) desirable? | Product Owner |
+| Q6 | Is a maximum question count (e.g. 100) desirable? | **Decided 2026-11-15: yes, 1–100** (implemented, BUG-15) |
 | Q7 | Is macOS/Linux packaging required? | Product Owner |
 | Q8 | Is the stated MIT licence correct, and who is the copyright holder? | Owner |
 
