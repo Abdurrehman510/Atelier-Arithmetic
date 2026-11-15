@@ -183,8 +183,8 @@ public class HelpPanel extends JPanel {
                 "&nbsp;&nbsp;a perfect score, an answer in under 2 seconds, 10 quizzes,\n" +
                 "&nbsp;&nbsp;90% or more in Addition, Difference, Multiplication or Division,\n" +
                 "&nbsp;&nbsp;80% or more on a Hard Special quiz, and a 3-day streak.\n" +
-                "• Stars are kept for the whole computer. Each profile has\n" +
-                "&nbsp;&nbsp;its own quiz history, badges and Archie accessories."));
+                "• Each profile has its own stars, quiz history, badges and\n" +
+                "&nbsp;&nbsp;Archie accessories."));
 
         content.add(Box.createVerticalStrut(12));
 
@@ -225,8 +225,8 @@ public class HelpPanel extends JPanel {
                 "• PRACTICE STREAK: finish a quiz daily to grow your 🔥.\n" +
                 "&nbsp;&nbsp;Missing a whole day starts it over.\n" +
                 "• DAILY CHALLENGE: everyone gets the same 10 Medium questions\n" +
-                "&nbsp;&nbsp;each day, with bonus stars. When you finish, the Home button\n" +
-                "&nbsp;&nbsp;says Completed until tomorrow."));
+                "&nbsp;&nbsp;each day, with bonus stars. Each profile can play it once a\n" +
+                "&nbsp;&nbsp;day; after that it shows Completed until tomorrow."));
 
         content.add(Box.createVerticalStrut(12));
 
@@ -234,7 +234,7 @@ public class HelpPanel extends JPanel {
                 "• ANALYTICS (for grown-ups): an accuracy line chart, a 10-sided\n" +
                 "&nbsp;&nbsp;radar chart of each category, a 28-day practice map, strengths,\n" +
                 "&nbsp;&nbsp;weaknesses and recent quizzes. Reset History clears the current\n" +
-                "&nbsp;&nbsp;profile's quiz history, stars and Archie accessories.\n" +
+                "&nbsp;&nbsp;profile's quiz history; stars and Archie accessories are kept.\n" +
                 "• SMART PRACTICE: click Practice on the Home screen to play 10\n" +
                 "&nbsp;&nbsp;questions on the topic and level where you can improve most.\n" +
                 "• QUIZ BUILDER (for parents and teachers): write your own\n" +
