@@ -170,7 +170,7 @@ Root: `D:\MathQuizApp`. Source root: `src/com/mathquiz/`.
 | `view` | `GridNavigation` | 35 | Package-private: arrow-key movement in the category grid (same column, stop at edges) |
 | `view` | `GamePanel` | 563 | Quiz loop, timer, hint box, adaptive prompts, key bindings |
 | `view` | `ResultsPanel` | 636 | 4-card results dashboard, HTML export, optional print |
-| `view` | `ReportPrintable` | 90 | Package-private: paginated plain-text printout of a session |
+| `view` | `ReportPrintable` | 157 | Package-private: plain-text printout of a session — long lines wrapped to the page width, every question, as many pages as needed |
 | `view` | `ReviewPanel` | 268 | Colour-coded answer table |
 | `view` | `HelpPanel` | 383 | 13 help sections (HTML body width pinned to 440 CSS px ≈ 572 px so the page fits the 720 px minimum window) |
 | `view` | `AnalyticsPanel` | 844 | Dashboard + inner `LineChartPanel`, `RadarChartPanel` (Java2D) |
