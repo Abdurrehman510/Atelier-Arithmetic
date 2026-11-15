@@ -1,9 +1,11 @@
 package com.mathquiz.view;
 
+import com.mathquiz.model.AnswerCheck;
 import com.mathquiz.model.Question;
 import com.mathquiz.model.QuestionResult;
 import com.mathquiz.model.QuizSession;
 import com.mathquiz.service.QuestionGenerator;
+import com.mathquiz.service.QuestionSource;
 import com.mathquiz.service.AdaptiveDifficultyEngine;
 import com.mathquiz.service.SoundService;
 import com.mathquiz.config.AppTheme;
@@ -59,6 +61,7 @@ public class GamePanel extends JPanel {
     // ── State ────────────────────────────────────────────────────────────────
     private final QuizNavigator    nav;
     private final QuestionGenerator generator;
+    private final QuestionSource   questionSource;
     private final AdaptiveDifficultyEngine difficultyEngine;
     private final SoundService     sound;
 
@@ -66,6 +69,8 @@ public class GamePanel extends JPanel {
 
     private QuizSession activeSession;
     private Question    currentQuestion;
+    private String      currentDifficulty;     // level the current question was generated at
+    private int         hintsUsedForCurrent;   // hint opens before submitting the current question
     private long        questionStartTime;     // ms timestamp when question loaded
     private boolean     awaitingNext = false;  // true after answer submitted
     private java.util.List<Question> customQuestions = null;
@@ -79,12 +84,21 @@ public class GamePanel extends JPanel {
         this.nav       = nav;
         this.sound     = sound;
         this.generator = new QuestionGenerator();
+        this.questionSource = new QuestionSource(generator);
         this.difficultyEngine = new AdaptiveDifficultyEngine();
         setBackground(BG_PRIMARY);
         setLayout(new BorderLayout());
         build();
         initTimer();
         setupKeyBindings();
+        // BUG-03: every way of leaving this screen (Esc, Guide, tour, results) hides the card,
+        // so stop the per-question timer and its tick sound here rather than at each exit.
+        addComponentListener(new ComponentAdapter() {
+            @Override
+            public void componentHidden(ComponentEvent e) {
+                stopTimer();
+            }
+        });
     }
 
 
@@ -216,7 +230,8 @@ public class GamePanel extends JPanel {
                 new EmptyBorder(6, 12, 6, 12)));
         hintButton.addActionListener(e -> {
             if (currentQuestion != null) {
-                String hint = com.mathquiz.service.HintService.generateHint(currentQuestion.getExpression());
+                if (!awaitingNext) hintsUsedForCurrent++; // F1 / Ctrl+H also arrive here via doClick()
+                String hint = com.mathquiz.service.HintService.generateHint(currentQuestion);
                 hintTextLabel.setText(hint);
                 hintPanel.setVisible(true);
                 playCard.revalidate();
@@ -316,23 +331,11 @@ public class GamePanel extends JPanel {
             return;
         }
 
-        // Generate question
-        if (customQuestions != null) {
-            currentQuestion = customQuestions.get(activeSession.getCurrentQuestionIndex());
-        } else if (activeSession.getCategory().equalsIgnoreCase("Daily Challenge")) {
-            long seed = getTodaySeed();
-            currentQuestion = generator.generateSeeded(
-                    activeSession.getDifficulty(),
-                    "Mixed",
-                    seed,
-                    activeSession.getCurrentQuestionIndex()
-            );
-        } else {
-            currentQuestion = generator.generate(
-                    activeSession.getDifficulty(),
-                    activeSession.getCategory()
-            );
-        }
+        // Pick the next question (custom list → Daily Challenge → generator)
+        QuestionSource.Prepared prepared = questionSource.next(activeSession, customQuestions, getTodaySeed());
+        currentQuestion = prepared.question();
+        currentDifficulty = prepared.difficulty();
+        hintsUsedForCurrent = 0;
 
 
 
@@ -367,17 +370,13 @@ public class GamePanel extends JPanel {
             return;
         }
 
-        String input = answerField.getText().trim();
-        if (input.isEmpty()) {
+        AnswerCheck check = currentQuestion.check(answerField.getText());
+        if (check.status() == AnswerCheck.Status.EMPTY) {
             feedbackLabel.setText("Type your answer first!");
             feedbackLabel.setForeground(ERROR_RED);
             return;
         }
-
-        int val;
-        try {
-            val = Integer.parseInt(input);
-        } catch (NumberFormatException ex) {
+        if (check.status() == AnswerCheck.Status.NOT_A_WHOLE_NUMBER) {
             feedbackLabel.setText("Only whole numbers, please!");
             feedbackLabel.setForeground(ERROR_RED);
             return;
@@ -387,13 +386,14 @@ public class GamePanel extends JPanel {
         answerField.setEnabled(false);
 
         long timeSpentMs = System.currentTimeMillis() - questionStartTime;
-        boolean correct  = (val == currentQuestion.getCorrectAnswer());
+        boolean correct  = check.status() == AnswerCheck.Status.CORRECT;
 
         // Record result in session
         activeSession.recordResult(new QuestionResult(
                 currentQuestion.getExpression(),
                 currentQuestion.getCorrectAnswer(),
-                val, correct, timeSpentMs));
+                check.value(), correct, timeSpentMs,
+                currentQuestion.getSkill(), currentDifficulty, hintsUsedForCurrent));
 
         if (correct) {
             feedbackLabel.setText("✅ Correct! Great job!");
@@ -412,7 +412,9 @@ public class GamePanel extends JPanel {
 
         // Evaluate adaptive difficulty suggestion
         AdaptiveDifficultyEngine.Recommendation recommendation =
-                difficultyEngine.evaluate(activeSession.getResults(), activeSession.getDifficulty());
+                AdaptiveDifficultyEngine.appliesTo(activeSession)
+                        ? difficultyEngine.evaluate(activeSession.getResults(), activeSession.getDifficulty())
+                        : AdaptiveDifficultyEngine.Recommendation.MAINTAIN;   // Daily Challenge stays fair (BUG-17)
         if (recommendation == AdaptiveDifficultyEngine.Recommendation.UPGRADE) {
             SwingUtilities.invokeLater(this::proposeUpgrade);
         } else if (recommendation == AdaptiveDifficultyEngine.Recommendation.DOWNGRADE) {

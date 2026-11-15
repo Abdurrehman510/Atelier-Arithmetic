@@ -42,6 +42,7 @@ public class ResultsPanel extends JPanel {
 
     private JLabel nextActionPromptLabel;
     private JButton actionButton;
+    private com.mathquiz.service.NextStepAdvisor.NextStep nextStep;   // what actionButton does now (BUG-02)
 
     // Footer actions
     private JButton restartButton;
@@ -197,33 +198,26 @@ public class ResultsPanel extends JPanel {
     }
 
     private void generateNextSteps(QuizSession session) {
-        double pct = session.getPercentage();
-        if (pct >= 85.0) {
-            if ("Easy".equalsIgnoreCase(session.getDifficulty())) {
-                nextActionPromptLabel.setText("You are ready for the next challenge!");
-                actionButton.setText("STEP UP TO MEDIUM DIFFICULTY");
-                actionButton.addActionListener(e -> {
-                    nav.goToWelcome();
-                });
-            } else if ("Medium".equalsIgnoreCase(session.getDifficulty())) {
-                nextActionPromptLabel.setText("Incredible skills! Level up to master.");
-                actionButton.setText("STEP UP TO HARD DIFFICULTY");
-                actionButton.addActionListener(e -> {
-                    nav.goToWelcome();
-                });
-            } else {
-                nextActionPromptLabel.setText("Master class quizzer! Try the seeded daily run.");
-                actionButton.setText("PLAY TODAY'S DAILY CHALLENGE");
-                actionButton.addActionListener(e -> {
-                    nav.startDailyChallenge();
-                });
-            }
-        } else {
-            nextActionPromptLabel.setText("Review weaknesses to improve mastery!");
-            actionButton.setText("START SMART PRACTICE MODE");
-            actionButton.addActionListener(e -> {
+        nextStep = com.mathquiz.service.NextStepAdvisor.recommend(session, nav.isDailyChallengeAvailable());
+        nextActionPromptLabel.setText(nextStep.prompt());
+        actionButton.setText(nextStep.buttonLabel());
+    }
+
+    private void followNextStep() {
+        if (nextStep == null) {
+            return;
+        }
+        switch (nextStep.kind()) {
+            case STEP_UP:
+                nav.goToWelcome(nextStep.targetDifficulty());
+                break;
+            case DAILY_CHALLENGE:
+                nav.startDailyChallenge();
+                break;
+            case SMART_PRACTICE:
+            default:
                 nav.startSmartPractice();
-            });
+                break;
         }
     }
 
@@ -343,6 +337,8 @@ public class ResultsPanel extends JPanel {
         actionButton.setBorder(BorderFactory.createCompoundBorder(
                 BorderFactory.createLineBorder(AppTheme.getBorderClr(), 1),
                 new EmptyBorder(10, 16, 10, 16)));
+        // One listener for the panel's lifetime; it follows the latest recommendation (BUG-02)
+        actionButton.addActionListener(e -> followNextStep());
 
         nextStepsContent.add(nextActionPromptLabel);
         nextStepsContent.add(actionButton);
@@ -502,88 +498,29 @@ public class ResultsPanel extends JPanel {
         if (returnVal == JFileChooser.APPROVE_OPTION) {
             java.io.File dest = chooser.getSelectedFile();
 
-            StringBuilder html = new StringBuilder();
-            html.append("<!DOCTYPE html><html><head><meta charset='utf-8'><title>Atelier Arithmetic Dashboard Report</title>");
-            html.append("<style>");
-            html.append("body { font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; background-color: #FAF9F6; color: #1C1917; padding: 40px; }");
-            html.append(".card { background: white; border: 1px solid #E6E2DC; border-radius: 12px; padding: 30px; max-width: 700px; margin: 0 auto; box-shadow: 0 4px 6px rgba(0,0,0,0.02); }");
-            html.append("h1 { font-family: Georgia, serif; color: #B8966E; margin-bottom: 5px; }");
-            html.append(".subtitle { color: #78716C; font-size: 14px; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 25px; }");
-            html.append(".badge { font-size: 48px; margin-right: 15px; }");
-            html.append(".grade-box { display: flex; align-items: center; background: #FAF9F6; border: 1px solid #E6E2DC; border-radius: 8px; padding: 20px; margin-bottom: 25px; }");
-            html.append(".grade-text { font-size: 24px; font-weight: bold; color: #1C1917; }");
-            html.append(".grade-sub { font-size: 14px; color: #78716C; margin-top: 4px; }");
-            html.append("table { width: 100%; border-collapse: collapse; margin-top: 20px; }");
-            html.append("th, td { border-bottom: 1px solid #E6E2DC; padding: 12px; text-align: left; font-size: 13px; }");
-            html.append("th { background-color: #FAF9F6; color: #78716C; font-weight: bold; }");
-            html.append(".correct { background-color: #ECFDF5; color: #065F46; }");
-            html.append(".incorrect { background-color: #FEF2F2; color: #991B1B; }");
-            html.append("</style></head><body>");
-
-            // Load Base64 logo
+            // Load Base64 logo (optional decoration; the report is complete without it)
             String base64Logo = "";
             try (java.io.InputStream is = ResultsPanel.class.getResourceAsStream("/com/mathquiz/resources/logo.png")) {
                 if (is != null) {
-                    byte[] bytes = is.readAllBytes();
-                    base64Logo = java.util.Base64.getEncoder().encodeToString(bytes);
+                    base64Logo = java.util.Base64.getEncoder().encodeToString(is.readAllBytes());
                 }
-            } catch (Exception ignored) {}
-
-            html.append("<div class='card'>");
-            if (!base64Logo.isEmpty()) {
-                html.append("<div style='display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;'>");
-                html.append("<div>");
-                html.append("<h1>Atelier Arithmetic Dashboard</h1>");
-                html.append("<div class='subtitle'>Bespoke Performance Report</div>");
-                html.append("</div>");
-                html.append("<img src='data:image/png;base64,").append(base64Logo).append("' style='height: 60px; width: 60px; object-fit: contain; border-radius: 8px;' />");
-                html.append("</div>");
-            } else {
-                html.append("<h1>Atelier Arithmetic Dashboard</h1>");
-                html.append("<div class='subtitle'>Bespoke Performance Report</div>");
+            } catch (java.io.IOException ignored) {
+                // logo is optional
             }
+            String html = com.mathquiz.service.ReportBuilder.toHtml(activeSession, base64Logo);
 
-            html.append("<div class='grade-box'>");
-            html.append("<span class='badge'>").append(activeSession.getGradeEmoji()).append("</span>");
-            html.append("<div>");
-            html.append("<div class='grade-text'>Grade ").append(activeSession.getGrade()).append(" (").append((int)activeSession.getPercentage()).append("%)</div>");
-            html.append("<div class='grade-sub'>Remarks: ").append(activeSession.getRemarks()).append("</div>");
-            html.append("</div></div>");
-
-            html.append("<p><b>Category:</b> ").append(activeSession.getCategory()).append("</p>");
-            html.append("<p><b>Difficulty:</b> ").append(activeSession.getDifficulty()).append("</p>");
-            html.append("<p><b>Total Questions:</b> ").append(activeSession.getTotalQuestions()).append("</p>");
-            html.append("<p><b>Correct Answers:</b> ").append(activeSession.getCorrectAnswersCount()).append("</p>");
-            html.append("<p><b>Total Duration:</b> ").append(activeSession.getDurationMs() / 1000).append(" seconds</p>");
-
-            html.append("<h2>Session Details</h2>");
-            html.append("<table><thead><tr><th>#</th><th>Expression</th><th>Your Answer</th><th>Correct Answer</th><th>Time</th></tr></thead><tbody>");
-
-            java.util.List<QuestionResult> results = activeSession.getResults();
-            for (int i = 0; i < results.size(); i++) {
-                QuestionResult r = results.get(i);
-                String clrClass = r.isCorrect() ? "correct" : "incorrect";
-                html.append("<tr class='").append(clrClass).append("'>");
-                html.append("<td>").append(i + 1).append("</td>");
-                html.append("<td>").append(r.getExpression()).append("</td>");
-                html.append("<td>").append(r.getUserAnswer()).append("</td>");
-                html.append("<td>").append(r.getCorrectAnswer()).append("</td>");
-                html.append("<td>").append(r.getTimeSpentMs() / 1000).append("s</td>");
-                html.append("</tr>");
-            }
-            html.append("</tbody></table>");
-            html.append("</div></body></html>");
-
-            try (java.io.FileWriter writer = new java.io.FileWriter(dest)) {
-                writer.write(html.toString());
-                JOptionPane.showMessageDialog(this,
-                        "Report exported successfully!\nSaved to: " + dest.getAbsolutePath(),
-                        "Success", JOptionPane.INFORMATION_MESSAGE);
-            } catch (java.io.IOException ex) {
+            if (!com.mathquiz.service.ReportBuilder.writeReport(dest, html)) {   // also catches invalid file names
                 JOptionPane.showMessageDialog(this, "Failed to write file!", "Error", JOptionPane.ERROR_MESSAGE);
+                return;
             }
-
-            triggerNativePrint();
+            // BUG-12: printing is a separate choice, never automatic
+            int choice = JOptionPane.showConfirmDialog(this,
+                    "Report exported successfully!\nSaved to: " + dest.getAbsolutePath()
+                            + "\n\nWould you like to print it too?",
+                    "Report saved 🦉", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
+            if (choice == JOptionPane.YES_OPTION) {
+                triggerNativePrint();
+            }
         }
     }
 
@@ -591,38 +528,7 @@ public class ResultsPanel extends JPanel {
         java.awt.print.PrinterJob job = java.awt.print.PrinterJob.getPrinterJob();
         job.setJobName("Atelier Arithmetic Report");
 
-        job.setPrintable((g, pageFormat, pageIndex) -> {
-            if (pageIndex > 0) return java.awt.print.Printable.NO_SUCH_PAGE;
-
-            Graphics2D g2d = (Graphics2D) g;
-            g2d.translate(pageFormat.getImageableX(), pageFormat.getImageableY());
-
-            g2d.setColor(Color.BLACK);
-            g2d.setFont(new Font("Serif", Font.BOLD, 22));
-            g2d.drawString("Atelier Arithmetic Dashboard Report", 100, 100);
-
-            g2d.setFont(new Font("SansSerif", Font.PLAIN, 12));
-            g2d.drawString("Category: " + activeSession.getCategory(), 100, 130);
-            g2d.drawString("Difficulty: " + activeSession.getDifficulty(), 100, 150);
-            g2d.drawString("Grade: " + activeSession.getGrade(), 100, 170);
-            g2d.drawString("Success Rate: " + (int)activeSession.getPercentage() + "%", 100, 190);
-            g2d.drawString("Correct Answers: " + activeSession.getCorrectAnswersCount() + " / " + activeSession.getTotalQuestions(), 100, 210);
-
-            g2d.setFont(new Font("SansSerif", Font.BOLD, 12));
-            g2d.drawString("Question List Summary:", 100, 250);
-
-            g2d.setFont(new Font("SansSerif", Font.PLAIN, 11));
-            int y = 280;
-            java.util.List<QuestionResult> results = activeSession.getResults();
-            for (int i = 0; i < Math.min(results.size(), 20); i++) {
-                QuestionResult r = results.get(i);
-                String mark = r.isCorrect() ? "Correct" : "Wrong";
-                g2d.drawString((i + 1) + ".  " + r.getExpression() + " = " + r.getUserAnswer() + "  (" + mark + " - Correct: " + r.getCorrectAnswer() + ")", 100, y);
-                y += 20;
-            }
-
-            return java.awt.print.Printable.PAGE_EXISTS;
-        });
+        job.setPrintable(new ReportPrintable(activeSession));   // every question, paginated (BUG-12)
 
         boolean ok = job.printDialog();
         if (ok) {

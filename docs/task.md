@@ -60,6 +60,7 @@
 | 2026-11-08 | `001e501` (README, DEPLOYMENT, docs), `6bffb63` (Help) | **DOC-01 done** — README corrected against the code (85 edits: tour 24 steps, 3-column grid, sound menu, shared stars, no badge bonus, adaptive dialog, exact question ranges, heatmap/history counts, profile-name and gate rules, grade remarks, 13-section Help, runtime/installed sizes, COPPA wording) plus new *Known Limitations* and *Further documentation* sections. **DOC-02 done** — in-app Help rewritten (13 sections: all 10 categories, hints/level prompts/shortcuts, stars/badges/shop, accurate settings/sound/daily/analytics text; lines hard-wrapped and body width pinned so the page no longer overflows horizontally — the original page rendered 1,498 px wide, now 674 px). `DEPLOYMENT.md` runtime-size claim corrected (46 MB measured). |
 | 2026-11-08 | `dc406b2` | Tour category step now says 10 disciplines (was 6) |
 | 2026-11-08 | `dc406b2`, `6bffb63`, `001e501` | **DOC-03 done** — pending changes committed as three commits on a branch, fast-forwarded into `main`, rebased onto `origin/main` (`5cf9403`, README contact edit) without conflicts, and pushed (`5cf9403..001e501`) |
+| 2026-11-08 | `bf219cd` … `bc4f606` (branch `feat/phase0a-foundation`, not yet merged) | **Phase 0A (FEAT-11 foundation):** JUnit 5 harness + `test.ps1` (DEBT-01 partial); `-encoding UTF-8` builds (DEBT-02 partial); golden master + 10,000-sample generator invariants; `Skill` catalog (55 + custom); `SolutionStep`/`AnswerCheck`/`Question.check`; generator split into six classes (`QuestionGenerator` 576 → 62 lines); `PRAGMA user_version` schema v2 with migrations (**DEBT-11 done**); per-question skill, generation difficulty and hint opens saved (**FEAT-02 storage done**); `QuestionSource`. 92 tests green. |
 
 ---
 
@@ -67,35 +68,36 @@
 
 ### 4.1 Defects
 
-#### BUG-01 — Accuracy Trend shows the *oldest* 20 sessions once more than 20 exist · `P1 · S`
+#### BUG-01 — Accuracy Trend shows the *oldest* 20 sessions once more than 20 exist · `P1 · S` · **Done 2026-11-15** (`AnalyticsServiceTest`)
 * **Evidence:** `AnalyticsService.getAccuracyTrend` (lines 42–59): `loadRaw()` is newest-first; `from = max(0, size − max)` and `subList(from, size)` selects the *end* of the list, i.e. the **oldest** `max` sessions, then iterates in reverse.
 * **Impact:** After 21+ sessions the chart stops reflecting recent progress while its title says "last 20 sessions".
 * **Fix:** take `raw.subList(0, min(max, size))` (newest) and iterate in reverse for oldest→newest.
 * **Accept:** with 25 seeded sessions with distinct percentages, the chart's 20 points equal sessions 6–25 in chronological order; ≤ 20 sessions unchanged.
 * **Docs:** PRD FR-ANL-03.
 
-#### BUG-02 — Results "Suggested Path" button accumulates listeners; "STEP UP" buttons don't change difficulty · `P1 · S`
+#### BUG-02 — Results "Suggested Path" button accumulates listeners; "STEP UP" buttons don't change difficulty · `P1 · S` · **Done 2026-11-15** (single listener + `NextStepAdvisor`; `QuizNavigator.goToWelcome(difficulty)`; `ResultsPanelNextStepTest`, `NextStepAdvisorTest`)
 * **Evidence:** `ResultsPanel.generateNextSteps` (lines 199–228) calls `actionButton.addActionListener(...)` on every `populate()` without removing earlier ones. The two "STEP UP TO …" variants only call `nav.goToWelcome()`.
 * **Impact:** After N quizzes in one run the button fires N handlers, including stale ones from earlier branches (e.g. *goToWelcome* **and** *startSmartPractice* both run); duplicated navigation sounds/refreshes. "Step up" promises a change it does not make.
 * **Fix:** keep a single listener that reads the current recommendation from a field (or remove existing listeners first); add `QuizNavigator` support to pre-select the next difficulty (e.g. `goToWelcome(String suggestedDifficulty)`), or relabel the button.
 * **Accept:** after three consecutive quizzes, one click triggers exactly one navigation; after a ≥ 85 % Easy quiz the Home difficulty combo shows Medium (or the label is changed).
 * **Docs:** PRD FR-RES-04, BR-08.
 
-#### BUG-03 — Question timer (and its tick sound) keeps running after a quiz is abandoned · `P1 · S`
+#### BUG-03 — Question timer (and its tick sound) keeps running after a quiz is abandoned · `P1 · S` · **Done 2026-11-12**
+* **Fixed:** `GamePanel` stops its timer whenever the game card is hidden (covers Esc, Guide → Back, the tour). Reported by the owner during the Phase 0A manual check; test `GamePanelWiringTest.tickingStopsWhenTheGameScreenIsHidden` (failed with "⏱ 1s" before the fix).
 * **Evidence:** `GamePanel` starts the Swing `Timer` in `resetTimer()` for each question; it is stopped only in `handleSubmit()` and at session end (`GamePanel.java` 290–308, 312–316, 386). Esc → *Yes* (`setupKeyBindings`, 485–500) navigates away without stopping it; so do "❓ Guide" → Back (→ Home) and the tour's mock session (`QuizFrame.showCardForTour`).
 * **Impact:** a tick sound every second and timer events on unrelated screens until a new session starts.
 * **Fix:** stop the timer on abandon (add a `GamePanel.cancelSession()` called from the Esc handler and on card change), and when the tour switches away.
 * **Accept:** after Esc→Yes there is no tick sound; no `Timer` events while on any other screen.
 * **Docs:** PRD FR-GAM-08/09.
 
-#### BUG-04 — Daily Challenge can be replayed (and re-rewarded) from Analytics and Results · `P1 · S` · *Blocked (decision Q4)*
+#### BUG-04 — Daily Challenge can be replayed (and re-rewarded) from Analytics and Results · `P1 · S` · **Done 2026-11-15** (decision Q4: once per day per profile; central check in `QuizFrame.startDailyChallenge`, Analytics button disabled when done, Results offers Smart Practice; `DailyChallengeTest`, `NextStepAdvisorTest`, `ResultsPanelNextStepTest`)
 * **Evidence:** once-per-day is enforced only by the Home button (`WelcomePanel.buildCalendarStrip`, 922–932). `AnalyticsPanel` (499–504) and `ResultsPanel` (215–219) call `nav.startDailyChallenge()` unconditionally; `RewardService` (113) grants +8 for every "Daily Challenge" session.
 * **Impact:** unlimited +8 stars; contradicts Help ("Prevents double-completion daily").
 * **Fix:** enforce in `QuizFrame.startDailyChallenge()` (central) — if `lastDailyChallengeDate == today`, show an info dialog and return; hide/disable the other buttons accordingly. Decide whether the date should be per profile (see BUG-05).
 * **Accept:** after completing the challenge, no entry point starts it again until the next calendar day.
 * **Docs:** PRD FR-DLY-03.
 
-#### BUG-05 — Star balance is global, not per profile · `P1 · M` · *Blocked (decision Q2)*
+#### BUG-05 — Star balance is global, not per profile · `P1 · M` · **Done 2026-11-15** (decision Q2: per profile; `starBalance.<profile>` and `lastDailyChallengeDate.<profile>` with one-time migration of the shared keys; `AppConfigTest`)
 * **Evidence:** `AppConfig.getStarBalance/setStarBalance` use the plain key `starBalance` (140–151) while unlocked/equipped items use `.<profile>` suffixes. README claims per-profile.
 * **Impact:** siblings share/spend one wallet while history and shop items are separate; `resetAllData` zeros the shared balance (QuizFrame 431).
 * **Fix (if per-profile chosen):** key `starBalance.<profile>` with one-time migration of the legacy key to the active profile; make `lastDailyChallengeDate` per profile as well. If shared is intended: document it and show "Family stars".
@@ -109,70 +111,70 @@
 * **Accept:** unlocking "First Steps" gives +15 ★ exactly once, with sound and a visible notice; clearing history does not re-award on re-unlock *(decide: re-award or not)*.
 * **Docs:** PRD FR-RWD-04, FR-ACH-03, BR-02.
 
-#### BUG-07 — Hints for measurement/ratio/numerator questions are the wrong hint · `P1 · S`
+#### BUG-07 — Hints for measurement/ratio/numerator questions are the wrong hint · `P1 · S` · **Done 2026-11-15** (hints routed by skill; `HintServiceTest`)
 * **Evidence:** `HintService.generateHint` (25–27) routes any expression containing the substring `of` to the fraction/percentage hint. Affected generated texts include "Find the area **of** a square…", "Find the perimeter **of** a rectangle…", "…has a perimeter **of** … Meters", "…has an area **of**…", "Find the volume … **of** a box", "The ratio **of** red to blue…", "What is the numerator **of** …".
 * **Impact:** a child asking for help on an area problem is told to "divide by 100 and multiply by the percent".
 * **Fix:** route by explicit category markers (`What is a/b of`, `% of`, `Calculate a/b of`, `… of E?` for fractions) and add dedicated hints for area/perimeter/volume/ratio/numerator/time conversions; fall back to generic.
 * **Accept:** for every generator template there is a unit test asserting the hint contains the expected key phrase; no template maps to the percentage hint except fraction/percent templates.
 * **Docs:** PRD FR-HNT-02.
 
-#### BUG-08 — "Spark Mascot Name" can generate names the dialog rejects (> 15 chars) · `P2 · S`
+#### BUG-08 — "Spark Mascot Name" can generate names the dialog rejects (> 15 chars) · `P2 · S` · **Done 2026-11-15** (`ProfileNames.spark` draws only from names that fit; validation shares the limit; `ProfileNamesTest`)
 * **Evidence:** `WelcomePanel` 768–774 (12 adjectives × 12 animals) vs validation 809. Over-length combos: *Friendly* + {Squirrel(17), Dolphin(16), Penguin(16), Cheetah(16)}, *Sparkly* + Squirrel(16) → 5/144.
 * **Fix:** rename the longest words (e.g. "Friendly"→"Kindly" or trim animals) or filter generated names to ≤ 15.
 * **Accept:** 10,000 generations are all valid.
 * **Docs:** PRD FR-PRF-05.
 
-#### BUG-09 — Skipping the tour never marks it as seen · `P2 · S`
+#### BUG-09 — Skipping the tour never marks it as seen · `P2 · S` · **Done 2026-11-15** (`TourManagerTest`)
 * **Evidence:** `TourManager.skipTour()` → `endTour(false)` → `setTourSeen(true)` only when `completed` (277–284).
 * **Impact:** a user who skips is shown the tour at every launch.
 * **Fix:** persist `tourSeen=true` on skip as well (replay remains available).
 * **Accept:** Skip at step 2 → restart → no auto-tour.
 * **Docs:** PRD FR-TUR-04.
 
-#### BUG-10 — Custom quiz storage is fragile · `P2 · M`
+#### BUG-10 — Custom quiz storage is fragile · `P2 · M` · **Done 2026-11-15** (escape-aware reader, brace-safe split, `quizExists` + replace prompt, honest save result; `JsonHelperTest`, `CustomQuizServiceTest`)
 * **Evidence:** `JsonHelper.extractString` (110–117) ends the value at the first `"` and never unescapes; `escapeString` writes `\"`/`\\`. `CustomQuizService.sanitizeFilename` maps all other chars to `_` (81–83), so "Quiz 1" and "Quiz_1" collide and `saveQuiz` silently overwrites; `JsonHelper.writeFile` swallows `IOException` yet `saveQuiz` returns `true` (27–45).
 * **Fix:** proper JSON escape/unescape (or use a tiny parser), detect name collisions (confirm overwrite), return `false` on write failure.
 * **Accept:** an expression containing `"` and `\` round-trips; collision prompts; failed write shows an error.
 * **Docs:** PRD FR-CQZ-02.
 
-#### BUG-11 — Exported HTML is not escaped · `P2 · S`
+#### BUG-11 — Exported HTML is not escaped · `P2 · S` · **Done 2026-11-15** (`ReportBuilder` escapes every dynamic value; UTF-8 file; `ReportBuilderTest`)
 * **Evidence:** `ResultsPanel.handleExportReport` appends `getCategory()`, `getExpression()` raw (553, 568).
 * **Impact:** a custom-quiz name/expression with `<` breaks or injects markup into the local report.
 * **Fix:** HTML-escape all dynamic text.
 * **Accept:** expression `<b>x</b>` renders literally.
 * **Docs:** PRD FR-EXP-03.
 
-#### BUG-12 — Export always opens the print dialog; print output truncated · `P3 · S`
+#### BUG-12 — Export always opens the print dialog; print output truncated · `P3 · S` · **Done 2026-11-15** (print is a Yes/No choice after saving; `ReportPrintable` paginates every question; `ReportPrintableTest`; tour text updated)
 * **Evidence:** `handleExportReport` ends with `triggerNativePrint()` (586); the printable draws at most 20 rows (617).
 * **Fix:** separate "Export HTML" and "Print" actions; paginate printing.
 * **Accept:** exporting does not open a print dialog; printing handles > 20 questions.
 * **Docs:** PRD FR-EXP-02.
 
-#### BUG-13 — "Reset History" also wipes stars and shop purchases without saying so · `P1 · S` · *Blocked (decision Q3)*
+#### BUG-13 — "Reset History" also wipes stars and shop purchases without saying so · `P1 · S` · **Done 2026-11-15** (decision Q3: reset deletes only quiz history; stars and items kept; warning lists exactly that; `QuizFrameResetTest`)
 * **Evidence:** warning text (`AnalyticsPanel` 281–287) mentions only quiz history; `QuizFrame.resetAllData` (424–441) also sets `starBalance=0`, clears equipped/unlocked items.
 * **Fix:** either limit the reset to sessions, or list everything deleted in the confirmation ("…your stars and Archie's accessories too").
 * **Accept:** dialog text matches exactly what is removed.
 * **Docs:** PRD FR-ANL-09, FR-DAT-01.
 
-#### BUG-14 — Dynamically rebuilt content may not be scaled or sound-instrumented · `P2 · M` · *needs visual verification*
+#### BUG-14 — Dynamically rebuilt content may not be scaled or sound-instrumented · `P2 · M` · **Done 2026-11-15** (`QuizFrame.rescale` after every rebuild; `QuizFrameScalingTest` reproduced unscaled badge cards at 150 %). Still worth a visual pass at 150 % in the 720 × 550 window (TC-09) for clipping.
 * **Evidence:** `AppTheme.scaleComponentFont` runs only from `QuizFrame.updateAllThemes()` (start-up, theme/scale/profile/sound toggles). Panels rebuilt in `refresh()` (Analytics cards, badge cards, shop grid, smart-practice labels) are created after that call.
 * **Impact (expected):** at the default 125 % some screens show base-size fonts, and their buttons lack hover/click sounds until the next toggle.
 * **Fix:** call `AppTheme.scaleComponentFont(panel, scale, sound)` at the end of each `refresh()/populate()` (or hook `QuizFrame` navigation).
 * **Accept:** fonts and button sounds are identical before and after toggling the scale button, on every screen.
 * **Docs:** design §13, architecture §6.7.
 
-#### BUG-15 — No upper limit on the number of questions · `P2 · S`
+#### BUG-15 — No upper limit on the number of questions · `P2 · S` · **Done 2026-11-15** (1–100, decision Q6; `QuestionCounts`, `QuestionCountsTest`)
 * **Evidence:** `WelcomePanel.handleStart` (578–596) accepts any integer > 0.
 * **Fix:** cap (e.g. 1–100, spinner or clamp with message) — decision Q6.
 * **Accept:** values above the cap are refused with a friendly message.
 * **Docs:** PRD FR-SET-02.
 
-#### BUG-16 — Category grid Up/Down navigation wraps oddly · `P3 · S`
+#### BUG-16 — Category grid Up/Down navigation wraps oddly · `P3 · S` · **Done 2026-11-15** (`GridNavigation`: same column, stop at edges; `GridNavigationTest`)
 * **Evidence:** `CategoryPanel` 208–211 uses `(idx ± 3) mod 10` on a 3-column grid with 10 items (e.g. ↓ from card 8 goes to card 1).
 * **Fix:** compute row/column; stop at the last row or wrap by column.
 * **Accept:** ↑/↓ keep the same column and clamp/wrap predictably.
 
-#### BUG-17 — Daily Challenge determinism breaks if the adaptive prompt changes difficulty · `P3 · S`
+#### BUG-17 — Daily Challenge determinism breaks if the adaptive prompt changes difficulty · `P3 · S` · **Done 2026-11-15** (no level-change prompts in the Daily Challenge; `AdaptiveDifficultyEngineTest`)
 * **Evidence:** `GamePanel.loadNextQuestion` seeds with the session's *current* difficulty (322–329); `proposeUpgrade/Downgrade` can change it mid-run.
 * **Impact:** two children can receive different questions on the same day after accepting a prompt.
 * **Fix:** suppress adaptive prompts in Daily Challenge sessions (or freeze the seed difficulty).
@@ -189,12 +191,14 @@
 ### 4.3 Technical debt
 
 #### DEBT-01 — Introduce automated tests · `P1 · L`
+* **Progress 2026-11-08 (branch `feat/phase0a-foundation`):** harness in place (`.\test.ps1`, JUnit 5 console launcher 1.11.4 in `lib-test/`); targets (1) generator invariants (10,000 samples per category × difficulty) plus a golden master of seeded output (`test/resources/golden/question-generator-v1.tsv`), (2) QuizSession grades and remarks and (8) `SessionRepository` save/load/migrations against temp DBs covered; also `QuestionSource` and a `GamePanel` wiring test. Still open: targets (3) adaptive engine, (4) rewards, (5) analytics/streaks, (6) hints, (7) crypto, (9) JSON/custom quizzes.
 * **Why:** zero tests; generators and reward/grade maths directly affect children and stored data.
 * **Plan:** add `test/` with JUnit 5 (vendored console-standalone JAR in `lib-test/` to stay offline; needs approval per R-ARC-09). First targets: (1) **`QuestionGenerator` invariants** — for each of 10 categories × 3 difficulties × ≥ 10,000 samples assert integer answer, exact division, Difference ≥ 1, algebra x ≥ 2, format prefixes, and seeded reproducibility; (2) `QuizSession` grade/remark/emoji boundaries (95, 85, 78, 65, 53, 40, 33.33); (3) `AdaptiveDifficultyEngine` windows/cool-down; (4) `RewardService.calculateAndAwardQuizReward` table-driven (PRD BR-02 examples); (5) `AnalyticsService` streak/trend/weakest logic with an in-memory or temp-dir repository; (6) `HintService` per template (BUG-07); (7) `CryptoHelper` round-trip and fallback; (8) `SessionRepository` save/load/clear/cascade against a temp DB; (9) `JsonHelper`/`CustomQuizService` round-trip incl. escapes.
 * **Enabler:** make the app directory overridable (`-Datelier.home=…`/constructor parameter) — part of DEBT-04.
 * **Accept:** tests run with one command and fail on injected defects (e.g. change `pct >= 95` to `> 95`).
 
 #### DEBT-02 — Build hygiene: encoding, line endings, version · `P1 · S`
+* **Progress 2026-11-08:** `-encoding UTF-8` added to `run.bat`, `package.ps1` and `test.ps1`. Still open: `.gitattributes`, single version source.
 * Add `-encoding UTF-8` to `run.bat` and `package.ps1` (and any future build); add `.gitattributes`; document the non-Windows classpath separator. **Risk addressed:** JDK 17 on a Windows ANSI code page can corrupt emoji literals. **Accept:** clean build on JDK 17 *and* 21, UI shows emoji correctly.
 
 #### DEBT-03 — Reduce repeated full-history loads · `P2 · M`
@@ -225,6 +229,7 @@
 * Use a single-thread executor and reuse/size-limit audio lines; mark threads daemon; remove or wire the four unused sounds (BUG-06). **Accept:** rapid hovering never creates more than N concurrent lines.
 
 #### DEBT-11 — Database schema versioning · `P2 · S`
+* **Done 2026-11-08 (`d3fc468`, branch `feat/phase0a-foundation`):** `SchemaMigrations` with `PRAGMA user_version` (v2), indexes, one-transaction upgrade, legacy mode on failure; tests use a v1 fixture and a real upgrade from the `baseline-2026-11-08` build was verified (see §10).
 * Add `PRAGMA user_version`, a `Migrations` list, indexes, and an upgrade test using a v1 fixture DB. **Accept:** opening a v1 DB upgrades silently and keeps data.
 
 #### DEBT-12 — Remove deprecated `Date` constructor usage · `P3 · S`
@@ -252,7 +257,7 @@
 | ID | Pri | Proposal | Notes |
 |---|---|---|---|
 | FEAT-01 | P2 | Profile management: rename, delete, per-profile stars/daily date/settings | Depends on BUG-05 decision |
-| FEAT-02 | P3 | Track hint usage per question (store, show in Review/Analytics) | Schema change → DEBT-11 first |
+| FEAT-02 | P3 | Track hint usage per question (store, show in Review/Analytics) | **Storage done 2026-11-08** (`bc4f606`: `hints_used` per question, schema v2). Showing it in Review/Analytics is still open |
 | FEAT-03 | P3 | De-duplicate questions within a session; mastery-based difficulty progression | Needs generator tests |
 | FEAT-04 | P2 | Backup/restore (export/import) of history & settings; makes machine moves possible | Mitigates PRD risk R1; interacts with DEBT-08 |
 | FEAT-05 | P2 | Accessibility pass: AA-compliant text colours, visible focus, keyboard-operable tour, accessible names, high-contrast theme | See design §3.5, §14 |
@@ -312,7 +317,7 @@ Run on a **throw-away Windows user profile** or with `-Duser.home=<temp>` so rea
 | TC-16 **RB** | Play flow | Answer right then wrong | Feedback strings exactly as design §2.2; sounds; button text toggles; timer stops on submit, resets on next |
 | TC-17 | Input errors | Submit empty, `abc`, `-5` | Empty/abc → red messages, question not consumed; `-5` accepted as an answer |
 | TC-18 | Hints | Hint via button, F1, Ctrl+H on Addition(2-digit), Division, bracket, Pattern, Algebra, Measurement | Appropriate hint box; hides on next question. **Now:** area/perimeter/volume/ratio/numerator show the percentage hint (BUG-07) |
-| TC-19 | Esc | Esc → No; Esc → Yes | No → stays; Yes → Categories; session not in history. **Now:** tick sound/timer continue (BUG-03) |
+| TC-19 | Esc | Esc → No; Esc → Yes | No → stays; Yes → Categories; session not in history; no tick sound afterwards (BUG-03 fixed) |
 | TC-20 | Adaptive up | Easy, 10 questions, answer 5 correct in a row | "Level Up?" dialog after 5th (needs ≥ 4 answered); Yes → later questions Medium; results show Medium; Hard session never prompts to upgrade |
 | TC-21 | Adaptive down | Medium: Q1 correct, Q2–Q4 wrong | "Adjust Level?" after Q4; Easy never prompts to downgrade |
 | TC-22 | Cool-down | After a prompt, continue streak | Next prompt not before 5 answers later |
@@ -383,3 +388,6 @@ Run on a **throw-away Windows user profile** or with `-Duser.home=<temp>` so rea
 | Application was **not** executed during the audit | Run-time behaviour is inferred from code; TC-xx cases confirm it |
 | README + Help fixes (2026-11-08) | 85 README edits and the Help rewrite applied by all-or-nothing scripts (every anchor matched exactly once; CRLF preserved); `javac -encoding UTF-8` exit 0; `HelpPanel` rendered **off-screen** (headless): 674 px wide, widest label 572 px → fits the 720 px minimum window. **Not yet seen in a live window** — run TC-53 |
 | Git integration (2026-11-08) | Three commits made on branch `docs/readme-help-corrections`, fast-forwarded into `main`; `main` was 3 ahead / 1 behind `origin/main` (`5cf9403`), rebased with no conflicts; recompiled (exit 0); remote's contact edit confirmed present; pushed `5cf9403..001e501`; afterwards 0 ahead / 0 behind |
+| Phase 0A (2026-11-08, branch `feat/phase0a-foundation`) | `.\test.ps1`: **92 tests, 0 failed**. Zero-warning compile (R-TST-01) after every task. Each new test was seen failing first (or, for characterisation tests, failing on an injected defect that was then reverted). Golden master unchanged across the whole generator split. |
+| Real upgrade check (2026-11-08) | The `baseline-2026-11-08` code (built from the tag) saved 2 sessions into a throw-away home; the new code then opened it: `user_version` 0 → 2, both sessions visible with `skillId=null, difficulty=null, hintsUsed=0`, analytics and achievements computed normally, and a new save stored `skillId=alg.two_step_sub_from, difficulty=Medium, hintsUsed=1`. |
+| Not yet done for Phase 0A | Live-window click-through (Task 10 Step 7, Task 11 Steps 3–4: first launch, new profile empty states, task.md §7 regression cases). No desktop control in the build session — owner to run before merging. |

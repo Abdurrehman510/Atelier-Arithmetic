@@ -45,7 +45,7 @@
 | R-PRD-04 | No time pressure: the timer is informational; MUST NOT add countdowns, time limits, speed penalties or leaderboards. | Principle P4. | ✔ |
 | R-PRD-05 | Rewards MUST be earned in-app only and purely cosmetic: no real-money purchases, random paid rewards ("loot boxes"), expiring offers, or loss of owned items for inactivity. | Principle P5. | ✔ |
 | R-PRD-06 | MUST NOT add ads, third-party SDKs, social/chat features or external links that open from child-facing screens. | Child safety. | ✔ |
-| R-PRD-07 | Any new adult-only or destructive feature MUST be behind the parental gate and, if destructive, a confirmation dialog that states **everything** that will be deleted. | Principle P3. | ⚠ BUG-13 |
+| R-PRD-07 | Any new adult-only or destructive feature MUST be behind the parental gate and, if destructive, a confirmation dialog that states **everything** that will be deleted. | Principle P3. | ✔ (BUG-13 fixed) |
 | R-PRD-08 | Copy SHOULD be readable by 8–14-year-olds: short sentences, concrete verbs, supportive emoji. | Audience. | ✔ |
 | R-PRD-09 | Gameplay features MUST work without any adult gate and without the guided tour. | Usability. | ✔ |
 
@@ -60,7 +60,7 @@
 | R-ARC-03 | Business rules (scoring, grading, rewards, streaks, achievements, recommendations, question generation, hint text) MUST live in `model`/`service`, never in a panel. | Single responsibility; unit-testable. | ⚠ streak maths duplicated in `WelcomePanel`; next-step rules in `ResultsPanel` (DEBT-06) |
 | R-ARC-04 | Collaborators MUST be passed in through constructors. New code MUST NOT call `new SessionRepository()`, `AppConfig.getInstance()` or `new AnalyticsService(...)` inside a view or service when `QuizFrame` already owns one. | Avoids hidden state, redundant DB init, and enables tests. | ⚠ DEBT-04 |
 | R-ARC-05 | Each screen is one `JPanel`, created once, registered as a `CARD_*` constant in `QuizFrame`, and exposes `applyTheme()` that `updateAllThemes()` calls. | Consistent theming/navigation. | ✔ |
-| R-ARC-06 | A class SHOULD stay under ~500 lines; split when it exceeds. | Maintainability. | ⚠ `WelcomePanel` 1,142, `AnalyticsPanel` 844, `ResultsPanel` 636, `GamePanel` 563, `QuestionGenerator` 576 |
+| R-ARC-06 | A class SHOULD stay under ~500 lines; split when it exceeds. | Maintainability. | ⚠ `WelcomePanel` 1,142, `AnalyticsPanel` 844, `ResultsPanel` 636, `GamePanel` 563 (`QuestionGenerator` split 2026-11-08) |
 | R-ARC-07 | A constant (category list, difficulty names, badge count, app version) MUST have one definition. | Prevents drift. | ⚠ categories in 3 places; "10" badges hard-coded; version in 2 places (DEBT-05, REL-01) |
 | R-ARC-08 | Persisted data goes through `AppConfig` (settings) or `SessionRepository` (history). Files outside `AppConfig.getAppDir()` are written only on an explicit user action (save dialog). | Predictable data footprint. | ✔ |
 | R-ARC-09 | Do not introduce a dependency (JAR, JDK module) without maintainer approval, licence check, pinned version, and updates to `package.ps1` (`build/input`, `--add-modules`). | Offline, small, reproducible. | ✔ |
@@ -72,7 +72,7 @@
 | ID | Rule | Why | Now |
 |---|---|---|:---:|
 | R-COD-01 | Packages: `com.mathquiz.{config,model,service,util,view,view.tour}`. One public top-level class per file named like the class. | Existing layout. | ✔ |
-| R-COD-02 | Source files are UTF-8 and MUST be compiled with `-encoding UTF-8`. For BMP symbols that must render on every font (e.g. ★) prefer `★` escapes. | Emoji literals exist in sources. | ⚠ DEBT-02 |
+| R-COD-02 | Source files are UTF-8 and MUST be compiled with `-encoding UTF-8`. For BMP symbols that must render on every font (e.g. ★) prefer `★` escapes. | Emoji literals exist in sources. | ✔ (`run.bat`, `package.ps1`, `test.ps1`) |
 | R-COD-03 | Use only APIs available in **JDK 17** (supported baseline). Raising the baseline needs a documented decision. | Packaging uses 17/21. | ✔ |
 | R-COD-04 | Style: 4-space indent, K&R braces, `camelCase` members, `PascalCase` types, `UPPER_SNAKE_CASE` constants, no wildcard imports in new files, no unused imports. | Matches existing code. | ✔ mostly |
 | R-COD-05 | Model classes (`Question`, `QuestionResult`) are immutable; only `QuizSession` has documented mutable state (`difficulty`, results list). | Safe sharing. | ✔ |
@@ -96,7 +96,7 @@
 | R-UI-03 | Every change MUST be checked in **both light and dark mode**. | Dark mode is persisted and common. | — |
 | R-UI-04 | Every new panel implements `applyTheme()` and is added to `QuizFrame.updateAllThemes()`. | Consistent theme switching. | ✔ |
 | R-UI-05 | Fonts: `Serif` for display titles, `SansSerif` for UI text, `Segoe UI Emoji` (inside HTML `<font face>`) for emoji; set a base size and let `AppTheme.scaleComponentFont` scale it. | Cross-screen consistency; accessibility. | ✔ |
-| R-UI-06 | After building components dynamically (in `refresh()`/`populate…`), the new subtree MUST receive scaling and button-sound instrumentation. | Else content looks unscaled/silent. | ⚠ BUG-14 (verify) |
+| R-UI-06 | After building components dynamically (in `refresh()`/`populate…`), the new subtree MUST receive scaling and button-sound instrumentation. | Else content looks unscaled/silent. | ✔ `QuizFrame.rescale` (BUG-14) |
 | R-UI-07 | Layouts MUST work at the minimum window size 720×550 at the default 125 % scale, and scroll (not clip) at 150 %. | Accessibility. | — verify |
 | R-UI-08 | Every interactive control MUST be reachable and operable by keyboard; Enter triggers the primary action where natural; Esc backs out; no keyboard traps. | Accessibility. | ⚠ tour is mouse-only; analytics keyboard untested |
 | R-UI-09 | Use `★` (U+2605) for star counts in text; use emoji only in emoji-capable fonts. | Rendering (fixed in commit `5cf780a`). | ✔ |
@@ -122,9 +122,10 @@
 | R-DOM-06 | Rewards are awarded exactly once per **completed** session, **after** it is saved. Abandoned sessions are neither saved nor rewarded. | Streak maths and fairness. | ✔ |
 | R-DOM-07 | Stored category strings are exactly: `Addition, Difference, Multiplication, Division, Mixed, Special, Fractions, Patterns, Algebra, Measurement, Daily Challenge, Custom: <name>`. They are persisted — never rename without a data migration. | History/achievement lookup is string-based. | ✔ |
 | R-DOM-08 | Shop item IDs (`hat_top`, …) and profile names are persisted keys — never change or reuse them. | Saved purchases. | ✔ |
-| R-DOM-09 | The daily challenge MUST be playable at most once per calendar day (per decision Q4 in the PRD). | Reward integrity. | ⚠ BUG-04 |
+| R-DOM-09 | The daily challenge MUST be playable at most once per calendar day (per decision Q4 in the PRD). | Reward integrity. | ✔ `QuizFrame.startDailyChallenge` (BUG-04) |
 | R-DOM-10 | Mixed excludes Special and the advanced categories (PRD FR-QGN-03). | Spec. | ✔ |
-| R-DOM-11 | A new generator sub-type MUST be added together with an invariant test (≥ 10,000 samples, all difficulties). | Prevents broken questions reaching children. | ⚠ no tests (DEBT-01) |
+| R-DOM-11 | A new generator sub-type MUST be added together with an invariant test (≥ 10,000 samples, all difficulties). | Prevents broken questions reaching children. | ✔ `QuestionGeneratorInvariantTest` + golden master |
+| R-DOM-12 | `Skill` IDs (`add.2digit.2terms`, …) are persisted keys: never rename, reuse or remove one; only add new IDs. | Stored per answered question; renames orphan history. | ✔ `SkillTest` |
 
 ---
 
@@ -134,13 +135,13 @@
 |---|---|---|:---:|
 | R-DAT-01 | All data lives under `AppConfig.getAppDir()` (`~/.atelier-arithmetic`). | Single, documented footprint. | ✔ |
 | R-DAT-02 | Multi-row DB writes MUST be one transaction with rollback. | ACID. | ✔ |
-| R-DAT-03 | A schema change MUST ship with a migration strategy (introduce `PRAGMA user_version` first), be backward-compatible, and never drop user data. | Existing installs hold real data. | ⚠ DEBT-11 |
+| R-DAT-03 | A schema change MUST ship with a migration strategy (introduce `PRAGMA user_version` first), be backward-compatible, and never drop user data. | Existing installs hold real data. | ✔ `SchemaMigrations` (v2) |
 | R-DAT-04 | A new config key MUST have a safe default and tolerate missing/invalid values (never throw). Decide per-profile vs global and record it in architecture §7.1. | Stability. | ✔ |
 | R-DAT-05 | Per-profile settings use the key suffix `.<profile>`. | Existing convention. | ✔ |
 | R-DAT-06 | Config and quiz files SHOULD be written atomically (temp file + move) and backed up before overwrite. | Crash safety. | ⚠ DEBT-07 |
-| R-DAT-07 | Reset/delete flows MUST disclose what is deleted and MUST affect only the active profile's data (plus any shared value explicitly named). | Trust. | ⚠ BUG-13, BUG-05 |
+| R-DAT-07 | Reset/delete flows MUST disclose what is deleted and MUST affect only the active profile's data (plus any shared value explicitly named). | Trust. | ✔ (BUG-13, BUG-05 fixed) |
 | R-DAT-08 | Logs MUST NOT contain answers, profile names or other personal data. | Privacy. | ✔ |
-| R-DAT-09 | Custom-quiz writer and reader MUST remain symmetrical; characters needing escaping (`"`, `\`) MUST round-trip. | Data integrity. | ⚠ BUG-10 |
+| R-DAT-09 | Custom-quiz writer and reader MUST remain symmetrical; characters needing escaping (`"`, `\`) MUST round-trip. | Data integrity. | ✔ `JsonHelperTest`, `CustomQuizServiceTest` |
 
 ---
 
@@ -151,7 +152,7 @@
 | R-SEC-01 | New sensitive string columns MUST be encrypted through `CryptoHelper`; profile names and expressions are never stored in clear. | Privacy. | ✔ |
 | R-SEC-02 | Do not describe current encryption as strong security. It is machine-bound obfuscation (ECB, derived key). | Honesty ([architecture §8.2](architecture.md#82-honest-limits)). | ✔ |
 | R-SEC-03 | Secrets (PINs, PFX files/passwords, keys) MUST NOT be committed. `*.pfx`, `*.p12`, `*.snk`, `*.key` SHOULD be added to `.gitignore`. Prefer environment variables or secure prompts over command-line secrets. | Supply-chain safety. | ⚠ REL-05 |
-| R-SEC-04 | Any HTML written by the app MUST escape dynamic values. | Injection safety. | ⚠ BUG-11 |
+| R-SEC-04 | Any HTML written by the app MUST escape dynamic values. | Injection safety. | ✔ `ReportBuilder` |
 | R-SEC-05 | Custom file names MUST be sanitised to `[A-Za-z0-9_-]`. | Path traversal. | ✔ |
 | R-SEC-06 | When changing the crypto scheme, ship a migration that can still read old data (decrypt fallback) and test with real old files. | No data loss. | — |
 
@@ -184,7 +185,7 @@
 
 | ID | Rule | Why | Now |
 |---|---|---|:---:|
-| R-BLD-01 | Compile with `-encoding UTF-8` in `run.bat`, `package.ps1` and any CI. | Emoji in sources. | ⚠ DEBT-02 |
+| R-BLD-01 | Compile with `-encoding UTF-8` in `run.bat`, `package.ps1` and any CI. | Emoji in sources. | ✔ |
 | R-BLD-02 | Release builds use JDK 21 (or 17), `JAVA_HOME` set; record the JDK version in release notes. | Reproducibility. | — |
 | R-BLD-03 | The product version has **one** source and is applied to `package.ps1`, `HelpPanel`, installer names and docs. | Consistency. | ⚠ REL-01 |
 | R-BLD-04 | Generated outputs (`bin/`, `build/`, `dist/`, `logo.ico`) are never committed; `lib/*.jar` is the only committed binary. | Repo hygiene. | ✔ |
@@ -216,8 +217,8 @@
 | ID | Rule | Why | Now |
 |---|---|---|:---:|
 | R-TST-01 | Code MUST compile with **zero warnings**: `javac -encoding UTF-8 -cp "lib/*" -sourcepath src src/com/mathquiz/QuizApp.java -d <tmpdir>`. | Baseline verified clean. | ✔ |
-| R-TST-02 | Once the test harness exists (DEBT-01), changes to generators, grading, rewards, streaks, achievements or the adaptive engine MUST include/modify unit tests. | Regression safety. | ⚠ no tests |
-| R-TST-03 | A generator change MUST be validated with ≥ 10,000 samples per (category × difficulty) asserting: integer answer, exact division, positivity, expected format. | R-DOM-01/02. | ⚠ |
+| R-TST-02 | Once the test harness exists (DEBT-01), changes to generators, grading, rewards, streaks, achievements or the adaptive engine MUST include/modify unit tests. | Regression safety. | ⚠ harness exists (`.\test.ps1`); coverage partial (DEBT-01) |
+| R-TST-03 | A generator change MUST be validated with ≥ 10,000 samples per (category × difficulty) asserting: integer answer, exact division, positivity, expected format. | R-DOM-01/02. | ✔ |
 | R-TST-04 | UI changes MUST be exercised in light + dark, at 100 %, 125 % (default) and 150 % scale, with sound on and off. | Theme/scale/sound regressions. | — |
 | R-TST-05 | Test three data states: **first launch** (no `.atelier-arithmetic`), **existing data** (upgrade), **empty profile**. | Migrations, empty states. | — |
 | R-TST-06 | UI changes SHOULD attach before/after screenshots to the PR. | Review. | — |
@@ -267,13 +268,8 @@ Existing violations are accepted as **debt** until their task is done; they do n
 | Rule | Where | Task |
 |---|---|---|
 | R-ARC-01/04 | `AppTheme`→`SoundService`, `TourManager`→view, `ParentalGate`→Swing, `SessionRepository`→`AppConfig` singleton, panels creating services | DEBT-04 |
-| R-ARC-06 | Five classes > 500 LOC | DEBT-05 |
+| R-ARC-06 | Four classes > 500 LOC | DEBT-05 |
 | R-ARC-07 | Duplicate category/token/version definitions | DEBT-05, REL-01 |
-| R-COD-02 / R-BLD-01 | No `-encoding` flag | DEBT-02 |
 | R-COD-06 | Silent persistence failures | DEBT-07 |
-| R-UI-06 | Unscaled dynamic content | BUG-14 |
 | R-UI-13 | Listener accumulation in `ResultsPanel` | BUG-02 |
-| R-DOM-09 | Daily Challenge re-entry | BUG-04 |
-| R-DAT-07 | Reset wipes stars/shop without saying so | BUG-13 |
-| R-SEC-04 | Unescaped HTML report | BUG-11 |
-| R-TST-02/03 | No tests | DEBT-01 |
+| R-TST-02 | Tests cover grading and generators; rewards, streaks, achievements and the adaptive engine still open | DEBT-01 |

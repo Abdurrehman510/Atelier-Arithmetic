@@ -120,7 +120,7 @@ Sizes are relative: **S** (days), **M** (1–2 weeks), **L** (several weeks), **
 
 | Phase | Theme | Features | Why this order |
 |---|---|---|---|
-| **0** | Foundation | G0, A1 (initial set), A8, schema changes (Part E), X1, X3 | Everything else depends on these. No visible feature on its own. Plans: `docs/superpowers/plans/2026-11-08-phase0a-test-harness-and-question-foundation.md` and `…-phase0b-macos-build-pipeline.md` |
+| **0** | Foundation | G0, A1 (initial set), A8, schema changes (Part E), X1, X3 | Everything else depends on these. No visible feature on its own. Plans: `docs/superpowers/plans/2026-11-08-phase0a-test-harness-and-question-foundation.md` and `…-phase0b-macos-build-pipeline.md`. **0A built 2026-11-08 on branch `feat/phase0a-foundation`** (awaiting the owner's live check and merge); 0B deferred |
 | **1** | The paid hook | P1, P2, P3, P10, P11, P12, P14 (basics), P16, C1, A7, C6, C7, T1–T3 (interim, expert-reviewed) | The two hypotheses to prove first: parents pay for *explained errors* and *printable targeted worksheets* |
 | **2** | Adaptive v2 | A2–A6, P4–P9, P13, T4 (pilot study) | Needs the Phase 0 data and enough sessions to be meaningful |
 | **3** | New mechanics | G1, G2, G3, G4–G8, C2–C5 | Highest development cost; build after the hook is validated |
@@ -154,7 +154,7 @@ Each feature has an ID, what it is, why it sells (parent view), how it helps (ch
 
 ### D.1 Interactive gameplay and mechanics
 
-**G0 — Task framework (foundation, M–L).** Replace `Question` with a `Task` interface: `createView()`, `evaluate()`, skill tag, solution trace, misconception detectors. Animate with a 16 ms `javax.swing.Timer` and Java2D. Every drag interaction gets a keyboard alternative, a drag threshold and a reduced-motion setting. Correct/wrong is shown with icon + text, never colour alone.
+**G0 — Task framework (foundation, M–L).** *Phase 0A (2026-11-08) extended `Question` with skill, solution steps and `check()`; the `Task` interface itself is deferred to the first non-numeric mechanic (Phase 3), when its shape is known.* Replace `Question` with a `Task` interface: `createView()`, `evaluate()`, skill tag, solution trace, misconception detectors. Animate with a 16 ms `javax.swing.Timer` and Java2D. Every drag interaction gets a keyboard alternative, a drag threshold and a reduced-motion setting. Correct/wrong is shown with icon + text, never colour alone.
 
 **G1 — Function Machines / Rule Detective (L).** Numbers enter a hidden machine. The child has a limited number of probe inputs, infers the rule, builds it from draggable blocks (×2, −3) and predicts the output for a large n. Later levels run machines backwards (equation solving).
 - *Sells:* a detective game that teaches algebra.

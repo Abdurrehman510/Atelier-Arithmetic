@@ -90,7 +90,7 @@ public class WelcomePanel extends JPanel {
     public int getQuestionCount() {
         try {
             int v = Integer.parseInt(qCountField.getText().trim());
-            return (v > 0) ? v : 10;
+            return (v > 0) ? Math.min(v, com.mathquiz.service.QuestionCounts.MAX) : 10;   // never above the cap (BUG-15)
         } catch (NumberFormatException e) {
             return 10;
         }
@@ -576,20 +576,9 @@ public class WelcomePanel extends JPanel {
     }
 
     private void handleStart() {
-        String raw = qCountField.getText().trim();
-        int qty;
-        try {
-            qty = Integer.parseInt(raw);
-        } catch (NumberFormatException ex) {
-            JOptionPane.showMessageDialog(this,
-                    "Please enter a number for how many questions you want!",
-                    "Oops!", JOptionPane.WARNING_MESSAGE);
-            return;
-        }
-        if (qty <= 0) {
-            JOptionPane.showMessageDialog(this,
-                    "Please enter at least 1 question!",
-                    "Oops!", JOptionPane.WARNING_MESSAGE);
+        String problem = com.mathquiz.service.QuestionCounts.validate(qCountField.getText());   // 1–100 (BUG-15)
+        if (problem != null) {
+            JOptionPane.showMessageDialog(this, problem, "Oops!", JOptionPane.WARNING_MESSAGE);
             return;
         }
         nav.goToCategories();
@@ -766,11 +755,7 @@ public class WelcomePanel extends JPanel {
         generateBtn.setFocusPainted(false);
         generateBtn.setCursor(new Cursor(Cursor.HAND_CURSOR));
         generateBtn.addActionListener(e -> {
-            String[] adjectives = {"Happy", "Clever", "Swift", "Bright", "Merry", "Kind", "Calm", "Brave", "Shiny", "Friendly", "Loyal", "Sparkly"};
-            String[] animals = {"Owl", "Panda", "Cheetah", "Squirrel", "Dolphin", "Penguin", "Tiger", "Koala", "Otter", "Badger", "Fox", "Falcon"};
-            Random rand = new Random();
-            String randomName = adjectives[rand.nextInt(adjectives.length)] + " " + animals[rand.nextInt(animals.length)];
-            nameField.setText(randomName);
+            nameField.setText(com.mathquiz.service.ProfileNames.spark(new Random()));   // always valid (BUG-08)
         });
         inputRow.add(generateBtn, BorderLayout.EAST);
         mainPanel.add(inputRow);
@@ -798,16 +783,9 @@ public class WelcomePanel extends JPanel {
         createBtn.setCursor(new Cursor(Cursor.HAND_CURSOR));
         createBtn.addActionListener(e -> {
             String name = nameField.getText().trim();
-            if (name.isEmpty()) {
-                JOptionPane.showMessageDialog(dialog, "Profile name cannot be empty!", "Error", JOptionPane.ERROR_MESSAGE);
-                return;
-            }
-            if (!name.matches("[a-zA-Z0-9_ ]+")) {
-                JOptionPane.showMessageDialog(dialog, "Profile name contains invalid characters!", "Error", JOptionPane.ERROR_MESSAGE);
-                return;
-            }
-            if (name.length() > 15) {
-                JOptionPane.showMessageDialog(dialog, "Profile name must be 15 characters or less!", "Error", JOptionPane.ERROR_MESSAGE);
+            String problem = com.mathquiz.service.ProfileNames.validate(name);
+            if (problem != null) {
+                JOptionPane.showMessageDialog(dialog, problem, "Error", JOptionPane.ERROR_MESSAGE);
                 return;
             }
             config.addProfile(name);

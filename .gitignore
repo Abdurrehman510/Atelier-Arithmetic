@@ -9,6 +9,7 @@ bin/
 
 # Allow library dependency jars to be committed
 !lib/*.jar
+!lib-test/*.jar
 
 # ── IDE project files ─────────────────────────────────────────────────────────
 # IntelliJ IDEA

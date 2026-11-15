@@ -153,15 +153,15 @@ See [non-goals](#22-non-goals-v100). Additionally *not present today* (gaps, not
 | FR-PRF-02 | The top bar shall show `👤 <profile>`; clicking opens a menu listing profiles (active one marked ✓) and "➕ Create Profile…". Selecting a profile switches immediately and re-themes the UI. | I |
 | FR-PRF-03 | The create dialog shall show the privacy notice *"To protect child safety, please do not use your real first or last name!…"*. | I |
 | FR-PRF-04 | A profile name shall be accepted only if, after trimming, it is non-empty, matches `[a-zA-Z0-9_ ]+` (letters, digits, underscore, **space**) and is ≤ **15** characters; otherwise an error dialog is shown. An existing name is not duplicated (it is simply switched to). | I |
-| FR-PRF-05 | A "🎭 Spark Mascot Name" button shall fill the field with `<Adjective> <Animal>` chosen from 12 adjectives × 12 animals. | **P** (5 of 144 combinations exceed 15 chars and are rejected — BUG-08) |
-| FR-PRF-06 | **Per-profile data:** quiz sessions (DB), unlocked shop items, equipped item. **Global (shared by all profiles):** star balance, daily-challenge completion date, sound/theme/scale settings, tour-seen flag, custom quizzes. | **P** (star balance global — BUG-05) |
+| FR-PRF-05 | A "🎭 Spark Mascot Name" button shall fill the field with `<Adjective> <Animal>` chosen from 12 adjectives × 12 animals, limited to the 139 pairs of at most 15 characters, so every suggestion is accepted (`ProfileNames`). | I (BUG-08 fixed 2026-11-15) |
+| FR-PRF-06 | **Per-profile data:** quiz sessions (DB), star balance, daily-challenge completion date, unlocked shop items, equipped item. **Global (shared by all profiles):** sound/theme/scale settings, tour-seen flag, custom quizzes. On the first start after upgrading from 1.0.0, the old shared star balance and daily date move to the profile that is active then. | I (BUG-05 fixed 2026-11-15, decision Q2) |
 | FR-PRF-07 | Profile rename/delete. | **N** (FEAT-01) |
 
 ### 6.3 Session setup — Home screen (`FR-SET`)
 | ID | Requirement | St |
 |---|---|:---:|
 | FR-SET-01 | Home shall provide a question-count text field (default `10`) and a difficulty combo (`Easy`, `Medium`, `Hard`; default Easy). | I |
-| FR-SET-02 | "CHOOSE CATEGORY →" shall require the count to parse as an integer **> 0**; otherwise warning dialog ("Please enter a number…" / "Please enter at least 1 question!") and no navigation. There is **no upper bound**. | **P** (BUG-15) |
+| FR-SET-02 | "CHOOSE CATEGORY →" shall require the count to be a whole number from **1 to 100** (decision Q6); otherwise a warning dialog ("Please enter a number…" / "Please enter at least 1 question!" / "That's a lot! Please choose 100 questions or fewer.") and no navigation (`QuestionCounts`). | I (BUG-15 fixed 2026-11-15) |
 | FR-SET-03 | Home shall be a two-column dashboard: left = Archie header (equipped-accessory aware greeting), config card (count, difficulty, Quiz Builder, Load Quiz, Choose Category); right = four cards: **Daily Quest** (Daily Challenge button, streak, 7-day strip), **Performance & Badges** (sessions, badges `n / 10`, Analytics, Badges buttons), **Archie's Shop** (star balance, equipped item, shop button), **Smart Practice & Guide** (Practice, Tour, Guide buttons). | I |
 | FR-SET-04 | Returning to Home shall refresh star balance, equipped item, greeting, session/badge counts, streak label and calendar strip. | I |
 
@@ -170,13 +170,13 @@ See [non-goals](#22-non-goals-v100). Additionally *not present today* (gaps, not
 |---|---|:---:|
 | FR-CAT-01 | The screen shall show 10 cards in this order: Addition, Difference, Multiplication, Division, Mixed, Special, Fractions, Patterns, Algebra, Measurement — each with icon, name, one-line description and a START button; layout = 3 columns, vertically scrollable. | I |
 | FR-CAT-02 | Clicking START, or pressing **Enter/Space** on a focused card, shall start a quiz with the Home count and difficulty. | I |
-| FR-CAT-03 | Arrow keys shall move focus (Left/Right ±1 with wrap; Up/Down ±3 modulo 10); **Esc** returns Home; hover and focus show a gold 2-px border. | I |
+| FR-CAT-03 | Arrow keys shall move focus: Left/Right ±1 in reading order with wrap; Up/Down to the card above/below **in the same column**, staying put at the top or bottom (`GridNavigation`); **Esc** returns Home; hover and focus show a gold 2-px border. | I (BUG-16 fixed 2026-11-15) |
 | FR-CAT-04 | Footer buttons: "❓ Guide" and "← Back". | I |
 
 ### 6.5 Question engine (`FR-QGN`)
 | ID | Requirement | St |
 |---|---|:---:|
-| FR-QGN-01 | A `Question` shall consist of an expression `String` and an `int` correct answer. | I |
+| FR-QGN-01 | A `Question` shall consist of an expression `String`, an `int` correct answer, the `Skill` it practises and an exact step-by-step solution (empty for custom questions, whose skill is `custom`). Checking typed input (trim, then whole-number parse) belongs to `Question.check`. | I |
 | FR-QGN-02 | Every generated answer shall be an integer; every division/ratio/percentage/fraction question shall be constructed so the result is exact; Difference results shall be ≥ 1. Full per-category spec: [§9](#9-question-generation-specification). | I |
 | FR-QGN-03 | **Mixed** shall pick uniformly among Addition, Difference, Multiplication, Division for *each question* (Special and the four advanced categories are excluded). | I |
 | FR-QGN-04 | An unknown category name shall fall back to Addition. | I |
@@ -193,22 +193,22 @@ See [non-goals](#22-non-goals-v100). Additionally *not present today* (gaps, not
 | FR-GAM-05 | Feedback: correct → "✅ Correct! Great job!" (green) + success arpeggio; wrong → "❌ Wrong. The correct answer was: *X*" (red) + descending buzz. | I |
 | FR-GAM-06 | After feedback the button reads "NEXT QUESTION →"; pressing it loads the next question or, after the last, finishes the session. | I |
 | FR-GAM-07 | A tick sound shall play each second (very quiet). | I |
-| FR-GAM-08 | **Esc** shall ask "Do you want to exit the current quiz and return to categories?"; **Yes** navigates to Categories and the session is discarded (not saved). | **P** (timer keeps running — BUG-03) |
-| FR-GAM-09 | "❓ Guide" shall open Help; Back from Help during a game returns to **Home**, abandoning the session. | **P** (BUG-03) |
+| FR-GAM-08 | **Esc** shall ask "Do you want to exit the current quiz and return to categories?"; **Yes** navigates to Categories and the session is discarded (not saved), and the question timer and its tick sound stop. | I (BUG-03 fixed 2026-11-12) |
+| FR-GAM-09 | "❓ Guide" shall open Help; Back from Help during a game returns to **Home**, abandoning the session; the question timer stops as soon as the game screen is left. | I (BUG-03 fixed 2026-11-12) |
 
 ### 6.7 Hints (`FR-HNT`)
 | ID | Requirement | St |
 |---|---|:---:|
-| FR-HNT-01 | A "💡 Hint" button (also **F1** and **Ctrl+H**) shall show an HTML hint in a gold-bordered box under the answer; the box hides when the next question loads. Hints are free and not tracked. | I |
-| FR-HNT-02 | Hint content (first match wins, see `HintService.generateHint`): (a) starts with `(` and contains `)` and an operator → BODMAS hint (left bracket, right bracket, combine with middle operator when the form `) op (` is found, else generic BODMAS text); (b) contains substring `of` → fraction/percentage hint (1/2, 3/4, else "divide by 100 then multiply"); (c) starts `Pattern:` → generic "look at the change between steps"; (d) starts `Solve for x:` → generic "isolate x"; (e) starts `Convert` with meters→cm, hours→minutes, litres→mL → unit-factor hint; (f) operator `+`, `-`, `*`/`×`, `/` → partition/step/reverse-multiplication hint (worked example only for 2-digit operands, or exact division); (g) fallback "Break the numbers into parts…". | **P** (rule (b) misroutes measurement/ratio/numerator word problems — BUG-07) |
+| FR-HNT-01 | A "💡 Hint" button (also **F1** and **Ctrl+H**) shall show an HTML hint in a gold-bordered box under the answer; the box hides when the next question loads. Hints are free. Each hint opened **before** the answer is submitted is counted and saved with that question (`hints_used`, schema v2); the count is not shown in the UI yet (FEAT-02). | I |
+| FR-HNT-02 | Hint content is chosen by the question's **skill** (`HintService.generateHint(Question)`): partition/step/reverse-multiplication worked hints for the four operations (worked example only for 2-digit operands or exact division); BODMAS bracket hint for Special and chained division; fraction-of, two-fractions, mixed-number, simplifying, percentage and ratio hints for Fractions; "find the hidden rule" for Patterns; "isolate x" for linear equations and "add or subtract the two equations" for simultaneous ones; a unit-fact or formula hint for every Measurement template (length/mass/capacity/time conversions, perimeter, area, volume). **Custom** (Quiz Builder) questions are routed by wording: brackets → BODMAS; `p% of` → percentage; `a/b of` → fraction; `Pattern:`, `Solve for x:`, `Convert …` and operator rules as before; fallback "Break the numbers into parts…". | I (BUG-07 fixed 2026-11-15; `HintServiceTest` covers every skill) |
 
 ### 6.8 Adaptive difficulty (`FR-ADP`)
 | ID | Requirement | St |
 |---|---|:---:|
-| FR-ADP-01 | After every submitted answer the engine shall evaluate the session. No recommendation is made until **≥ 4** answers exist. After a suggestion, a cool-down applies: the next suggestion can appear no earlier than **5 answers later** (the counter also advances if the child declines). | I |
+| FR-ADP-01 | After every submitted answer the engine shall evaluate the session — except in the **Daily Challenge**, which never offers a level change, so every child gets the same questions that day (`AdaptiveDifficultyEngine.appliesTo`, BUG-17 fixed 2026-11-15). No recommendation is made until **≥ 4** answers exist. After a suggestion, a cool-down applies: the next suggestion can appear no earlier than **5 answers later** (the counter also advances if the child declines). | I |
 | FR-ADP-02 | **UPGRADE** when the last **5** answers are all correct and current difficulty is not Hard. **DOWNGRADE** when the last **3** answers are all wrong and current difficulty is not Easy. Upgrade is checked first. | I |
 | FR-ADP-03 | A recommendation shall be presented as a **modal Yes/No dialog** ("Level Up?" / "Adjust Level?"). Yes changes the *active session's* difficulty (affecting subsequent questions only) and shows a feedback line; No keeps it. The cool-down starts either way. | I |
-| FR-ADP-04 | The difficulty stored with the session is the **final** value at completion. | I |
+| FR-ADP-04 | The difficulty stored with the session is the **final** value at completion. Each saved question also stores the difficulty it was generated at (schema v2), so a mid-session level change is visible per question. | I |
 
 ### 6.9 Results and grading (`FR-RES`)
 | ID | Requirement | St |
@@ -216,7 +216,7 @@ See [non-goals](#22-non-goals-v100). Additionally *not present today* (gaps, not
 | FR-RES-01 | Completing the last question shall: play the fanfare; if the category is "Daily Challenge" store today's date (`yyyyMMdd`) as `lastDailyChallengeDate`; **save** the session; **then** compute and award stars; populate and show Results. | I |
 | FR-RES-02 | Results shall show 4 cards. **Key Metrics:** score *x / N*, success rate (`%.1f%%`), grade with emoji, total time (`Xm Ys` or `Ys`), average speed (sum of per-question time ÷ N, `%.1fs / question`), and "★ +*n* Stars Earned!" with a tooltip breakdown. **Session Mastery:** fastest *correct* question and a "challenge area" (slowest *incorrect* question; if none incorrect, slowest correct). **Archie's Insights:** advice by accuracy (≥95 / ≥80 / ≥50 / else). **Suggested Path:** one action button ([BR-08](#88-results-next-step-rules-br-08)). | I |
 | FR-RES-03 | Footer: "❓ Guide", "📋 Review Answers", "📄 Export Report", "🔄 PLAY AGAIN" (→ Home). | I |
-| FR-RES-04 | The "Suggested Path" button shall act as specified in BR-08. | **P** (listener accumulation and no-op "step up" — BUG-02) |
+| FR-RES-04 | The "Suggested Path" button shall act as specified in BR-08 — exactly one action per click, for the latest result (`NextStepAdvisor`). | I (BUG-02 fixed 2026-11-15) |
 | FR-RES-05 | Grade/remark/emoji shall follow [BR-01](#81-grading-br-01). The remark text is shown only in the exported report (the dashboard shows grade + emoji). | I |
 
 ### 6.10 Review (`FR-REV`)
@@ -229,8 +229,8 @@ See [non-goals](#22-non-goals-v100). Additionally *not present today* (gaps, not
 | ID | Requirement | St |
 |---|---|:---:|
 | FR-EXP-01 | "📄 Export Report" shall open a save dialog (default `~/.atelier-arithmetic/math_report.html`) and write a self-contained HTML file: embedded Base64 logo, grade box, category, difficulty, totals, duration (whole seconds), and a per-question table (time in whole seconds). | I |
-| FR-EXP-02 | After saving, the system print dialog shall open automatically; the printed page is a plain-text summary of **at most the first 20 questions**. There is no way to export without the print prompt. | **P** (BUG-12) |
-| FR-EXP-03 | Dynamic text in the HTML shall be HTML-escaped. | **N** (BUG-11) |
+| FR-EXP-02 | After saving, a Yes/No dialog shall confirm the save and ask whether to print. Only **Yes** opens the system print dialog. The printout is a plain-text summary of **every** question; lines too wide for the page (word problems) wrap onto an indented next line, and the printout continues over as many pages as needed (`ReportPrintable`). | I (BUG-12 fixed 2026-11-15) |
+| FR-EXP-03 | Dynamic text in the HTML shall be HTML-escaped (`ReportBuilder.escape`); the file is written as UTF-8. | I (BUG-11 fixed 2026-11-15) |
 
 ### 6.12 Stars (`FR-RWD`)
 Rules in [BR-02](#82-star-rewards-br-02). 
@@ -238,7 +238,7 @@ Rules in [BR-02](#82-star-rewards-br-02).
 |---|---|:---:|
 | FR-RWD-01 | After each completed quiz (any category incl. Daily, Smart Practice, Custom) stars shall be computed per BR-02 and added to the balance; balance never negative. | I |
 | FR-RWD-02 | Balance shall be visible on Home (top bar and shop card) and in the Shop header. | I |
-| FR-RWD-03 | Balance shall be per profile. | **N** (global — BUG-05) |
+| FR-RWD-03 | Balance shall be per profile (`starBalance.<profile>`). | I (BUG-05 fixed 2026-11-15) |
 | FR-RWD-04 | Unlocking an achievement shall award +15 stars. | **N** (method `awardAchievementBonus` exists but is never called — BUG-06) |
 
 ### 6.13 Mascot Shop (`FR-SHP`)
@@ -259,8 +259,8 @@ Rules in [BR-02](#82-star-rewards-br-02).
 | ID | Requirement | St |
 |---|---|:---:|
 | FR-DLY-01 | The Daily Challenge shall be a **10-question, Medium, category "Daily Challenge"** session whose questions come from `generateSeeded(difficulty, "Mixed", seed = yyyyMMdd as long, index)`; hence all users on the same date get identical questions (unless the adaptive prompt changes difficulty mid-run). | I |
-| FR-DLY-02 | Completing it shall record today's date globally and award +8 bonus stars (BR-02). The Home button then shows "✅ Completed" (disabled) for the rest of that calendar day. | I |
-| FR-DLY-03 | The challenge shall be playable once per day. | **P** (Analytics and Results screens can start it again and re-award +8 — BUG-04) |
+| FR-DLY-02 | Completing it shall record today's date for the active profile and award +8 bonus stars (BR-02). The Home button then shows "✅ Completed" (disabled) for the rest of that calendar day. | I |
+| FR-DLY-03 | The challenge shall be playable once per calendar day **per profile** (decision Q4). `QuizFrame.startDailyChallenge()` checks centrally and shows a friendly "already finished today" message; Home and Analytics show it as done and disabled; Results offers Smart Practice instead. | I (BUG-04 fixed 2026-11-15) |
 | FR-DLY-04 | Streak rules: [BR-05](#85-streaks-br-05). Home shows `🔥 n Day Streak` and a 7-day strip (today and the previous 6 days; ● played / ○ not). | I |
 
 ### 6.16 Analytics dashboard (`FR-ANL`)
@@ -268,13 +268,13 @@ Rules in [BR-02](#82-star-rewards-br-02).
 |---|---|:---:|
 | FR-ANL-01 | Entry from Home shall require the parental gate. | I |
 | FR-ANL-02 | **Stat cards (4):** *Overall Accuracy* = arithmetic mean of session percentages (unweighted by question count), subtitle "Best score"; *Questions Solved* = Σ totalQuestions, subtitle total practice time (`Ns` or `N.N min`); *Average Speed* = mean per-question time, subtitle fastest correct answer (answers ≤ 100 ms ignored); *Practice Streak* = current streak in days, subtitle longest streak. | I |
-| FR-ANL-03 | **Accuracy Trend:** smooth Bézier line chart of the **last 20** sessions, oldest → newest; needs ≥ 2 sessions, otherwise an empty-state message. | **P** (shows the *oldest* 20 when > 20 sessions exist — BUG-01) |
+| FR-ANL-03 | **Accuracy Trend:** smooth Bézier line chart of the **last 20** sessions, oldest → newest; needs ≥ 2 sessions, otherwise an empty-state message. | I (BUG-01 fixed 2026-11-15) |
 | FR-ANL-04 | **Category Radar:** 10-spoke radar with rings at 25/50/75/100 %; per-category value = mean percentage of that category's sessions (0 if none). Daily Challenge and Custom sessions are not plotted. | I |
 | FR-ANL-05 | **Heatmap:** 28 cells (4 rows × 7), oldest first; gold = at least one session that day, grey = none (binary, no intensity). | I |
 | FR-ANL-06 | **Recommendation** text from weakest category and weakest difficulty. **Strengths:** up to 2 categories with mean ≥ 70 %. **Weaknesses:** up to 2 categories with mean < 70 % (no overlap). Categories with no sessions are ignored. | I |
 | FR-ANL-07 | **Recent history:** the 4 most recent sessions: category (difficulty), score %, seconds/question, `MM/DD`. | I |
 | FR-ANL-08 | **Goals:** two read-only checkboxes ("Complete Daily Quest today", "Keep practice streak alive") and buttons "🎯 Smart Practice", "📅 Daily Challenge". | I |
-| FR-ANL-09 | **Reset History** (gate + confirmation) shall clear the active profile's data per FR-DAT-01. | **P** (dialog does not disclose star/shop wipe — BUG-13) |
+| FR-ANL-09 | **Reset History** (gate + confirmation) shall clear the active profile's quiz history per FR-DAT-01; the confirmation names the profile, says history (and therefore charts, streaks and badges) is deleted and that stars and Archie's accessories are kept (`AnalyticsPanel.resetWarning`). | I (BUG-13 fixed 2026-11-15) |
 
 ### 6.17 Smart Practice (`FR-SMP`)
 | ID | Requirement | St |
@@ -286,7 +286,7 @@ Rules in [BR-02](#82-star-rewards-br-02).
 | ID | Requirement | St |
 |---|---|:---:|
 | FR-CQZ-01 | The Quiz Builder (gate-protected) shall let an adult enter a quiz name (default "My Custom Quiz"), an expression (free text) and an **integer** answer, add rows to a table, remove the selected row (rows re-numbered), and save. Validation: expression and answer required; answer must be an integer; name required; ≥ 1 question. | I |
-| FR-CQZ-02 | Saved quizzes shall be stored as `~/.atelier-arithmetic/custom_quizzes/<sanitised-name>.json` where characters outside `[A-Za-z0-9_-]` become `_`. Saving an existing name **overwrites silently**; names differing only in special characters collide. | **P** (BUG-10) |
+| FR-CQZ-02 | Saved quizzes shall be stored as `~/.atelier-arithmetic/custom_quizzes/<sanitised-name>.json` where characters outside `[A-Za-z0-9_-]` become `_`. If the target file already exists (same name, or a name that sanitises to the same file), the builder asks before replacing it. Expressions round-trip exactly, including `"`, `\` and braces. A failed write is reported to the parent and the questions are kept. | I (BUG-10 fixed 2026-11-15) |
 | FR-CQZ-03 | "📂 Load Quiz" (not gated) shall list saved quizzes alphabetically in a popup; selecting one starts a session with `total = number of questions`, difficulty `Medium`, category `"Custom: <name>"`, questions in stored order. Empty list → info dialog. | I |
 | FR-CQZ-04 | The builder correctness of expression-vs-answer is the author's responsibility; the app does not evaluate expressions. Editing an existing quiz is not supported. | I |
 
@@ -296,7 +296,7 @@ Rules in [BR-02](#82-star-rewards-br-02).
 | FR-TUR-01 | On first launch (`tourSeen=false`) the tour shall auto-start 400 ms after the frame appears; it can be replayed from Home ("🦉 Tour") and from Help ("🦉 Replay Tour"). | I |
 | FR-TUR-02 | The tour has **24 steps**: `welcome` 13 (1 intro + 12 element spotlights: profile, font scale, theme, calendar strip, Quiz Builder, Load Quiz, question count, difficulty, Analytics, Badges, Smart Practice, Choose Category), `categories` 1, `game` 5 (expression, answer field, hint, timer, submit), `results` 3 (grade, Export Report, Review Answers), `review` 1 (table), plus 1 closing `welcome` step. Each step dims the screen, cuts a rounded spotlight around the target, shows a speech bubble with text, Archie in one of 5 expressions, "Step *i* of *N*", **NEXT →/FINISH ✓** and **SKIP TOUR**. The tour auto-switches screens (using a mock session if none exists). | I |
 | FR-TUR-03 | Finishing the final step shall persist `tourSeen=true`. | I |
-| FR-TUR-04 | Skipping shall prevent the tour from auto-launching again. | **N** (skip does not persist — BUG-09) |
+| FR-TUR-04 | Skipping shall prevent the tour from auto-launching again (replay stays available from the Guide card). | I (BUG-09 fixed 2026-11-15) |
 | FR-HLP-01 | Help shall show 13 sections (How to start, Categories (all 10), Hints/level prompts/shortcuts, Grades, Timer, Reviewing, Stars/badges/shop, Progress saved, Tips, Settings, Streaks & Daily Challenge, Analytics/Smart Practice/Quiz Builder, About). It is opened from the ❓ Guide buttons on Home, Categories, Game and Results; its Back button returns to `categories` or `results` when opened from there, otherwise to Home (leaving Help from a running quiz ends that quiz). Text was verified against the code on 2026-11-08 (DOC-02) and is hard-wrapped so the page fits the 720 px minimum window. | I |
 
 ### 6.20 Settings (`FR-SET2`)
@@ -305,7 +305,7 @@ Rules in [BR-02](#82-star-rewards-br-02).
 | FR-SET2-01 | **Dark mode** toggle (🌙 Dark / ☀️ Light), persisted (`darkMode`), applied to all screens. | I |
 | FR-SET2-02 | **Font scale** button cycles **100 % → 125 % → 150 % → 100 %**, persisted (`fontSizeScale`); the **default is 125 %**. | I |
 | FR-SET2-03 | **Sound menu** (gate-protected): Mute/Unmute and four volume presets **100 / 75 / 50 / 25 %** (default stored volume 70 %, which matches no preset). Selecting a preset plays a click and persists. | I (menu of presets; there is no slider) |
-| FR-SET2-04 | Every `JButton` that exists when `updateAllThemes()` runs shall produce hover and click sounds. | **P** (dynamic buttons — BUG-14) |
+| FR-SET2-04 | Every `JButton` shall produce hover and click sounds, including buttons rebuilt when a screen opens. | I (BUG-14 fixed 2026-11-15) |
 
 ### 6.21 Parental gate (`FR-GTE`)
 | ID | Requirement | St |
@@ -317,7 +317,7 @@ Rules in [BR-02](#82-star-rewards-br-02).
 ### 6.22 Data management (`FR-DAT`)
 | ID | Requirement | St |
 |---|---|:---:|
-| FR-DAT-01 | "Reset History" shall: delete the active profile's rows from `sessions` (cascade to `session_questions`); set the (global) star balance to 0; clear that profile's unlocked and equipped items; refresh Home, Analytics, Badges, Smart Practice and Shop. Other profiles' sessions are untouched. | I |
+| FR-DAT-01 | "Reset History" shall delete the active profile's rows from `sessions` (cascade to `session_questions`) and refresh Home, Analytics, Badges, Smart Practice and Shop. Stars, unlocked and equipped items are **kept** (decision Q3). Other profiles' data is untouched. | I (changed 2026-11-15, BUG-13) |
 | FR-DAT-02 | Backup/restore or export of history. | **N** (FEAT-04) |
 
 ---
@@ -426,9 +426,10 @@ Seed = today's date as `yyyyMMdd` (long). Question *i* uses `new Random(seed*100
 ### 8.8 Results next-step rules (BR-08)
 | Condition | Prompt | Button | Intended action |
 |---|---|---|---|
-| pct ≥ 85, difficulty Easy | "You are ready for the next challenge!" | STEP UP TO MEDIUM DIFFICULTY | go Home (does **not** change the difficulty combo) |
-| pct ≥ 85, Medium | "Incredible skills! Level up to master." | STEP UP TO HARD DIFFICULTY | go Home (same limitation) |
+| pct ≥ 85, difficulty Easy | "You are ready for the next challenge!" | STEP UP TO MEDIUM DIFFICULTY | go Home with **Medium** pre-selected |
+| pct ≥ 85, Medium | "Incredible skills! Level up to master." | STEP UP TO HARD DIFFICULTY | go Home with **Hard** pre-selected |
 | pct ≥ 85, Hard | "Master class quizzer! Try the seeded daily run." | PLAY TODAY'S DAILY CHALLENGE | start Daily Challenge |
+| pct ≥ 85, Hard, today's challenge already done | "Master class quizzer! Sharpen another skill next." | START SMART PRACTICE MODE | open Smart Practice (BUG-04) |
 | pct < 85 | "Review weaknesses to improve mastery!" | START SMART PRACTICE MODE | open Smart Practice |
 
 ---
@@ -641,11 +642,11 @@ Mismatches that were found between claims (README, Help text, code comments) and
 | # | Question | Owner |
 |---|---|---|
 | Q1 | Official target age range: 8–14 (code comments) or 8–17 (README)? | Product Owner |
-| Q2 | Should stars be per-profile (matching shop state) or deliberately shared (family wallet)? | Product Owner |
-| Q3 | Should "Reset History" also wipe stars/shop (current behaviour) or only sessions? | Product Owner |
-| Q4 | Should the Daily Challenge be strictly once per day, per profile? | Product Owner |
+| Q2 | Should stars be per-profile (matching shop state) or deliberately shared (family wallet)? | **Decided 2026-11-15 (owner): per profile** — to implement in BUG-05 |
+| Q3 | Should "Reset History" also wipe stars/shop (current behaviour) or only sessions? | **Decided 2026-11-15 (owner): only sessions;** keep stars and shop items, and list exactly what is deleted — to implement in BUG-13 |
+| Q4 | Should the Daily Challenge be strictly once per day, per profile? | **Decided 2026-11-15 (owner): yes, once per day per profile** — to implement in BUG-04 |
 | Q5 | Do achievements need an unlock moment (toast/sound/+15 stars)? | Product Owner / UX |
-| Q6 | Is a maximum question count (e.g. 100) desirable? | Product Owner |
+| Q6 | Is a maximum question count (e.g. 100) desirable? | **Decided 2026-11-15: yes, 1–100** (implemented, BUG-15) |
 | Q7 | Is macOS/Linux packaging required? | Product Owner |
 | Q8 | Is the stated MIT licence correct, and who is the copyright holder? | Owner |
 

@@ -19,11 +19,16 @@ public class JsonHelper {
     // File I/O
     // -------------------------------------------------------------------------
 
-    public static void writeFile(String path, String json) {
+    /** Writes {@code json} as UTF-8; returns false (and logs the error type, no path) if the write fails. */
+    public static boolean writeFile(String path, String json) {
         try {
             Files.write(Paths.get(path), json.getBytes(StandardCharsets.UTF_8),
                         StandardOpenOption.CREATE, StandardOpenOption.TRUNCATE_EXISTING);
-        } catch (IOException ignored) {}
+            return true;
+        } catch (IOException | InvalidPathException e) {
+            System.err.println("Failed to write custom quiz file: " + e.getClass().getSimpleName());
+            return false;
+        }
     }
 
     public static String readFile(String path) {
@@ -111,9 +116,38 @@ public class JsonHelper {
         String search = "\"" + key + "\": \"";
         int start = json.indexOf(search);
         if (start < 0) return "";
-        start += search.length();
-        int end = json.indexOf("\"", start);
-        return end < 0 ? "" : json.substring(start, end);
+        // Read up to the first *unescaped* quote and decode escapes, mirroring escapeString (BUG-10)
+        StringBuilder value = new StringBuilder();
+        for (int i = start + search.length(); i < json.length(); i++) {
+            char c = json.charAt(i);
+            if (c == '"') {
+                return value.toString();
+            }
+            if (c == '\\' && i + 1 < json.length()) {
+                char next = json.charAt(++i);
+                switch (next) {
+                    case 'n': value.append('\n'); break;
+                    case 'r': value.append('\r'); break;
+                    case 't': value.append('\t'); break;
+                    case 'u':
+                        if (i + 4 < json.length()) {
+                            try {
+                                value.append((char) Integer.parseInt(json.substring(i + 1, i + 5), 16));
+                                i += 4;
+                                break;
+                            } catch (NumberFormatException e) {
+                                // not a valid \\uXXXX escape: keep the characters as written
+                            }
+                        }
+                        value.append('\\').append(next);
+                        break;
+                    default: value.append(next); // \" \\ \/ and anything else: the character itself
+                }
+            } else {
+                value.append(c);
+            }
+        }
+        return ""; // unterminated string
     }
 
     /**
@@ -174,9 +208,23 @@ public class JsonHelper {
         List<String> items = new ArrayList<>();
         int depth = 0;
         int start = -1;
+        boolean inString = false;
+        boolean escaped = false;
         for (int i = 0; i < json.length(); i++) {
             char c = json.charAt(i);
-            if (c == '{') {
+            if (inString) {                    // braces inside string values are text, not structure (BUG-10)
+                if (escaped) {
+                    escaped = false;
+                } else if (c == '\\') {
+                    escaped = true;
+                } else if (c == '"') {
+                    inString = false;
+                }
+                continue;
+            }
+            if (c == '"') {
+                inString = true;
+            } else if (c == '{') {
                 if (depth == 0) start = i;
                 depth++;
             } else if (c == '}') {

@@ -3,7 +3,7 @@ echo ==============================================
 echo ATELIER ARITHMETIC - COMPILING AND LAUNCHING
 echo ==============================================
 mkdir bin 2>nul
-javac -cp "lib/*" -sourcepath src src\com\mathquiz\QuizApp.java -d bin
+javac -encoding UTF-8 -cp "lib/*" -sourcepath src src\com\mathquiz\QuizApp.java -d bin
 if %errorlevel% neq 0 (
     echo Compilation failed. Please ensure JDK is installed.
     pause

@@ -66,6 +66,8 @@ public class MascotShopPanel extends JPanel {
     private final QuizNavigator nav;
     private final RewardService rewardService;
     private final AppConfig config;
+    /** Runs after every rebuild, including Equip/Buy inside the shop (set by QuizFrame: rescale, BUG-14). */
+    private Runnable afterRebuild = () -> { };
 
     // Header elements
     private JLabel titleLabel;
@@ -292,11 +294,17 @@ public class MascotShopPanel extends JPanel {
 
     // ── Public API ────────────────────────────────────────────────────────────
 
+    /** Sets what runs after each rebuild (QuizFrame passes its text-size/sound pass). */
+    public void setAfterRebuild(Runnable afterRebuild) {
+        this.afterRebuild = afterRebuild == null ? () -> { } : afterRebuild;
+    }
+
     /** Refreshes the grid and balance label (call after earning/spending stars). */
     public void refresh() {
         balanceLabel.setText("★ " + rewardService.getBalance() + " Stars");  // ★ U+2605
         populateGrid();
         applyTheme();
+        afterRebuild.run();
         // Reset scroll position to top to prevent Swing focus auto-scroll bugs
         SwingUtilities.invokeLater(() -> {
             if (scrollPane != null) {

@@ -29,7 +29,7 @@ This document explains **how Atelier Arithmetic is built**: structure, runtime b
 | Build | `javac` / `jar` scripts | No Maven/Gradle; `run.bat` (dev), `package.ps1` (release) |
 | Packaging | `jlink` (via jpackage) + `jpackage` + WiX 3.11 | Bundled minimal JRE; MSI or portable ZIP |
 | Signing | `signtool.exe` | SHA-256 + RFC 3161 timestamp |
-| Tests | **none** | see DEBT-01 |
+| Tests | JUnit 5 — console launcher 1.11.4, test-only in `lib-test/`, never packaged | `.\test.ps1` compiles `src/` and `test/` with `--release 17` and runs every test with a throw-away `user.home` (`build/test/home`). Coverage is growing under DEBT-01 |
 | Size | 36 Java files, ≈ 9,700 lines | |
 
 ## 3. System context
@@ -131,12 +131,28 @@ Root: `D:\MathQuizApp`. Source root: `src/com/mathquiz/`.
 | `com.mathquiz` | `QuizApp` | 54 | `main`: installs default uncaught-exception handler (log + dialog), sets AA properties and system L&F, opens `QuizFrame` on the EDT |
 | `config` | `AppConfig` | 234 | Singleton (`getInstance`) over an AES-encrypted `Properties` file; typed getters/setters for every setting (each setter saves immediately); `getAppDir()` = `~/.atelier-arithmetic` |
 | `config` | `AppTheme` | 99 | Static light/dark palettes and semantic getters (`getBgPrimary/Card/TextDark/TextMuted/BorderClr/AccentGold`); `scaleComponentFont()` recursively scales fonts and attaches hover/click sounds to buttons |
-| `model` | `Question` | 23 | Immutable expression + `int` answer |
-| `model` | `QuestionResult` | 35 | Immutable per-answer record (expression, correct, user answer, correctness, ms) |
+| `model` | `Question` | 81 | Immutable expression, `int` answer, `Skill`, solution steps; `check(input)` → `AnswerCheck` |
+| `model` | `SolutionStep` | 46 | Record: one exact `+ - * /` step; `of(op, left, right)` computes the result and rejects inexact or overflowing steps |
+| `model` | `AnswerCheck` | 27 | Record: `EMPTY / NOT_A_WHOLE_NUMBER / CORRECT / INCORRECT` plus the parsed value |
+| `model` | `QuestionResult` | 57 | Immutable per-answer record (expression, correct, user answer, correctness, ms, skill, generation difficulty, hints used) |
+| `model` | `Skill` | 124 | Enum of 56 persisted micro-skill IDs (one per generator sub-type, plus `custom`); `id()`, `category()`, `fromId`, `forCategory` — see [§7.6](#76-skill-catalog-persisted-keys) |
 | `model` | `QuizSession` | 117 | Session state (count, difficulty (mutable), category, start time, results); percentage, **grade, remarks, emoji** rules |
-| `service` | `QuestionGenerator` | 576 | `generate(difficulty, category)`, `generateSeeded(difficulty, category, dateSeed, index)`; one private generator per category |
+| `service` | `QuestionGenerator` | 62 | Facade: `generate(difficulty, category)`, `generateSeeded(difficulty, category, dateSeed, index)`; owns the `Random`, the Mixed choice and the unknown-category fallback |
+| `service` | `ArithmeticQuestions` | 115 | Package-private: Addition, Difference, Multiplication, Division (skills + solution steps) |
+| `service` | `OrderOfOperationsQuestions` | 89 | Package-private: Special (five bracket forms) |
+| `service` | `FractionQuestions` | 126 | Package-private: fractions, percentages, ratios |
+| `service` | `PatternQuestions` | 142 | Package-private: next-term patterns |
+| `service` | `AlgebraQuestions` | 124 | Package-private: solve-for-x and simultaneous equations |
+| `service` | `MeasurementQuestions` | 112 | Package-private: conversions, time, perimeter, area, volume |
+| `service` | `DailyChallenge` | 26 | Once-per-day rule: `dayKey(LocalDate)` → `yyyyMMdd`, `isAvailable(lastCompletedDay, today)` (BUG-04, Q4) |
+| `service` | `NextStepAdvisor` | 50 | `recommend(session)` → Results "Suggested Path" (`STEP_UP` with target difficulty / `DAILY_CHALLENGE` / `SMART_PRACTICE`), PRD BR-08 |
+| `service` | `ReportBuilder` | 106 | `toHtml(session, base64Logo)` → the exported HTML report; `escape(text)` for every dynamic value (R-SEC-04) |
+| `service` | `ProfileNames` | 63 | Profile-name rules (`validate`) and the always-valid "Spark Mascot Name" suggestion (`spark`) |
+| `service` | `QuestionCounts` | 36 | Question-count rule 1–100 (`validate`), decision Q6 |
+| `service` | `QuestionSource` | 42 | `next(session, customQuestions, todaySeed)` → `Prepared(question, difficulty)`: custom → Daily Challenge → generator |
+| `service` | `SchemaMigrations` | 103 | Package-private: `PRAGMA user_version` migrations (current v2), see §7.2 |
 | `service` | `AdaptiveDifficultyEngine` | 146 | `evaluate(results, difficulty)` → `UPGRADE/DOWNGRADE/MAINTAIN`; static `upgrade/downgrade/canUpgrade/canDowngrade` |
-| `service` | `HintService` | 194 | Static `generateHint(expression)` → HTML string by pattern matching |
+| `service` | `HintService` | 307 | Static `generateHint(Question)` → HTML hint chosen by the question's `Skill`; `generateHint(expression)` keeps wording-based routing for custom questions |
 | `service` | `RewardService` | 168 | Star balance, shop unlock/equip delegation to `AppConfig`, `calculateAndAwardQuizReward()` → `RewardResult` |
 | `service` | `AnalyticsService` | 434 | All aggregate stats over `SessionRepository.loadRaw()` (trend, per-category accuracy, streaks, weakest category/difficulty, heatmap, KPIs); `ALL_CATEGORIES` constant |
 | `service` | `AchievementService` | 103 | Computes the 10 `Achievement`s from history |
@@ -152,8 +168,10 @@ Root: `D:\MathQuizApp`. Source root: `src/com/mathquiz/`.
 | `view` | `QuizFrame` | 447 | JFrame; owns services & panels; implements `QuizNavigator`; theme/scale orchestration; tour wiring |
 | `view` | `WelcomePanel` | 1142 | Home dashboard, profile menu/dialog, sound menu, theme & scale toggles, calendar strip, streak logic (duplicate) |
 | `view` | `CategoryPanel` | 330 | 10 category cards, keyboard navigation |
+| `view` | `GridNavigation` | 35 | Package-private: arrow-key movement in the category grid (same column, stop at edges) |
 | `view` | `GamePanel` | 563 | Quiz loop, timer, hint box, adaptive prompts, key bindings |
-| `view` | `ResultsPanel` | 636 | 4-card results dashboard, HTML export, print |
+| `view` | `ResultsPanel` | 636 | 4-card results dashboard, HTML export, optional print |
+| `view` | `ReportPrintable` | 157 | Package-private: plain-text printout of a session — long lines wrapped to the page width, every question, as many pages as needed |
 | `view` | `ReviewPanel` | 268 | Colour-coded answer table |
 | `view` | `HelpPanel` | 383 | 13 help sections (HTML body width pinned to 440 CSS px ≈ 572 px so the page fits the 720 px minimum window) |
 | `view` | `AnalyticsPanel` | 844 | Dashboard + inner `LineChartPanel`, `RadarChartPanel` (Java2D) |
@@ -273,9 +291,9 @@ sequenceDiagram
 
 ### 6.5 Game panel internals
 * **State:** `activeSession`, `currentQuestion`, `questionStartTime`, `awaitingNext`, `customQuestions` (null for generated quizzes), `questionTimer` (1 s Swing timer).
-* **Question source precedence:** custom list → Daily Challenge (seeded Mixed) → generator by session category/difficulty.
+* **Question source precedence:** custom list → Daily Challenge (seeded Mixed) → generator by session category/difficulty — implemented in `QuestionSource.next(session, customQuestions, todaySeed)`, which also returns the difficulty used. `GamePanel` keeps that difficulty and the count of hint opens before submit, checks input with `Question.check`, and records both in the `QuestionResult`.
 * **Submit state machine:** `awaitingNext=false` → validate → record → `awaitingNext=true` (button "NEXT QUESTION →") → next press → `loadNextQuestion()`.
-* **Timer lifecycle defect:** started in `resetTimer()` (each question), stopped only in `handleSubmit()` and when the session ends. Leaving by Esc/Guide/tour does not stop it (BUG-03).
+* **Timer lifecycle:** started in `resetTimer()` (each question); stopped in `handleSubmit()`, at session end, and — since the BUG-03 fix — whenever the game card is hidden (a `componentHidden` listener), which covers Esc, Guide, the tour and any future exit.
 * **Key bindings** (`WHEN_IN_FOCUSED_WINDOW`): `Esc` (confirm exit), `F1` and `Ctrl+H` (hint).
 
 ### 6.6 Tour subsystem
@@ -289,13 +307,13 @@ TourManager (service)                    TourOverlay (glass pane, JPanel)       
 ```
 * Targets are real component instances captured at `initialize()` time through the registry built in `QuizFrame` (e.g. `calendarStripHolder` rather than the rebuilt strip).
 * `QuizFrame.maybeContinueTour(screen)` is called from navigation methods so a running tour can follow the user; it jumps to the **first** step of that screen.
-* `endTour(completed)`: hides overlay; persists `tourSeen=true` **only if completed** (skip does not — BUG-09); runs the `onTourEnd` callback (`welcomePanel.applyTheme()`).
+* `endTour(completed)`: hides overlay; persists `tourSeen=true` whether the tour was completed or skipped (BUG-09 fix); runs the `onTourEnd` callback (`welcomePanel.applyTheme()`).
 
 ### 6.7 Theming and scaling
 * `AppTheme` is a static holder (`darkMode`) with semantic getters. `QuizFrame.updateAllThemes()` is the single refresh point: set dark flag from config → call `applyTheme()` on all 11 panels → `AppTheme.scaleComponentFont(frame, config.getFontSizeScale(), sound)` → `SwingUtilities.updateComponentTreeUI` → `repaint`.
 * It is invoked on start-up, theme toggle, scale toggle, profile switch, mute/volume change, and sound-preset change.
 * Scaling stores each component's original size in client property `baseFontSize` and sets `round(base × scale)`; HTML label text with inline `font-size` is **not** scaled. Button sounds are attached once (client property `soundAttached`).
-* Components created **after** the last `updateAllThemes()` (e.g. rebuilt badge cards, analytics cards, shop buttons) are not scaled/instrumented until the next call (BUG-14, to be verified visually).
+* Screens that rebuild content when opened (badge cards, analytics cards, shop buttons, smart-practice labels, results, review, Home dynamic data) are passed through `QuizFrame.rescale(screen)` right after `refresh()/populate()`, so new components get the current text size and button sounds (BUG-14 fix; `QuizFrameScalingTest`).
 * Each view still carries a private copy of the light palette as `static final Color` constants (design-token duplication — DEBT-05).
 
 ### 6.8 Audio
@@ -322,10 +340,10 @@ Uninstalling the app leaves this folder in place.
 | `soundVolume` | int 0–100 | `70` | global | Sound menu presets (100/75/50/25) |
 | `darkMode` | bool | `false` | global | theme toggle |
 | `fontSizeScale` | double | `1.25` | global | scale toggle (1.0 / 1.25 / 1.5) |
-| `lastDailyChallengeDate` | `yyyyMMdd` | `""` | **global** | `QuizFrame.finishQuiz` |
+| `lastDailyChallengeDate.<profile>` | `yyyyMMdd` | `""` | per profile (was global until BUG-05; migrated to the active profile on first start) | `QuizFrame.finishQuiz` |
 | `currentProfile` | string | `Guest` | global | profile switch |
 | `profiles` | comma-separated | `Guest` | global | `addProfile` |
-| `starBalance` | int ≥ 0 | `0` | **global** | `RewardService` |
+| `starBalance.<profile>` | int ≥ 0 | `0` | per profile (was global until BUG-05; migrated to the active profile on first start) | `RewardService` |
 | `unlockedItems.<profile>` | comma-separated IDs | `""` | per profile | `addUnlockedItem` |
 | `equippedItem.<profile>` | item ID or `none` | `none` | per profile | `setEquippedItem` |
 
@@ -353,15 +371,23 @@ CREATE TABLE IF NOT EXISTS session_questions (
   user_answer INTEGER NOT NULL,
   correct INTEGER NOT NULL,        -- 0/1
   time_ms INTEGER NOT NULL,
-  FOREIGN KEY (session_id) REFERENCES sessions(id) ON DELETE CASCADE
+  FOREIGN KEY (session_id) REFERENCES sessions(id) ON DELETE CASCADE,
+  -- added in schema v2 (NULL / 0 for rows saved before the upgrade):
+  skill_id TEXT,                   -- AES(Base64) of a Skill id, e.g. add.2digit.2terms
+  difficulty TEXT,                 -- AES(Base64) — level this question was generated at
+  hints_used INTEGER NOT NULL DEFAULT 0
 );
+CREATE INDEX idx_sessions_profile ON sessions(profile_name);
+CREATE INDEX idx_session_questions_session ON session_questions(session_id);
 ```
-* No indexes, no `user_version`/migrations (schema evolution is currently impossible without manual SQL — DEBT-11).
+* **Schema version** lives in `PRAGMA user_version` and is managed by `SchemaMigrations` (current: **2**). App 1.0.0 databases read 0 and are upgraded on start-up in **one transaction**: v0/1 → create the two tables if missing; v1 → v2 add the three columns and two indexes. Migrations only add — they never drop or rewrite data.
+* A database **newer** than the app (higher `user_version`) is left untouched. If an upgrade step fails, it is rolled back, one line goes to `System.err`, and `SessionRepository` runs in **legacy mode** (any version below 2: old column set) so history still loads and saves.
+* `SessionRepository(String dbPath, Supplier<String> currentProfile)` takes the file and profile explicitly (used by tests); the no-argument constructor uses `AppConfig.getAppDir()` and the active profile.
 * `PRAGMA foreign_keys = ON` is a per-connection setting; it is executed in `clear()` (the only path that relies on cascade). The pragma in `initDatabase()` affects only its throw-away connection.
 * A new JDBC connection is opened for every public call (no pool).
 * Profile filtering: `WHERE profile_name = ?` with the **encrypted** profile name. This works only because ECB encryption is deterministic.
 
-`loadRaw()` returns `List<Map<String,Object>>`, newest first, each with `timestamp, category, difficulty, totalQuestions, correctAnswers, percentage, grade, durationMs, questions:[{expression, correctAnswer, userAnswer, correct, timeMs}]`. All analytics/achievement/streak code consumes this structure.
+`loadRaw()` returns `List<Map<String,Object>>`, newest first, each with `timestamp, category, difficulty, totalQuestions, correctAnswers, percentage, grade, durationMs, questions:[{expression, correctAnswer, userAnswer, correct, timeMs, skillId, difficulty, hintsUsed}]` (the last three are `null`, `null`, `0` for rows saved before schema v2 and in legacy mode). All analytics/achievement/streak code consumes this structure.
 
 ### 7.3 Custom quiz file
 ```json
@@ -379,6 +405,9 @@ Achievements, streaks, heatmap, per-category accuracy, weakest category/difficul
 
 ### 7.5 Performance characteristics (static analysis)
 `loadRaw()` loads **all** sessions and, for each, a separate query for its questions, decrypting every encrypted field. It is called repeatedly: opening Analytics triggers ≈ 17 full loads; refreshing Home ≈ 5 (stats label ×3, streak, calendar) and Home refresh happens on every return to Home and every theme/scale/profile change. Everything runs on the EDT. Fine for tens of sessions; will degrade with hundreds (DEBT-03, DEBT-09).
+
+### 7.6 Skill catalog (persisted keys)
+`Skill` IDs such as `add.2digit.2terms` name the micro-skill a question practises: one per generator sub-type (55) plus `custom` for Quiz Builder questions. They become persisted values once stored per answered question, so they are keys like category names: never rename, reuse or remove one (rules.md R-DOM-12). The full list lives in `src/com/mathquiz/model/Skill.java` and is frozen by `SkillTest.skillIdsAreStable`. Prerequisite links between skills are not modelled yet; they wait for the assessment advisors (premium roadmap X3).
 
 ## 8. Security architecture
 

@@ -54,7 +54,7 @@ Write-Host "[3/5] Translating assets and compiling application..."
 
 # Compile source files including custom IcoConverter utility
 mkdir -Force "build/classes"
-& javac -cp "lib/*" -sourcepath src src\com\mathquiz\QuizApp.java src\com\mathquiz\util\IcoConverter.java -d build/classes
+& javac -encoding UTF-8 -cp "lib/*" -sourcepath src src\com\mathquiz\QuizApp.java src\com\mathquiz\util\IcoConverter.java -d build/classes
 
 # Execute IcoConverter to construct Microsoft Icon format logo
 Write-Host "Creating high-res logo.ico from logo.png..."

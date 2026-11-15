@@ -161,7 +161,7 @@ A 4-card post-session performance report:
 
 **Footer buttons:** `❓ Guide` | `📋 Review Answers` | `📄 Export Report` | `🔄 PLAY AGAIN`
 
-`Export Report` saves a self-contained HTML report and then opens the system print dialog. The grade remark (e.g. *"Very Good — Strong Performance!"*) appears in the exported report; the dashboard shows the grade with an emoji badge.
+`Export Report` saves a self-contained HTML report and then asks whether to print it too (printing lists every question, over as many pages as needed). The grade remark (e.g. *"Very Good — Strong Performance!"*) appears in the exported report; the dashboard shows the grade with an emoji badge.
 
 ---
 
@@ -188,7 +188,7 @@ A comprehensive learning analytics view (parental gate protected):
 | **Recent Sessions Log** | The 4 most recent sessions: category (difficulty), score %, seconds per question, and date |
 | **Goals Checklist** | Two read-only goals (Daily Quest done today, streak alive) plus **Smart Practice** and **Daily Challenge** buttons |
 
-**Header actions:** `🗑 Reset History` (parental gate + confirmation; clears the active profile's quiz history **and** its stars and shop items) | `← Back`
+**Header actions:** `🗑 Reset History` (parental gate + confirmation; clears the active profile's quiz history — charts, streaks and badges restart from zero — while stars and Archie's accessories are kept) | `← Back`
 
 ---
 
@@ -230,7 +230,7 @@ Analyses session history to identify the child's weakest category and lowest acc
 An editable table interface for building custom quiz sessions:
 - Add custom expressions with their exact expected **integer** answers (the app does not evaluate the expression; the author supplies the answer)
 - Remove questions from the table
-- Name and save the quiz set to disk via `CustomQuizService` (stored as plain JSON in `custom_quizzes/`; saving under an existing name overwrites it)
+- Name and save the quiz set to disk via `CustomQuizService` (stored as plain JSON in `custom_quizzes/`; the builder asks before replacing a quiz with the same name)
 - Load saved quizzes from the Home screen with the `📂 Load Quiz` button (not gated; the quiz runs as category `Custom: <name>` at Medium difficulty)
 - Opening the builder is protected by the Parental Gate
 
@@ -279,7 +279,7 @@ All 10 categories use the `QuestionGenerator` service to generate **randomized q
 | **Measurement** | Metric conversions (m→cm, L→mL) | Time calculations, rectangular area/perimeter | Box volumes, multi-unit complex word problems |
 
 ### Daily Challenge Mode
-The Home Screen's **Daily Quest Tracker** launches a date-seeded 10-question daily challenge (Medium difficulty, questions drawn from the four core operations). The same questions are generated for all users on the same day (deterministic seed), and completion awards **+8 bonus stars**. Completion is recorded once per computer (not per profile); the Home button then shows ✅ Completed until the next calendar day.
+The Home Screen's **Daily Quest Tracker** launches a date-seeded 10-question daily challenge (Medium difficulty, questions drawn from the four core operations). The same questions are generated for all users on the same day (deterministic seed), and completion awards **+8 bonus stars**. Completion is recorded per profile: each child can play it once per calendar day, and the Home, Analytics and Results screens show it as done until the next day.
 
 ---
 
@@ -493,7 +493,7 @@ Atelier Arithmetic includes a built-in engagement economy that motivates consist
 
 The perfect-score bonus replaces the grade bonus (they are not added together), and the streak bonus counts today's quiz, so every completed quiz earns at least +2 streak stars.
 
-The **★ N** balance is shown in the Home screen's top bar, on the shop card and in the shop header, and is refreshed whenever you return to Home. It is stored (encrypted) in `config.properties` and is **shared by all profiles on the same computer**; the items you unlock and equip are saved per profile.
+The **★ N** balance is shown in the Home screen's top bar, on the shop card and in the shop header, and is refreshed whenever you return to Home. It is stored (encrypted) in `config.properties` and is kept **per profile**, like the items you unlock and equip. (When upgrading from 1.0.0, the old shared balance moves to the child who is active at the first start.)
 
 ### Mascot Shop — 12 Items
 
@@ -586,10 +586,10 @@ All session data is stored in an embedded SQLite database at `~/.atelier-arithme
 
 **User preferences** are stored in `~/.atelier-arithmetic/config.properties`, including:
 - Profile list and active profile
-- Star balance (shared by all profiles on the computer)
+- Star balance (per profile)
 - Unlocked and equipped shop items (per profile)
 - Sound enabled/volume, dark mode, font scale
-- Tour completion flag, last daily challenge date (shared)
+- Tour completion flag (shared); last daily challenge date (per profile)
 
 Everything lives in one folder that the uninstaller does **not** remove:
 
@@ -804,18 +804,9 @@ Behaviours that differ from what you might expect. Each is tracked in [docs/task
 
 | Area | Limitation | Task |
 |---|---|---|
-| Analytics | The Accuracy Trend chart shows the *oldest* 20 sessions once a profile has more than 20 | BUG-01 |
-| Results | The Suggested Path button can fire several times after multiple quizzes in one run; "Step up" returns to Home without changing the level | BUG-02 |
-| Quiz | Leaving a quiz early (Esc, or Guide → Back) leaves the per-second tick sound running | BUG-03 |
-| Daily Challenge | Played-once-per-day is enforced by the Home button only; Analytics and Results can start it again (and re-award +8 stars) | BUG-04 |
-| Stars | One star balance is shared by every profile on the computer; **Reset History** also clears stars and shop items | BUG-05, BUG-13 |
 | Badges | No unlock sound or bonus stars | BUG-06 |
-| Hints | Some measurement and ratio questions show a generic or percentage-style hint | BUG-07 |
-| Tour | Skipping the tour does not remember the choice | BUG-09 |
-| Export | Exporting a report always opens the print dialog | BUG-12 |
 | Data | Data is bound to the Windows account and there is no backup/restore | FEAT-04 |
-| Build | The build scripts do not pass `-encoding UTF-8`; use JDK 21 (UTF-8 by default) or add the flag | DEBT-02 |
-| Quality | There are no automated tests yet | DEBT-01 |
+| Quality | Automated tests (`.\test.ps1`) cover question generation, grading, storage and several screens; rewards, streaks and achievements are not yet covered | DEBT-01 |
 
 ---
 

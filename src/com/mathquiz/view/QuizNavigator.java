@@ -12,6 +12,9 @@ public interface QuizNavigator {
     /** Go back to the Welcome / setup screen. */
     void goToWelcome();
 
+    /** Go back to the Welcome screen with {@code suggestedDifficulty} pre-selected (Results "step up", BUG-02). */
+    void goToWelcome(String suggestedDifficulty);
+
     /** Advance from Welcome to the Category selection screen. */
     void goToCategories();
 
@@ -57,6 +60,9 @@ public interface QuizNavigator {
 
     /** Start the daily seeded challenge quiz. */
     void startDailyChallenge();
+
+    /** False once the active profile has completed today's Daily Challenge (BUG-04). */
+    boolean isDailyChallengeAvailable();
 
     /** (Re-)launch the interactive guided tour from the beginning. */
     void launchTour();
