@@ -305,7 +305,7 @@ Rules in [BR-02](#82-star-rewards-br-02).
 | FR-SET2-01 | **Dark mode** toggle (🌙 Dark / ☀️ Light), persisted (`darkMode`), applied to all screens. | I |
 | FR-SET2-02 | **Font scale** button cycles **100 % → 125 % → 150 % → 100 %**, persisted (`fontSizeScale`); the **default is 125 %**. | I |
 | FR-SET2-03 | **Sound menu** (gate-protected): Mute/Unmute and four volume presets **100 / 75 / 50 / 25 %** (default stored volume 70 %, which matches no preset). Selecting a preset plays a click and persists. | I (menu of presets; there is no slider) |
-| FR-SET2-04 | Every `JButton` that exists when `updateAllThemes()` runs shall produce hover and click sounds. | **P** (dynamic buttons — BUG-14) |
+| FR-SET2-04 | Every `JButton` shall produce hover and click sounds, including buttons rebuilt when a screen opens. | I (BUG-14 fixed 2026-11-15) |
 
 ### 6.21 Parental gate (`FR-GTE`)
 | ID | Requirement | St |

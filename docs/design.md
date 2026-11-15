@@ -488,7 +488,7 @@ Mute and volume presets (100/75/50/25 %) are reached through the gated Sound men
 2. Panels create with the light palette then re-colour in `applyTheme()` (recursive `recolorTree` heuristics based on component type, font size or text — e.g. labels > 20 pt are "dark text").
 3. Persisted: `darkMode`, `fontSizeScale`.
 4. Toggle labels: theme button shows the *target* mode ("🌙 Dark" in light mode, "☀️ Light" in dark mode); scale button shows the current scale ("🔍 Scale: 125%").
-5. Known gaps: dynamically rebuilt content may be unscaled until the next refresh (BUG-14); recolour heuristics key off font size/text and are fragile (DEBT-05).
+5. Known gaps: recolour heuristics key off font size/text and are fragile (DEBT-05). (Rebuilt content is now rescaled when a screen opens — BUG-14 fixed 2026-11-15.)
 
 ---
 

@@ -156,7 +156,7 @@
 * **Accept:** dialog text matches exactly what is removed.
 * **Docs:** PRD FR-ANL-09, FR-DAT-01.
 
-#### BUG-14 — Dynamically rebuilt content may not be scaled or sound-instrumented · `P2 · M` · *needs visual verification*
+#### BUG-14 — Dynamically rebuilt content may not be scaled or sound-instrumented · `P2 · M` · **Done 2026-11-15** (`QuizFrame.rescale` after every rebuild; `QuizFrameScalingTest` reproduced unscaled badge cards at 150 %). Still worth a visual pass at 150 % in the 720 × 550 window (TC-09) for clipping.
 * **Evidence:** `AppTheme.scaleComponentFont` runs only from `QuizFrame.updateAllThemes()` (start-up, theme/scale/profile/sound toggles). Panels rebuilt in `refresh()` (Analytics cards, badge cards, shop grid, smart-practice labels) are created after that call.
 * **Impact (expected):** at the default 125 % some screens show base-size fonts, and their buttons lack hover/click sounds until the next toggle.
 * **Fix:** call `AppTheme.scaleComponentFont(panel, scale, sound)` at the end of each `refresh()/populate()` (or hook `QuizFrame` navigation).

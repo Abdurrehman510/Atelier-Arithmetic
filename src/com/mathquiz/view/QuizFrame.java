@@ -231,6 +231,7 @@ public class QuizFrame extends JFrame implements QuizNavigator {
         cardLayout.show(mainPanel, CARD_WELCOME);
         welcomePanel.focusDefaultField();
         welcomePanel.refreshDynamicData();   // Sync star balance, equipped item, Archie tagline
+        rescale(welcomePanel);   // BUG-14
         maybeContinueTour(CARD_WELCOME);
     }
 
@@ -276,6 +277,7 @@ public class QuizFrame extends JFrame implements QuizNavigator {
                 rewardService.calculateAndAwardQuizReward(session, analyticsService);
         // Update results screen with reward info
         resultsPanel.populate(session, reward);
+        rescale(resultsPanel);   // BUG-14
         cardLayout.show(mainPanel, CARD_RESULTS);
         maybeContinueTour(CARD_RESULTS);
     }
@@ -286,6 +288,7 @@ public class QuizFrame extends JFrame implements QuizNavigator {
         soundService.playTransition();
         if (lastSession == null) return;
         reviewPanel.populate(lastSession, CARD_RESULTS);
+        rescale(reviewPanel);   // BUG-14
         cardLayout.show(mainPanel, CARD_REVIEW);
     }
 
@@ -301,6 +304,7 @@ public class QuizFrame extends JFrame implements QuizNavigator {
         if (!com.mathquiz.service.ParentalGate.verifyParent(this)) return;
         soundService.playTransition();
         analyticsPanel.refresh();
+        rescale(analyticsPanel);   // BUG-14
         cardLayout.show(mainPanel, CARD_ANALYTICS);
     }
 
@@ -308,6 +312,7 @@ public class QuizFrame extends JFrame implements QuizNavigator {
     public void startSmartPractice() {
         soundService.playTransition();
         smartPracticePanel.refresh();
+        rescale(smartPracticePanel);   // BUG-14
         cardLayout.show(mainPanel, CARD_SMART_PRACTICE);
     }
 
@@ -315,6 +320,7 @@ public class QuizFrame extends JFrame implements QuizNavigator {
     public void showAchievements() {
         soundService.playTransition();
         achievementsPanel.refresh();
+        rescale(achievementsPanel);   // BUG-14
         cardLayout.show(mainPanel, CARD_ACHIEVEMENTS);
     }
 
@@ -359,6 +365,7 @@ public class QuizFrame extends JFrame implements QuizNavigator {
     public void showMascotShop() {
         soundService.playTransition();
         mascotShopPanel.refresh();
+        rescale(mascotShopPanel);   // BUG-14
         cardLayout.show(mainPanel, CARD_SHOP);
     }
 
@@ -375,24 +382,38 @@ public class QuizFrame extends JFrame implements QuizNavigator {
         if (CARD_RESULTS.equals(screen) && lastSession == null) {
             lastSession = new QuizSession(10, "Medium", "Mixed");
             resultsPanel.populate(lastSession);
+            rescale(resultsPanel);   // BUG-14
         }
         if (CARD_REVIEW.equals(screen) && lastSession == null) {
             lastSession = new QuizSession(10, "Medium", "Mixed");
             reviewPanel.populate(lastSession, CARD_RESULTS);
+            rescale(reviewPanel);   // BUG-14
         }
         if (CARD_ANALYTICS.equals(screen)) {
             analyticsPanel.refresh();
+            rescale(analyticsPanel);   // BUG-14
         }
         if (CARD_ACHIEVEMENTS.equals(screen)) {
             achievementsPanel.refresh();
+            rescale(achievementsPanel);   // BUG-14
         }
         if (CARD_SMART_PRACTICE.equals(screen)) {
             smartPracticePanel.refresh();
+            rescale(smartPracticePanel);   // BUG-14
         }
     }
 
 
     // ── Tour helper ───────────────────────────────────────────────────────────
+
+    /**
+     * Applies the current text size and button sounds to a screen whose content was just rebuilt.
+     * {@link AppTheme#scaleComponentFont} remembers each component's base size, so this is safe to
+     * repeat (BUG-14: rebuilt badge/analytics/shop/practice content used to stay at base size).
+     */
+    private void rescale(Component screen) {
+        AppTheme.scaleComponentFont(screen, config.getFontSizeScale(), soundService);
+    }
 
     public void updateAllThemes() {
         AppTheme.setDarkMode(config.isDarkMode());
@@ -440,10 +461,15 @@ public class QuizFrame extends JFrame implements QuizNavigator {
 
         // 3. Refresh all dynamic UI panels instantly
         welcomePanel.refreshDynamicData();
+        rescale(welcomePanel);   // BUG-14
         analyticsPanel.refresh();
+        rescale(analyticsPanel);   // BUG-14
         achievementsPanel.refresh();
+        rescale(achievementsPanel);   // BUG-14
         smartPracticePanel.refresh();
+        rescale(smartPracticePanel);   // BUG-14
         mascotShopPanel.refresh();
+        rescale(mascotShopPanel);   // BUG-14
     }
 
     public SoundService getSoundService() {

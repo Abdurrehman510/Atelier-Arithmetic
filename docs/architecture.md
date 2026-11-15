@@ -308,7 +308,7 @@ TourManager (service)                    TourOverlay (glass pane, JPanel)       
 * `AppTheme` is a static holder (`darkMode`) with semantic getters. `QuizFrame.updateAllThemes()` is the single refresh point: set dark flag from config → call `applyTheme()` on all 11 panels → `AppTheme.scaleComponentFont(frame, config.getFontSizeScale(), sound)` → `SwingUtilities.updateComponentTreeUI` → `repaint`.
 * It is invoked on start-up, theme toggle, scale toggle, profile switch, mute/volume change, and sound-preset change.
 * Scaling stores each component's original size in client property `baseFontSize` and sets `round(base × scale)`; HTML label text with inline `font-size` is **not** scaled. Button sounds are attached once (client property `soundAttached`).
-* Components created **after** the last `updateAllThemes()` (e.g. rebuilt badge cards, analytics cards, shop buttons) are not scaled/instrumented until the next call (BUG-14, to be verified visually).
+* Screens that rebuild content when opened (badge cards, analytics cards, shop buttons, smart-practice labels, results, review, Home dynamic data) are passed through `QuizFrame.rescale(screen)` right after `refresh()/populate()`, so new components get the current text size and button sounds (BUG-14 fix; `QuizFrameScalingTest`).
 * Each view still carries a private copy of the light palette as `static final Color` constants (design-token duplication — DEBT-05).
 
 ### 6.8 Audio

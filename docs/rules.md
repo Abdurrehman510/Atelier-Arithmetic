@@ -96,7 +96,7 @@
 | R-UI-03 | Every change MUST be checked in **both light and dark mode**. | Dark mode is persisted and common. | — |
 | R-UI-04 | Every new panel implements `applyTheme()` and is added to `QuizFrame.updateAllThemes()`. | Consistent theme switching. | ✔ |
 | R-UI-05 | Fonts: `Serif` for display titles, `SansSerif` for UI text, `Segoe UI Emoji` (inside HTML `<font face>`) for emoji; set a base size and let `AppTheme.scaleComponentFont` scale it. | Cross-screen consistency; accessibility. | ✔ |
-| R-UI-06 | After building components dynamically (in `refresh()`/`populate…`), the new subtree MUST receive scaling and button-sound instrumentation. | Else content looks unscaled/silent. | ⚠ BUG-14 (verify) |
+| R-UI-06 | After building components dynamically (in `refresh()`/`populate…`), the new subtree MUST receive scaling and button-sound instrumentation. | Else content looks unscaled/silent. | ✔ `QuizFrame.rescale` (BUG-14) |
 | R-UI-07 | Layouts MUST work at the minimum window size 720×550 at the default 125 % scale, and scroll (not clip) at 150 %. | Accessibility. | — verify |
 | R-UI-08 | Every interactive control MUST be reachable and operable by keyboard; Enter triggers the primary action where natural; Esc backs out; no keyboard traps. | Accessibility. | ⚠ tour is mouse-only; analytics keyboard untested |
 | R-UI-09 | Use `★` (U+2605) for star counts in text; use emoji only in emoji-capable fonts. | Rendering (fixed in commit `5cf780a`). | ✔ |
@@ -271,7 +271,6 @@ Existing violations are accepted as **debt** until their task is done; they do n
 | R-ARC-06 | Four classes > 500 LOC | DEBT-05 |
 | R-ARC-07 | Duplicate category/token/version definitions | DEBT-05, REL-01 |
 | R-COD-06 | Silent persistence failures | DEBT-07 |
-| R-UI-06 | Unscaled dynamic content | BUG-14 |
 | R-UI-13 | Listener accumulation in `ResultsPanel` | BUG-02 |
 | R-DOM-09 | Daily Challenge re-entry | BUG-04 |
 | R-DAT-07 | Reset wipes stars/shop without saying so | BUG-13 |
