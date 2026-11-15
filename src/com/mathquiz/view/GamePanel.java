@@ -412,7 +412,9 @@ public class GamePanel extends JPanel {
 
         // Evaluate adaptive difficulty suggestion
         AdaptiveDifficultyEngine.Recommendation recommendation =
-                difficultyEngine.evaluate(activeSession.getResults(), activeSession.getDifficulty());
+                AdaptiveDifficultyEngine.appliesTo(activeSession)
+                        ? difficultyEngine.evaluate(activeSession.getResults(), activeSession.getDifficulty())
+                        : AdaptiveDifficultyEngine.Recommendation.MAINTAIN;   // Daily Challenge stays fair (BUG-17)
         if (recommendation == AdaptiveDifficultyEngine.Recommendation.UPGRADE) {
             SwingUtilities.invokeLater(this::proposeUpgrade);
         } else if (recommendation == AdaptiveDifficultyEngine.Recommendation.DOWNGRADE) {

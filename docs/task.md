@@ -174,7 +174,7 @@
 * **Fix:** compute row/column; stop at the last row or wrap by column.
 * **Accept:** ↑/↓ keep the same column and clamp/wrap predictably.
 
-#### BUG-17 — Daily Challenge determinism breaks if the adaptive prompt changes difficulty · `P3 · S`
+#### BUG-17 — Daily Challenge determinism breaks if the adaptive prompt changes difficulty · `P3 · S` · **Done 2026-11-15** (no level-change prompts in the Daily Challenge; `AdaptiveDifficultyEngineTest`)
 * **Evidence:** `GamePanel.loadNextQuestion` seeds with the session's *current* difficulty (322–329); `proposeUpgrade/Downgrade` can change it mid-run.
 * **Impact:** two children can receive different questions on the same day after accepting a prompt.
 * **Fix:** suppress adaptive prompts in Daily Challenge sessions (or freeze the seed difficulty).

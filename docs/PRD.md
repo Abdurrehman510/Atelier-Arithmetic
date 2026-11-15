@@ -205,7 +205,7 @@ See [non-goals](#22-non-goals-v100). Additionally *not present today* (gaps, not
 ### 6.8 Adaptive difficulty (`FR-ADP`)
 | ID | Requirement | St |
 |---|---|:---:|
-| FR-ADP-01 | After every submitted answer the engine shall evaluate the session. No recommendation is made until **≥ 4** answers exist. After a suggestion, a cool-down applies: the next suggestion can appear no earlier than **5 answers later** (the counter also advances if the child declines). | I |
+| FR-ADP-01 | After every submitted answer the engine shall evaluate the session — except in the **Daily Challenge**, which never offers a level change, so every child gets the same questions that day (`AdaptiveDifficultyEngine.appliesTo`, BUG-17 fixed 2026-11-15). No recommendation is made until **≥ 4** answers exist. After a suggestion, a cool-down applies: the next suggestion can appear no earlier than **5 answers later** (the counter also advances if the child declines). | I |
 | FR-ADP-02 | **UPGRADE** when the last **5** answers are all correct and current difficulty is not Hard. **DOWNGRADE** when the last **3** answers are all wrong and current difficulty is not Easy. Upgrade is checked first. | I |
 | FR-ADP-03 | A recommendation shall be presented as a **modal Yes/No dialog** ("Level Up?" / "Adjust Level?"). Yes changes the *active session's* difficulty (affecting subsequent questions only) and shows a feedback line; No keeps it. The cool-down starts either way. | I |
 | FR-ADP-04 | The difficulty stored with the session is the **final** value at completion. Each saved question also stores the difficulty it was generated at (schema v2), so a mid-session level change is visible per question. | I |

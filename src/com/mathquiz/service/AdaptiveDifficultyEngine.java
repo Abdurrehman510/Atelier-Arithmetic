@@ -1,6 +1,7 @@
 package com.mathquiz.service;
 
 import com.mathquiz.model.QuestionResult;
+import com.mathquiz.model.QuizSession;
 
 import java.util.List;
 
@@ -119,6 +120,15 @@ public class AdaptiveDifficultyEngine {
     // =========================================================================
 
     /** Returns the difficulty one step harder, or the same if already at Hard. */
+    /**
+     * Whether level-change prompts may be offered in this session. Never in the Daily Challenge:
+     * its questions are seeded by date and difficulty, so a change would give children different
+     * questions on the same day (BUG-17).
+     */
+    public static boolean appliesTo(QuizSession session) {
+        return !"Daily Challenge".equalsIgnoreCase(session.getCategory());
+    }
+
     public static String upgrade(String current) {
         for (int i = 0; i < DIFFICULTY_ORDER.length - 1; i++) {
             if (DIFFICULTY_ORDER[i].equalsIgnoreCase(current)) return DIFFICULTY_ORDER[i + 1];
