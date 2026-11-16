@@ -178,7 +178,7 @@ public class HelpPanel extends JPanel {
                 "&nbsp;&nbsp;the Daily Challenge.\n" +
                 "• Spend stars in Archie's Shop (Home screen → Open Mascot Shop)\n" +
                 "&nbsp;&nbsp;on hats, glasses, colors and badges for Archie.\n" +
-                "&nbsp;&nbsp;A new item goes on Archie right away.\n" +
+                "&nbsp;&nbsp;Archie wears it on Home, in quizzes and on your results.\n" +
                 "• 10 BADGES unlock by themselves as you play: your first quiz,\n" +
                 "&nbsp;&nbsp;a perfect score, an answer in under 2 seconds, 10 quizzes,\n" +
                 "&nbsp;&nbsp;90% or more in Addition, Difference, Multiplication or Division,\n" +

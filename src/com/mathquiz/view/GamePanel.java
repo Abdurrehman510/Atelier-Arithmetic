@@ -9,6 +9,7 @@ import com.mathquiz.service.QuestionSource;
 import com.mathquiz.service.AdaptiveDifficultyEngine;
 import com.mathquiz.service.SoundService;
 import com.mathquiz.config.AppTheme;
+import com.mathquiz.view.tour.TourStep;
 
 
 
@@ -55,6 +56,7 @@ public class GamePanel extends JPanel {
     private JButton      hintButton;
     private JPanel       hintPanel;
     private JLabel       hintTextLabel;
+    private ArchieView   archie;        // beside the card, wearing the child's shop item; reacts to answers
 
 
 
@@ -271,7 +273,17 @@ public class GamePanel extends JPanel {
 
         playCard.add(hintPanel, c);
 
-        outer.add(playCard);
+        // Archie stands at the card's lower-left, wearing the child's shop item, and reacts to each
+        // answer — the "visual mascot feedback" the tour promises (BUG-22)
+        archie = new ArchieView(TourStep.MascotExpression.HAPPY);
+        GridBagConstraints a = new GridBagConstraints();
+        a.gridx  = 0;
+        a.anchor = GridBagConstraints.LAST_LINE_END;
+        a.insets = new Insets(0, 0, 0, 12);
+        outer.add(archie, a);
+        GridBagConstraints cardPos = new GridBagConstraints();
+        cardPos.gridx = 1;
+        outer.add(playCard, cardPos);
         return outer;
 
 
@@ -358,6 +370,7 @@ public class GamePanel extends JPanel {
 
         submitButton.setText("SUBMIT ANSWER");
         awaitingNext = false;
+        archie.setExpression(TourStep.MascotExpression.HAPPY);
 
         resetTimer();
     }
@@ -397,11 +410,13 @@ public class GamePanel extends JPanel {
         if (correct) {
             feedbackLabel.setText("✅ Correct! Great job!");
             feedbackLabel.setForeground(SUCCESS_GREEN);
+            archie.setExpression(TourStep.MascotExpression.EXCITED);
             sound.playCorrect();
         } else {
             feedbackLabel.setText("❌ Wrong. The correct answer was: "
                     + currentQuestion.getCorrectAnswer());
             feedbackLabel.setForeground(ERROR_RED);
+            archie.setExpression(TourStep.MascotExpression.THINKING);
             sound.playIncorrect();
         }
 

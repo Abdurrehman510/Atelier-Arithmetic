@@ -176,18 +176,12 @@ public class MascotShopPanel extends JPanel {
                 new EmptyBorder(16, 14, 16, 14)));
         card.setBackground(AppTheme.getBgCard());
 
-        // Top: emoji icon — Segoe UI Emoji renders color/pictographic emoji on Windows
-        JLabel emojiLabel = new JLabel(item.emoji, SwingConstants.CENTER);
-        try {
-            Font emojiFont = new Font("Segoe UI Emoji", Font.PLAIN, 34);
-            // Fall back to Serif if Segoe UI Emoji is unavailable (non-Windows)
-            emojiLabel.setFont(emojiFont.getFamily().equals("Segoe UI Emoji") ? emojiFont : new Font("Serif", Font.PLAIN, 34));
-        } catch (Exception ex) {
-            emojiLabel.setFont(new Font("Serif", Font.PLAIN, 34));
-        }
-        // Add vertical padding to prevent top/bottom glyph clipping due to system font metrics
-        emojiLabel.setBorder(new EmptyBorder(12, 0, 4, 0));
-        card.add(emojiLabel, BorderLayout.NORTH);
+        // Top: Archie wearing this item, so a child sees exactly what they are buying (BUG-22)
+        JPanel previewBox = new JPanel(new FlowLayout(FlowLayout.CENTER, 0, 0));
+        previewBox.setOpaque(false);
+        previewBox.setBorder(new EmptyBorder(4, 0, 0, 0));
+        previewBox.add(ArchieView.wearing(item.id));
+        card.add(previewBox, BorderLayout.NORTH);
 
         // Center: name + category + description
         JPanel textPanel = new JPanel();

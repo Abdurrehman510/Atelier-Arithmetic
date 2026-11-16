@@ -162,7 +162,7 @@ See [non-goals](#22-non-goals-v100). Additionally *not present today* (gaps, not
 |---|---|:---:|
 | FR-SET-01 | Home shall provide a question-count text field (default `10`) and a difficulty combo (`Easy`, `Medium`, `Hard`; default Easy). | I |
 | FR-SET-02 | "CHOOSE CATEGORY →" shall require the count to be a whole number from **1 to 100** (decision Q6); otherwise a warning dialog ("Please enter a number…" / "Please enter at least 1 question!" / "That's a lot! Please choose 100 questions or fewer.") and no navigation (`QuestionCounts`). | I (BUG-15 fixed 2026-11-15) |
-| FR-SET-03 | Home shall be a two-column dashboard: left = Archie header (equipped-accessory aware greeting), config card (count, difficulty, Quiz Builder, Load Quiz, Choose Category); right = four cards: **Daily Quest** (Daily Challenge button, streak, 7-day strip), **Performance & Badges** (sessions, badges `n / 10`, Analytics, Badges buttons), **Archie's Shop** (star balance, equipped item, shop button), **Smart Practice & Guide** (Practice, Tour, Guide buttons). | I |
+| FR-SET-03 | Home shall be a two-column dashboard: left = Archie header (drawn Archie wearing the equipped item; the greeting changes when he wears one), config card (count, difficulty, Quiz Builder, Load Quiz, Choose Category); right = four cards: **Daily Quest** (Daily Challenge button, streak, 7-day strip), **Performance & Badges** (sessions, badges `n / 10`, Analytics, Badges buttons), **Archie's Shop** (star balance, equipped item, shop button), **Smart Practice & Guide** (Practice, Tour, Guide buttons). | I |
 | FR-SET-04 | Returning to Home shall refresh star balance, equipped item, greeting, session/badge counts, streak label and calendar strip. | I |
 
 ### 6.4 Category selection (`FR-CAT`)
@@ -244,9 +244,9 @@ Rules in [BR-02](#82-star-rewards-br-02).
 ### 6.13 Mascot Shop (`FR-SHP`)
 | ID | Requirement | St |
 |---|---|:---:|
-| FR-SHP-01 | The shop shall list the 12 items in [BR-03](#83-mascot-shop-catalogue-br-03) in a 3-column scrollable grid, each with emoji, category, name, description, price and one action button. | I |
+| FR-SHP-01 | The shop shall list the 12 items in [BR-03](#83-mascot-shop-catalogue-br-03) in a 3-column scrollable grid, each with a preview of Archie wearing it, category, name, description, price and one action button. | I |
 | FR-SHP-02 | Button states: **Buy *n*★** (not owned) → if balance < price show "Not Enough Stars" info dialog; else confirm dialog → deduct → unlock **and auto-equip** → success dialog. **Equip** (owned, not equipped). **✅ Equipped** (clicking unequips). Only **one** item can be equipped at a time. | I |
-| FR-SHP-03 | Unlocked and equipped items are stored per profile. The equipped item's emoji appears after 🦉 in Archie's Home greeting and as "<emoji> Equipped" on the shop card. Items are purely cosmetic. | I |
+| FR-SHP-03 | Unlocked and equipped items are stored per profile. Archie is drawn wearing the equipped item on Home (header), on the quiz screen (where he also reacts to each answer) and on the results screen (where he celebrates 80 % or more); the Home shop card reads "Wearing: <emoji> <name>" or "Not wearing anything yet". Items are purely cosmetic. | I |
 
 ### 6.14 Achievements (`FR-ACH`)
 | ID | Requirement | St |
@@ -656,7 +656,7 @@ Mismatches that were found between claims (README, Help text, code comments) and
 
 | Term | Meaning |
 |---|---|
-| **Archie** | Brand mascot, an owl; drawn in Java2D (tour) and shown as 🦉 + accessory emoji (Home). |
+| **Archie** | Brand mascot, an owl; drawn in Java2D (`MascotPainter`). On Home, the quiz and results screens and in shop previews he wears the equipped shop item (`ArchieView`). |
 | **Atelier Arithmetic** | Product name; window title adds "Royal Math Quiz". |
 | **Card** | A `CardLayout` screen. |
 | **Parental gate** | Times-table puzzle dialog (`ParentalGate.verifyParent`). |

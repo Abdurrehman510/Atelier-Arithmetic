@@ -79,6 +79,19 @@ final class FrameHarness {
         return null;
     }
 
+    static <T extends Component> List<T> findAll(Container root, Class<T> type) {
+        List<T> found = new ArrayList<>();
+        for (Component c : root.getComponents()) {
+            if (type.isInstance(c)) {
+                found.add(type.cast(c));
+            }
+            if (c instanceof Container) {
+                found.addAll(findAll((Container) c, type));
+            }
+        }
+        return found;
+    }
+
     static Component findByName(Container root, String name) {
         for (Component c : root.getComponents()) {
             if (name.equals(c.getName())) {
@@ -129,6 +142,11 @@ final class FrameHarness {
                     problems.add(describe(c) + " is cut short (" + jc.getWidth()
                             + " < " + jc.getPreferredSize().width + ")");
                 }
+            }
+            if (c instanceof ArchieView
+                    && (c.getWidth() < c.getPreferredSize().width || c.getHeight() < c.getPreferredSize().height)) {
+                problems.add("Archie is squeezed to " + c.getWidth() + "x" + c.getHeight()
+                        + " (needs " + c.getPreferredSize().width + "x" + c.getPreferredSize().height + ")");
             }
             if (c instanceof Container && !(c instanceof JComboBox) && !(c instanceof JTextField)) {
                 walk((Container) c, problems);

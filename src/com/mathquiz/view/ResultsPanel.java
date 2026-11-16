@@ -4,6 +4,7 @@ import com.mathquiz.model.QuestionResult;
 import com.mathquiz.model.QuizSession;
 import com.mathquiz.config.AppTheme;
 import com.mathquiz.config.AppConfig;
+import com.mathquiz.view.tour.TourStep;
 
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
@@ -28,6 +29,7 @@ public class ResultsPanel extends JPanel {
 
     // UI elements to update dynamically
     private JLabel dashboardTitleLabel;
+    private ArchieView archie;   // wearing the child's shop item; celebrates a high score (BUG-22)
     private JLabel scoreLabel;
     private JLabel percentLabel;
     private JLabel gradeLabel;
@@ -82,6 +84,10 @@ public class ResultsPanel extends JPanel {
         scoreLabel.setText("🎯  Score: " + session.getCorrectAnswersCount() + " / " + session.getTotalQuestions());
         percentLabel.setText("📈  Success Rate: " + String.format("%.1f%%", session.getPercentage()));
         gradeLabel.setText(session.getGradeEmoji() + "  Grade: " + session.getGrade());
+        double pct = session.getPercentage();
+        archie.setExpression(pct >= 80 ? TourStep.MascotExpression.EXCITED
+                : pct >= 50 ? TourStep.MascotExpression.HAPPY
+                : TourStep.MascotExpression.THINKING);
         durationLabel.setText("⏱  Total Time: " + formatDuration(session.getDurationMs()));
 
         double avgSpeed = 0.0;
@@ -232,7 +238,7 @@ public class ResultsPanel extends JPanel {
     private JPanel buildHeader() {
         JPanel header = new JPanel(new BorderLayout());
         header.setOpaque(false);
-        header.setBorder(new EmptyBorder(25, 40, 5, 40));
+        header.setBorder(new EmptyBorder(16, 40, 5, 40));   // 25 → 16: Archie is ~9 px taller than the titles
 
         JPanel left = new JPanel();
         left.setOpaque(false);
@@ -249,6 +255,13 @@ public class ResultsPanel extends JPanel {
         left.add(dashboardTitleLabel);
 
         header.add(left, BorderLayout.WEST);
+
+        // Archie, wearing the child's shop item, reacts to the score (the tour promises he celebrates);
+        // a little smaller than elsewhere, and the top padding is trimmed, so the header (and the cards
+        // below it) keep their old height
+        archie = new ArchieView(TourStep.MascotExpression.HAPPY);
+        archie.setFont(new Font("SansSerif", Font.PLAIN, 11));
+        header.add(archie, BorderLayout.EAST);
         return header;
     }
 
