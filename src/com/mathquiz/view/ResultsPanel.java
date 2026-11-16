@@ -330,8 +330,7 @@ public class ResultsPanel extends JPanel {
 
         actionButton = new JButton("START RECOMMENDATION");
         actionButton.setFont(new Font("SansSerif", Font.BOLD, 12));
-        actionButton.setBackground(AppTheme.getTextDark());
-        actionButton.setForeground(AppTheme.getBgCard());
+        PrimaryButtonStyle.apply(actionButton);
         actionButton.setFocusPainted(false);
         actionButton.setCursor(new Cursor(Cursor.HAND_CURSOR));
         actionButton.setBorder(BorderFactory.createCompoundBorder(
@@ -414,8 +413,7 @@ public class ResultsPanel extends JPanel {
     private JButton makePrimaryButton(String text) {
         JButton btn = new JButton(text);
         btn.setFont(new Font("SansSerif", Font.BOLD, 12));
-        btn.setBackground(AppTheme.getTextDark());
-        btn.setForeground(AppTheme.getBgCard());
+        PrimaryButtonStyle.apply(btn);
         btn.setFocusPainted(false);
         btn.setBorder(BorderFactory.createCompoundBorder(
                 BorderFactory.createLineBorder(AppTheme.getBorderClr(), 1),
@@ -458,13 +456,11 @@ public class ResultsPanel extends JPanel {
         if (nextActionPromptLabel != null) nextActionPromptLabel.setForeground(AppTheme.getTextDark());
 
         if (actionButton != null) {
-            actionButton.setBackground(AppTheme.getTextDark());
-            actionButton.setForeground(AppTheme.getBgCard());
+            PrimaryButtonStyle.apply(actionButton);
         }
 
         if (restartButton != null) {
-            restartButton.setBackground(AppTheme.getTextDark());
-            restartButton.setForeground(AppTheme.getBgCard());
+            PrimaryButtonStyle.apply(restartButton);
         }
         if (reviewBtn != null) {
             reviewBtn.setBackground(AppTheme.getBgCard());

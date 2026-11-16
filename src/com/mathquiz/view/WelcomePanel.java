@@ -596,32 +596,11 @@ public class WelcomePanel extends JPanel {
     private JButton makePrimaryButton(String text) {
         JButton btn = new JButton(text);
         btn.setFont(new Font("SansSerif", Font.BOLD, 13));
-        btn.setBackground(TEXT_DARK);
-        btn.setForeground(Color.WHITE);
+        PrimaryButtonStyle.apply(btn);
         btn.setFocusPainted(false);
         btn.setBorder(new EmptyBorder(12, 16, 12, 16));
         btn.setCursor(new Cursor(Cursor.HAND_CURSOR));
-        // Paint our own background: the Windows look-and-feel ignores setBackground, which left white
-        // text on a light-grey button. Hover/press lighten it slightly for feedback.
-        btn.setContentAreaFilled(false);
-        btn.setOpaque(true);
-        btn.getModel().addChangeListener(e -> {
-            ButtonModel m = btn.getModel();
-            double towardCard = m.isPressed() ? 0.30 : (m.isRollover() ? 0.15 : 0.0);
-            Color target = mix(AppTheme.getTextDark(), AppTheme.getBgCard(), towardCard);
-            if (!target.equals(btn.getBackground())) {
-                btn.setBackground(target);
-            }
-        });
         return btn;
-    }
-
-    /** {@code a} moved {@code t} (0–1) of the way toward {@code b}. */
-    private static Color mix(Color a, Color b, double t) {
-        return new Color(
-                (int) Math.round(a.getRed()   + (b.getRed()   - a.getRed())   * t),
-                (int) Math.round(a.getGreen() + (b.getGreen() - a.getGreen()) * t),
-                (int) Math.round(a.getBlue()  + (b.getBlue()  - a.getBlue())  * t));
     }
 
     // =========================================================================
@@ -1109,8 +1088,7 @@ public class WelcomePanel extends JPanel {
             } else if (c instanceof JButton) {
                 JButton btn = (JButton) c;
                 if (btn == startButton) {
-                    btn.setBackground(AppTheme.getTextDark());
-                    btn.setForeground(AppTheme.getBgCard());
+                    PrimaryButtonStyle.apply(btn);
                 } else {
                     btn.setBackground(AppTheme.getBgCard());
                     btn.setForeground(AppTheme.getTextMuted());

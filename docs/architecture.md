@@ -170,6 +170,7 @@ Root: `D:\MathQuizApp`. Source root: `src/com/mathquiz/`.
 | `view` | `CategoryPanel` | 330 | 10 category cards, keyboard navigation |
 | `view` | `TwoColumnLayout` | 96 | Package-private: Home's two columns side by side when both fit, else stacked (right below left) |
 | `view` | `ViewportFitPanel` | 47 | Package-private: scroll-pane view that fills the viewport and scrolls only when its content cannot fit |
+| `view` | `PrimaryButtonStyle` | 49 | Package-private: dark primary buttons paint their own background (Windows look-and-feel ignores setBackground); hover/press shading |
 | `view` | `GridNavigation` | 35 | Package-private: arrow-key movement in the category grid (same column, stop at edges) |
 | `view` | `GamePanel` | 563 | Quiz loop, timer, hint box, adaptive prompts, key bindings |
 | `view` | `ResultsPanel` | 636 | 4-card results dashboard, HTML export, optional print |

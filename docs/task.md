@@ -192,11 +192,12 @@
 
 #### BUG-20 — "CHOOSE CATEGORY" white text on light grey · `P1 · S` · **Done 2026-11-16**
 * **Evidence:** the Windows look-and-feel ignores `setBackground` on a filled button, so the dark primary button rendered light grey with white text (owner screenshot).
-* **Fix:** `makePrimaryButton` paints its own background (`setContentAreaFilled(false)`, opaque) with hover/press shading from the theme colours. Visually checked in light and dark mode.
+* **Fix:** the button paints its own background (`setContentAreaFilled(false)`, opaque) with hover/press shading from the theme colours — now the shared `PrimaryButtonStyle` (BUG-21). Visually checked in light and dark mode.
 
-#### BUG-21 — Other dark buttons may have the same low-contrast look · `P2 · S` · *needs visual check*
-* **Evidence:** `GamePanel` "SUBMIT ANSWER" and `ResultsPanel` "Suggested path" use the same `setBackground(TEXT_DARK)` + white text pattern as BUG-20.
-* **Fix:** reuse the BUG-20 approach (a shared helper) after a visual check of those screens.
+#### BUG-21 — Every other dark button had the same white-on-grey text · `P1 · S` · **Done 2026-11-16**
+* **Evidence:** measured under the Windows look-and-feel: 12 dark buttons painted white text on #E1E1E1 (contrast 1.3 : 1) — category START, SUBMIT ANSWER, START RECOMMENDATION, PLAY AGAIN, Back / Back to Results, START SMART PRACTICE, ADD QUESTION, Save Custom Quiz.
+* **Fix:** one shared `PrimaryButtonStyle.apply` used at all 17 places that styled a dark button (creation and theme switch).
+* **Accept / tests:** `DarkButtonContrastTest` paints every dark button under the system look-and-feel, at rest and on hover, in light and dark mode, and requires WCAG AA text contrast (4.5 : 1). Visually checked.
 
 ### 4.2 Documentation
 

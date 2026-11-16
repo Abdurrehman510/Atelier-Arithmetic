@@ -176,8 +176,7 @@ public class SmartPracticePanel extends JPanel {
         c.insets = new Insets(24, 10, 10, 10);
         actionButton = new JButton("START SMART PRACTICE  →");
         actionButton.setFont(new Font("SansSerif", Font.BOLD, 13));
-        actionButton.setBackground(TEXT_DARK);
-        actionButton.setForeground(Color.WHITE);
+        PrimaryButtonStyle.apply(actionButton);
         actionButton.setFocusPainted(false);
         actionButton.setBorder(new EmptyBorder(12, 36, 12, 36));
         actionButton.setCursor(new Cursor(Cursor.HAND_CURSOR));
@@ -219,8 +218,7 @@ public class SmartPracticePanel extends JPanel {
         if (promptLabel != null) promptLabel.setForeground(AppTheme.getTextMuted());
         if (targetLabel != null) targetLabel.setForeground(AppTheme.getTextDark());
         if (actionButton != null) {
-            actionButton.setBackground(AppTheme.getTextDark());
-            actionButton.setForeground(AppTheme.getBgCard());
+            PrimaryButtonStyle.apply(actionButton);
         }
     }
 }
