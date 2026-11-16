@@ -1,98 +1,95 @@
 package com.mathquiz.util;
 
-import java.awt.Graphics2D;
-import java.awt.Image;
+import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
-import java.io.ByteArrayOutputStream;
+import java.io.ByteArrayInputStream;
 import java.io.File;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
-import javax.imageio.ImageIO;
+import java.nio.file.Files;
+import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.List;
 
 /**
- * Automates the translation of standard PNG logo formats into Microsoft Icon (ICO) format
- * containing a high-resolution 256x256 image with zero external library dependencies.
+ * Build-time tool: packs square PNG files (16–256 px) into one Microsoft Icon (ICO) file, smallest first.
+ * The PNG bytes are embedded unchanged, so each size keeps the crispness it was exported with (the title
+ * bar, taskbar, Start menu and installer each pick the size they need). No external libraries.
  */
 public class IcoConverter {
 
+    private static final int HEADER_BYTES = 6;
+    private static final int ENTRY_BYTES = 16;
+    private static final int MAX_SIZE = 256;
+
     public static void main(String[] args) {
         if (args.length < 2) {
-            System.err.println("Usage: java com.mathquiz.util.IcoConverter <input-png> <output-ico>");
+            System.err.println("Usage: java com.mathquiz.util.IcoConverter <output-ico> <png> [<png> ...]");
             System.exit(1);
         }
-
-        File input = new File(args[0]);
-        File output = new File(args[1]);
-
+        List<File> pngs = new ArrayList<>();
+        for (int i = 1; i < args.length; i++) {
+            pngs.add(new File(args[i]));
+        }
         try {
-            convertPngToIco(input, output);
-            System.out.println("Successfully converted " + input.getName() + " to " + output.getName());
+            writeIco(new File(args[0]), pngs);
+            System.out.println("Wrote " + args[0] + " with " + pngs.size() + " sizes");
         } catch (Exception e) {
-            System.err.println("Error converting image: " + e.getMessage());
-            e.printStackTrace();
+            System.err.println("Error building icon: " + e.getMessage());
             System.exit(1);
         }
     }
 
-    public static void convertPngToIco(File inputPng, File outputIco) throws IOException {
-        BufferedImage src = ImageIO.read(inputPng);
-        if (src == null) {
-            throw new IOException("Could not read input PNG file: " + inputPng.getAbsolutePath());
+    /**
+     * @throws IllegalArgumentException if the list is empty or an image is not square or exceeds 256 px
+     * @throws IOException              if a file cannot be read as an image or the ICO cannot be written
+     */
+    public static void writeIco(File outputIco, List<File> pngs) throws IOException {
+        if (pngs.isEmpty()) {
+            throw new IllegalArgumentException("at least one PNG is required");
         }
-
-        // Scale to 256x256
-        int size = 256;
-        Image scaled = src.getScaledInstance(size, size, Image.SCALE_SMOOTH);
-        BufferedImage dest = new BufferedImage(size, size, BufferedImage.TYPE_INT_ARGB);
-        Graphics2D g2d = dest.createGraphics();
-        try {
-            g2d.drawImage(scaled, 0, 0, null);
-        } finally {
-            g2d.dispose();
+        List<Entry> entries = new ArrayList<>();
+        for (File png : pngs) {
+            byte[] data = Files.readAllBytes(png.toPath());
+            BufferedImage img = ImageIO.read(new ByteArrayInputStream(data));
+            if (img == null) {
+                throw new IOException("Could not read image: " + png.getAbsolutePath());
+            }
+            if (img.getWidth() != img.getHeight() || img.getWidth() > MAX_SIZE) {
+                throw new IllegalArgumentException(png.getName() + " must be square and at most "
+                        + MAX_SIZE + " px (was " + img.getWidth() + "x" + img.getHeight() + ")");
+            }
+            entries.add(new Entry(img.getWidth(), data));
         }
+        entries.sort(Comparator.comparingInt(e -> e.size));
 
-        // Write scaled image to PNG byte array
-        ByteArrayOutputStream pngBaos = new ByteArrayOutputStream();
-        ImageIO.write(dest, "png", pngBaos);
-        byte[] pngData = pngBaos.toByteArray();
-
-        // Write ICO file structure
-        try (FileOutputStream fos = new FileOutputStream(outputIco)) {
-            // ICO Header: 6 bytes
-            fos.write(new byte[]{0, 0}); // Reserved
-            fos.write(new byte[]{1, 0}); // Image type (1 = icon)
-            fos.write(new byte[]{1, 0}); // Number of images
-
-            // ICO Directory Entry: 16 bytes
-            fos.write(0); // Width (0 means 256)
-            fos.write(0); // Height (0 means 256)
-            fos.write(0); // Color count (0)
-            fos.write(0); // Reserved
-
-            // Color planes (1)
-            ByteBuffer planes = ByteBuffer.allocate(2).order(ByteOrder.LITTLE_ENDIAN);
-            planes.putShort((short) 1);
-            fos.write(planes.array());
-
-            // Bits per pixel (32)
-            ByteBuffer bpp = ByteBuffer.allocate(2).order(ByteOrder.LITTLE_ENDIAN);
-            bpp.putShort((short) 32);
-            fos.write(bpp.array());
-
-            // Size of image data
-            ByteBuffer dataSize = ByteBuffer.allocate(4).order(ByteOrder.LITTLE_ENDIAN);
-            dataSize.putInt(pngData.length);
-            fos.write(dataSize.array());
-
-            // Offset of image data (header 6 bytes + directory 16 bytes = 22)
-            ByteBuffer offset = ByteBuffer.allocate(4).order(ByteOrder.LITTLE_ENDIAN);
-            offset.putInt(22);
-            fos.write(offset.array());
-
-            // Write actual PNG image data bytes
-            fos.write(pngData);
+        int total = HEADER_BYTES + ENTRY_BYTES * entries.size();
+        for (Entry e : entries) {
+            total += e.data.length;
         }
+        ByteBuffer out = ByteBuffer.allocate(total).order(ByteOrder.LITTLE_ENDIAN);
+        out.putShort((short) 0);                       // reserved
+        out.putShort((short) 1);                       // type 1 = icon
+        out.putShort((short) entries.size());
+
+        int offset = HEADER_BYTES + ENTRY_BYTES * entries.size();
+        for (Entry e : entries) {
+            byte dimension = (byte) (e.size == MAX_SIZE ? 0 : e.size);   // 0 means 256
+            out.put(dimension).put(dimension);
+            out.put((byte) 0).put((byte) 0);           // colour count, reserved
+            out.putShort((short) 1);                   // colour planes
+            out.putShort((short) 32);                  // bits per pixel
+            out.putInt(e.data.length);
+            out.putInt(offset);
+            offset += e.data.length;
+        }
+        for (Entry e : entries) {
+            out.put(e.data);
+        }
+        Files.write(outputIco.toPath(), out.array());
+    }
+
+    private record Entry(int size, byte[] data) {
     }
 }

@@ -56,13 +56,14 @@ Write-Host "[3/5] Translating assets and compiling application..."
 mkdir -Force "build/classes"
 & javac -encoding UTF-8 -cp "lib/*" -sourcepath src src\com\mathquiz\QuizApp.java src\com\mathquiz\util\IcoConverter.java -d build/classes
 
-# Execute IcoConverter to construct Microsoft Icon format logo
-Write-Host "Creating high-res logo.ico from logo.png..."
-& java -cp build/classes com.mathquiz.util.IcoConverter src/com/mathquiz/resources/logo.png logo.ico
+# Execute IcoConverter to build logo.ico from the brand PNG sizes (16-256 px)
+Write-Host "Creating multi-size logo.ico from the brand icons..."
+$iconPngs = Get-ChildItem src/com/mathquiz/resources/icons/app-*.png | ForEach-Object { $_.FullName }
+& java -cp build/classes com.mathquiz.util.IcoConverter logo.ico @iconPngs
 
-# Copy resources so they are bundled in the JAR
+# Copy resources (icons, Archie) so they are bundled in the JAR
 mkdir -Force "build/classes/com/mathquiz/resources"
-Copy-Item -Path src/com/mathquiz/resources/logo.png -Destination build/classes/com/mathquiz/resources/logo.png
+Copy-Item -Path "src/com/mathquiz/resources/*" -Destination build/classes/com/mathquiz/resources -Recurse -Force
 
 # Bundle main application executable JAR
 mkdir -Force "dist"

@@ -263,9 +263,9 @@
 #### DEBT-12 — Remove deprecated `Date` constructor usage · `P3 · S`
 * `AnalyticsService.parseDate` uses `new Date(y-1900, m-1, d)`; replace with `LocalDate` (folds into DEBT-06). **Accept:** build shows no deprecation notes.
 
-#### DEBT-13 — Real PNG logo · `P3 · S` · *new design ready 2026-11-16*
+#### DEBT-13 — Real PNG logo · `P3 · S` · **Done 2026-11-16**
 * `logo.png` is JPEG data. Re-export as true PNG (consider transparency) at 1024² and 256² (+ ICO sizes 16–256).
-* **2026-11-16:** a new logo set exists as SVG in `brand/` (FEAT-12). Remaining: export `app-icon.svg` to PNG 1024/256/48 and `app-icon-small.svg` to 16/24/32, build a multi-size ICO (extend `IcoConverter`), and replace `logo.png` for the window icon, Help, Analytics and the report (report header: `logo-wide.svg` as PNG). **Accept:** `file` reports PNG; ICO contains multiple sizes.
+* **Done 2026-11-16 (with FEAT-12):** the old JPEG-in-a-`.png` is deleted. New transparent PNGs exported from `brand/*.svg`: `archie.png` and `icons/app-{16,24,32,48,256}.png` (16–32 px use the simplified icon). `IcoConverter` now packs them into one multi-size `logo.ico` (`IcoConverterTest`); `BrandAssets` loads them for the window icon set, Help, Analytics and the report (`BrandAssetsTest`: real PNG, transparent, right sizes, nothing references the old file). Checked visually in light and dark mode. 512/1024 px PNGs for macOS are exported from the SVG when plan 0B restarts.
 
 #### DEBT-14 — Externalise UI strings for localisation · `P3 · L` (prerequisite for FEAT-07)
 

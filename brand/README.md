@@ -47,8 +47,16 @@ fonts are unchanged.
 * **Don't** recolour Archie, stretch or rotate the logo, add shadows or outlines, swap the typeface, move the
   mark and the name apart, or place the logo on a busy photo.
 
-## Status in the app
+## In the app (since 2026-11-16)
 
-The app still uses the old blue owl `src/com/mathquiz/resources/logo.png` (a JPEG with a white background) for
-the window icon, Help, Analytics and the exported report. Swing cannot draw SVG, so these files must first be
-exported to PNG and ICO — task **DEBT-13** in [task.md](../docs/task.md).
+Swing cannot draw SVG, so the app uses PNG exports of these files (`src/com/mathquiz/resources/`):
+
+| Export | Source | Used for |
+|---|---|---|
+| `icons/app-16.png`, `-24`, `-32` | `app-icon-small.svg` | title bar, taskbar, `logo.ico` |
+| `icons/app-48.png`, `-256` | `app-icon.svg` | Start menu, installer, `logo.ico` |
+| `archie.png` (238 × 256) | `archie-mark.svg` | Help header, Analytics, report header |
+
+If you change an SVG, export it again at the same sizes (transparent background) and run `.\test.ps1` —
+`BrandAssetsTest` checks that every image is a real transparent PNG of the right size. `package.ps1` packs the
+five icon sizes into one `logo.ico`.

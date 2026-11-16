@@ -507,16 +507,8 @@ public class ResultsPanel extends JPanel {
         if (returnVal == JFileChooser.APPROVE_OPTION) {
             java.io.File dest = chooser.getSelectedFile();
 
-            // Load Base64 logo (optional decoration; the report is complete without it)
-            String base64Logo = "";
-            try (java.io.InputStream is = ResultsPanel.class.getResourceAsStream("/com/mathquiz/resources/logo.png")) {
-                if (is != null) {
-                    base64Logo = java.util.Base64.getEncoder().encodeToString(is.readAllBytes());
-                }
-            } catch (java.io.IOException ignored) {
-                // logo is optional
-            }
-            String html = com.mathquiz.service.ReportBuilder.toHtml(activeSession, base64Logo);
+            // Archie in the report header (optional decoration; the report is complete without it)
+            String html = com.mathquiz.service.ReportBuilder.toHtml(activeSession, BrandAssets.archieBase64());
 
             if (!com.mathquiz.service.ReportBuilder.writeReport(dest, html)) {   // also catches invalid file names
                 JOptionPane.showMessageDialog(this, "Failed to write file!", "Error", JOptionPane.ERROR_MESSAGE);

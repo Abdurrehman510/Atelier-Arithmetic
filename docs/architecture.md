@@ -120,8 +120,8 @@ Root: `D:\MathQuizApp`. Source root: `src/com/mathquiz/`.
 | `package.ps1` | Release pipeline (compile → ICO → JAR → jpackage app-image → MSI or ZIP) |
 | `sign.ps1` | Code-signing wrapper around `signtool.exe` |
 | `lib/sqlite-jdbc-3.42.0.0.jar` | Committed dependency (the `.gitignore` allows `lib/*.jar`) |
-| `src/com/mathquiz/resources/logo.png` | 1024×1024 brand image (**file content is JPEG** despite the `.png` name; `ImageIO` reads it by content) |
-| `brand/` | Logo master artwork (SVG, text outlined) and usage guide `brand/README.md`; not compiled or packaged — the app needs PNG/ICO exports (DEBT-13) |
+| `src/com/mathquiz/resources/archie.png`, `icons/app-*.png` | Brand images (transparent PNGs exported from `brand/*.svg`): Archie and the app icon in five sizes. Loaded by `BrandAssets` |
+| `brand/` | Logo master artwork (SVG, text outlined) and usage guide `brand/README.md`; not compiled or packaged — the PNGs in `resources/` are exported from it |
 | `bin/`, `build/`, `dist/`, `logo.ico` | Generated, git-ignored |
 | `.gitignore` | Ignores class files, build outputs, IDE files, logs |
 | `docs/` | This documentation set |
@@ -164,13 +164,14 @@ Root: `D:\MathQuizApp`. Source root: `src/com/mathquiz/`.
 | `service` | `ParentalGate` | 71 | Static `verifyParent(Component)` modal puzzle |
 | `util` | `CryptoHelper` | 62 | Static `encrypt/decrypt` (Base64 AES) with static machine-derived key |
 | `util` | `JsonHelper` | 192 | Minimal hand-written JSON writer/reader for a flat schema |
-| `util` | `IcoConverter` | 98 | CLI tool: PNG/JPEG → 256×256 PNG-in-ICO (used by `package.ps1`) |
+| `util` | `IcoConverter` | 95 | Build tool: `IcoConverter <out.ico> <png>…` packs square PNGs (16–256 px) into one multi-size ICO, PNG bytes unchanged (used by `package.ps1`) |
 | `view` | `QuizNavigator` | 78 | Navigation contract (16 methods) |
 | `view` | `QuizFrame` | 447 | JFrame; owns services & panels; implements `QuizNavigator`; theme/scale orchestration; tour wiring |
 | `view` | `WelcomePanel` | 1142 | Home dashboard, profile menu/dialog, sound menu, theme & scale toggles, calendar strip, streak logic (duplicate) |
 | `view` | `CategoryPanel` | 330 | 10 category cards, keyboard navigation |
 | `view` | `TwoColumnLayout` | 96 | Package-private: Home's two columns side by side when both fit, else stacked (right below left) |
 | `view` | `ViewportFitPanel` | 47 | Package-private: scroll-pane view that fills the viewport and scrolls only when its content cannot fit |
+| `view` | `BrandAssets` | 65 | Package-private: loads the window icon set, Archie (scaled) and Archie as Base64 for reports; a missing image is skipped |
 | `view` | `ArchieView` | 97 | Archie wearing the child's equipped item (or a fixed item for shop previews); size follows its font |
 | `view` | `PrimaryButtonStyle` | 49 | Package-private: dark primary buttons paint their own background (Windows look-and-feel ignores setBackground); hover/press shading |
 | `view` | `GridNavigation` | 35 | Package-private: arrow-key movement in the category grid (same column, stop at edges) |
@@ -473,7 +474,7 @@ java -cp "bin;lib/*" com.mathquiz.QuizApp                                   # ';
 |---|---|
 | 1 | Verify `javac`, `jar`, `jpackage`; detect WiX (`candle.exe` + `light.exe`) |
 | 2 | **Delete `build/` and `dist/`** (destroys previous outputs) |
-| 3 | `javac` (`QuizApp` + `IcoConverter`) → `build/classes`; run `IcoConverter` → `logo.ico` (repo root); copy `logo.png` into classes |
+| 3 | `javac` (`QuizApp` + `IcoConverter`) → `build/classes`; run `IcoConverter` over `resources/icons/app-*.png` → multi-size `logo.ico` (repo root); copy `resources/` (icons, Archie) into classes |
 | 4 | `jar --create --file dist/atelier-arithmetic.jar --main-class com.mathquiz.QuizApp -C build/classes .`; stage `build/input` with the app JAR + sqlite JAR |
 | 5 | `jpackage --type app-image --name AtelierArithmetic --add-modules java.base,java.desktop,java.sql,java.xml,java.naming,jdk.charsets --jlink-options "--strip-debug --no-man-pages --no-header-files --compress zip-9" --icon logo.ico --app-version 1.0.0 --vendor "Atelier Arithmetic" --dest dist` → `dist/AtelierArithmetic/{AtelierArithmetic.exe, app/, runtime/}` |
 | 6a | WiX present → `jpackage --type msi --win-menu --win-shortcut --win-dir-chooser --win-upgrade-uuid 71a2e7c3-3882-4df4-94fa-7e9b422a59cc --win-menu-group "Atelier Arithmetic"` → `dist/AtelierArithmetic-1.0.0.msi` |

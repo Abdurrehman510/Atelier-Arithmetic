@@ -62,18 +62,12 @@ public class HelpPanel extends JPanel {
 
         // Logo
         int row = 0;
-        try {
-            java.net.URL logoUrl = HelpPanel.class.getResource("/com/mathquiz/resources/logo.png");
-            if (logoUrl != null) {
-                ImageIcon logoIcon = new ImageIcon(logoUrl);
-                Image scaledImg = logoIcon.getImage().getScaledInstance(55, 55, Image.SCALE_SMOOTH);
-                JLabel logoLabel = new JLabel(new ImageIcon(scaledImg));
-                gbc.gridy = row++;
-                gbc.insets = new Insets(0, 0, 8, 0);
-                p.add(logoLabel, gbc);
-            }
-        } catch (Exception e) {
-            System.err.println("Could not load logo in HelpPanel: " + e.getMessage());
+        Image archie = BrandAssets.archie(55);
+        if (archie != null) {
+            JLabel logoLabel = new JLabel(new ImageIcon(archie));
+            gbc.gridy = row++;
+            gbc.insets = new Insets(0, 0, 8, 0);
+            p.add(logoLabel, gbc);
         }
 
         gbc.gridy = row++;

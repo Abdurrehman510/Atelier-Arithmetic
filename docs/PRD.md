@@ -141,7 +141,7 @@ See [non-goals](#22-non-goals-v100). Additionally *not present today* (gaps, not
 |---|---|:---:|
 | FR-APP-01 | The app shall run as one `JFrame` titled **"Atelier Arithmetic · Royal Math Quiz"**, initial size **820×620**, minimum **720×550**, centred, closing the window exits the process. | I |
 | FR-APP-02 | The app shall apply the system look-and-feel, silently falling back to the default if unavailable, and enable text anti-aliasing (`awt.useSystemAAFontSettings=on`, `swing.aatext=true`). | I |
-| FR-APP-03 | The window icon shall be `/com/mathquiz/resources/logo.png`. | I |
+| FR-APP-03 | The window icon shall be the brand icon in five sizes (16, 24, 32, 48, 256 px; `resources/icons/app-*.png`), so the title bar and taskbar each get a crisp one (`BrandAssets.windowIcons`). | I (new logo, FEAT-12) |
 | FR-APP-04 | A launch chime shall play when the frame is constructed (if sound is enabled). | I |
 | FR-APP-05 | A global uncaught-exception handler shall append thread name, timestamp and stack trace to `~/.atelier-arithmetic/logs/error.log` and show the dialog "Archie's Code Hiccup 🦉" with the exception message; the app shall continue running. | I |
 | FR-APP-06 | All 11 screens shall be created once and switched with a `CardLayout` (cards: `welcome, categories, game, results, review, help, analytics, smart_practice, achievements, quiz_builder, mascot_shop`). | I |
