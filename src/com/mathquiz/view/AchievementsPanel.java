@@ -115,7 +115,8 @@ public class AchievementsPanel extends JPanel {
         };
         card.setBackground(AppTheme.getBgCard());
         card.setBorder(BorderFactory.createEmptyBorder(16, 18, 16, 18));
-        card.setPreferredSize(new Dimension(320, 85));
+        // No fixed size: the card grows with its text, so a two-line description is never cut off
+        // at 125 % / 150 % text size (rules.md R-UI-15). The description wraps at 180 px.
 
         // Big Badge Icon
         JLabel badgeIcon = new JLabel(ach.emoji, SwingConstants.CENTER);
