@@ -40,6 +40,7 @@ public class WelcomePanel extends JPanel {
     private JLabel subBrand;
     private JLabel titleLabel;
     private JLabel taglineLabel;
+    private ArchieView homeArchie;   // wears the child's equipped shop item (BUG-22)
     private JLabel countLabel;
     private JLabel diffLabel;
     private JPanel configCardPanel;
@@ -156,16 +157,13 @@ public class WelcomePanel extends JPanel {
         panel.setOpaque(false);
         panel.setBorder(new EmptyBorder(8, 10, 8, 10));
 
-        // Mascot logo
-        try {
-            java.net.URL logoUrl = WelcomePanel.class.getResource("/com/mathquiz/resources/logo.png");
-            if (logoUrl != null) {
-                ImageIcon logoIcon = new ImageIcon(logoUrl);
-                Image scaledImg = logoIcon.getImage().getScaledInstance(60, 60, Image.SCALE_SMOOTH);
-                JLabel logoLabel = new JLabel(new ImageIcon(scaledImg));
-                panel.add(logoLabel, BorderLayout.WEST);
-            }
-        } catch (Exception e) {}
+        // Archie, wearing the child's equipped shop item, where the small logo image used to be: a
+        // purchase shows here straight away, and he is transparent, so he also suits dark mode (BUG-22)
+        homeArchie = new ArchieView(com.mathquiz.view.tour.TourStep.MascotExpression.HAPPY);
+        JPanel archieBox = new JPanel(new BorderLayout());
+        archieBox.setOpaque(false);
+        archieBox.add(homeArchie, BorderLayout.NORTH);
+        panel.add(archieBox, BorderLayout.WEST);
 
         // Titles
         JPanel textPanel = new JPanel(new GridBagLayout());
@@ -189,12 +187,7 @@ public class WelcomePanel extends JPanel {
 
         c.gridy = 2;
         c.insets = new Insets(4, 0, 0, 0);
-        String equipped = config.getEquippedItem();
-        String accessoryDisplay = "none".equals(equipped) ? "" : getEquippedEmoji(equipped);
-        String archieText = accessoryDisplay.isEmpty()
-            ? "<html><body style='width: 210px'><font face='Segoe UI Emoji'>\ud83e\udd89</font> <b>Archie says:</b> \"Ready for a math adventure? Configure below and select a category!\"</body></html>"
-            : "<html><body style='width: 210px'><font face='Segoe UI Emoji'>\ud83e\udd89" + accessoryDisplay + "</font> <b>Archie says:</b> \"Looking great today! Ready for math?\"</body></html>";
-        taglineLabel = new JLabel(archieText);
+        taglineLabel = new JLabel(greetingText());
         taglineLabel.setFont(new Font("SansSerif", Font.PLAIN, 11));
         taglineLabel.setForeground(TEXT_MUTED);
         textPanel.add(taglineLabel, c);
@@ -509,9 +502,7 @@ public class WelcomePanel extends JPanel {
         // Description (equipped accessory)
         c.gridy = 1;
         c.insets = new Insets(6, 0, 8, 0);
-        String equippedId = config.getEquippedItem();
-        String equipped = "none".equals(equippedId) ? "Nothing equipped" : "<font face='Segoe UI Emoji'>" + getEquippedEmoji(equippedId) + "</font> Equipped";
-        shopCardInfoLabel = new JLabel("<html><body>Spend stars to unlock hats, glasses &amp; themes!<br>" + equipped + "</body></html>");
+        shopCardInfoLabel = new JLabel(shopCardText());
         shopCardInfoLabel.setFont(new Font("SansSerif", Font.PLAIN, 11));
         shopCardInfoLabel.setForeground(TEXT_MUTED);
         card.add(shopCardInfoLabel, c);
@@ -529,12 +520,32 @@ public class WelcomePanel extends JPanel {
         return card;
     }
 
-    /** Maps a shop item ID to its display emoji for use in the mascot greeting. */
-    private String getEquippedEmoji(String itemId) {
-        for (com.mathquiz.view.MascotShopPanel.ShopItem item : com.mathquiz.view.MascotShopPanel.ALL_ITEMS) {
-            if (item.id.equals(itemId)) return item.emoji;
+    /** The equipped shop item of the current child, or null when Archie wears nothing. */
+    private MascotShopPanel.ShopItem equippedItem() {
+        String id = config.getEquippedItem();
+        for (MascotShopPanel.ShopItem item : MascotShopPanel.ALL_ITEMS) {
+            if (item.id.equals(id)) {
+                return item;
+            }
         }
-        return "";
+        return null;
+    }
+
+    /** Archie's greeting beside his picture (wraps at 210 px so no line is hidden). */
+    private String greetingText() {
+        String says = equippedItem() == null
+                ? "Ready for a math adventure? Configure below and select a category!"
+                : "Looking great today! Ready for math?";
+        return "<html><body style='width: 210px'><b>Archie says:</b> \"" + says + "\"</body></html>";
+    }
+
+    /** Shop card: what the shop sells, and what Archie is wearing now. */
+    private String shopCardText() {
+        MascotShopPanel.ShopItem item = equippedItem();
+        String wearing = item == null
+                ? "Not wearing anything yet"
+                : "Wearing: <font face='Segoe UI Emoji'>" + item.emoji + "</font> " + item.name;
+        return "<html><body>Dress Archie up with hats, glasses &amp; more!<br>" + wearing + "</body></html>";
     }
 
     private void handleLoadCustomQuiz(Component parent) {
@@ -1017,19 +1028,15 @@ public class WelcomePanel extends JPanel {
 
         // Shop card equipped-item description
         if (shopCardInfoLabel != null) {
-            String eqId = config.getEquippedItem();
-            String eqText = "none".equals(eqId) ? "Nothing equipped" : "<font face='Segoe UI Emoji'>" + getEquippedEmoji(eqId) + "</font> Equipped";
-            shopCardInfoLabel.setText("<html><body>Spend stars to unlock hats, glasses &amp; themes!<br>" + eqText + "</body></html>");
+            shopCardInfoLabel.setText(shopCardText());
         }
 
         // Archie mascot tagline in hero header
         if (taglineLabel != null) {
-            String eqId = config.getEquippedItem();
-            String accessory = "none".equals(eqId) ? "" : getEquippedEmoji(eqId);
-            String archieText = accessory.isEmpty()
-                ? "<html><body style='width: 210px'><font face='Segoe UI Emoji'>\ud83e\udd89</font> <b>Archie says:</b> \"Ready for a math adventure? Configure below and select a category!\"</body></html>"
-                : "<html><body style='width: 210px'><font face='Segoe UI Emoji'>\ud83e\udd89" + accessory + "</font> <b>Archie says:</b> \"Looking great today! Ready for math?\"</body></html>";
-            taglineLabel.setText(archieText);
+            taglineLabel.setText(greetingText());
+        }
+        if (homeArchie != null) {
+            homeArchie.repaint();   // he reads the equipped item when painted
         }
 
         // Stats card info label

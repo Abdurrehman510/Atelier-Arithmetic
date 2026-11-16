@@ -22,6 +22,9 @@ function Write-SourceList([string]$root, [string]$listFile) {
 Write-SourceList 'src' 'build/test/main-sources.txt'
 & javac -encoding UTF-8 --release 17 -cp 'lib/*' -d 'build/test/main' '@build/test/main-sources.txt'
 if ($LASTEXITCODE -ne 0) { Write-Host 'Main sources failed to compile.'; exit $LASTEXITCODE }
+# Resources (the logo) too, as run.bat and package.ps1 do, so layout tests see the screens users see
+$resOut = New-Item -ItemType Directory -Force 'build/test/main/com/mathquiz/resources'
+Copy-Item -Path 'src/com/mathquiz/resources/*' -Destination $resOut -Recurse -Force
 
 # 2. Test sources
 Write-SourceList 'test' 'build/test/test-sources.txt'

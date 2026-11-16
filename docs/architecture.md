@@ -171,6 +171,7 @@ Root: `D:\MathQuizApp`. Source root: `src/com/mathquiz/`.
 | `view` | `CategoryPanel` | 330 | 10 category cards, keyboard navigation |
 | `view` | `TwoColumnLayout` | 96 | Package-private: Home's two columns side by side when both fit, else stacked (right below left) |
 | `view` | `ViewportFitPanel` | 47 | Package-private: scroll-pane view that fills the viewport and scrolls only when its content cannot fit |
+| `view` | `ArchieView` | 97 | Archie wearing the child's equipped item (or a fixed item for shop previews); size follows its font |
 | `view` | `PrimaryButtonStyle` | 49 | Package-private: dark primary buttons paint their own background (Windows look-and-feel ignores setBackground); hover/press shading |
 | `view` | `GridNavigation` | 35 | Package-private: arrow-key movement in the category grid (same column, stop at edges) |
 | `view` | `GamePanel` | 563 | Quiz loop, timer, hint box, adaptive prompts, key bindings |
@@ -182,10 +183,10 @@ Root: `D:\MathQuizApp`. Source root: `src/com/mathquiz/`.
 | `view` | `SmartPracticePanel` | 227 | Weakest-topic recommendation + launcher |
 | `view` | `AchievementsPanel` | 198 | Badge grid |
 | `view` | `QuizBuilderPanel` | 354 | Custom quiz editor |
-| `view` | `MascotShopPanel` | 325 | 12-item catalogue (`ShopItem`, `ALL_ITEMS`), buy/equip |
+| `view` | `MascotShopPanel` | 327 | 12-item catalogue (`ShopItem`, `ALL_ITEMS`), buy/equip |
 | `view.tour` | `TourOverlay` | 268 | Glass pane: dimmed mask with spotlight hole, bubble, NEXT/SKIP |
 | `view.tour` | `TourStep` | 63 | Step data (screen, target component, message, bubble position, mascot expression) |
-| `view.tour` | `MascotPainter` | 170 | Draws Archie the Owl with Java2D (5 expressions) |
+| `view.tour` | `MascotPainter` | 510 | Draws Archie the Owl with Java2D (5 expressions) and the 12 shop items he can wear |
 
 ## 6. Runtime behaviour
 
