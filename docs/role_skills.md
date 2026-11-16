@@ -209,7 +209,7 @@ Minimum bar: R2 = 4 in Java/Swing/JDBC; R3 = 3 in Java/Swing; R7 = 4 in cryptogr
 | `src/.../service/ParentalGate.java`, `util/CryptoHelper.java` | R7 | R2 |
 | `src/.../service/SoundService.java` | R3 | R4 |
 | `src/.../model/*` | R3 | R5 (grading text) |
-| `src/.../resources/logo.png`, `logo.ico` pipeline | R4 | R8 |
+| `brand/`, `src/.../resources/archie.png`, `resources/icons/`, `logo.ico` pipeline | R4 | R8 |
 | `run.bat`, `package.ps1`, `sign.ps1`, `util/IcoConverter.java`, `lib/` | R8 | R2, R7 |
 | `README.md`, `DEPLOYMENT.md`, in-app Help/Tour text | R9 | R1, R5 |
 | Future `test/` | R6 | R3 |

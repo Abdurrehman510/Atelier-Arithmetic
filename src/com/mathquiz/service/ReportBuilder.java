@@ -79,7 +79,7 @@ public final class ReportBuilder {
             html.append("<div class='subtitle'>Bespoke Performance Report</div>");
             html.append("</div>");
             html.append("<img src='data:image/png;base64,").append(escape(base64Logo))
-                    .append("' style='height: 60px; width: 60px; object-fit: contain; border-radius: 8px;' />");
+                    .append("' alt='Archie the Owl' style='height: 60px; width: 60px; object-fit: contain;' />");
             html.append("</div>");
         } else {
             html.append("<h1>Atelier Arithmetic Dashboard</h1>");

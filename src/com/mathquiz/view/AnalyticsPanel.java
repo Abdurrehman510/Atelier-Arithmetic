@@ -168,14 +168,10 @@ public class AnalyticsPanel extends JPanel {
         recCard.setOpaque(false);
 
         // Mascot Icon
-        try {
-            java.net.URL logoUrl = AnalyticsPanel.class.getResource("/com/mathquiz/resources/logo.png");
-            if (logoUrl != null) {
-                ImageIcon icon = new ImageIcon(logoUrl);
-                Image img = icon.getImage().getScaledInstance(32, 32, Image.SCALE_SMOOTH);
-                recCard.add(new JLabel(new ImageIcon(img)), BorderLayout.WEST);
-            }
-        } catch (Exception e) {}
+        Image archie = BrandAssets.archie(32);
+        if (archie != null) {
+            recCard.add(new JLabel(new ImageIcon(archie)), BorderLayout.WEST);
+        }
 
         recommendationLabel = new JLabel("<html><body>Archie says: loading recommendations...</body></html>");
         recommendationLabel.setFont(new Font("SansSerif", Font.PLAIN, 11));

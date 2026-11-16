@@ -1,6 +1,6 @@
 <div align="center">
 
-<img src="src/com/mathquiz/resources/logo.png" width="130" height="130" style="border-radius: 16px; margin-bottom: 12px;" />
+<img src="brand/logo-stacked.svg" height="110" alt="Atelier Arithmetic" />
 
 # 🦉 Atelier Arithmetic
 ### *A Premium Adaptive Math Mastery Desktop Application for Children*
@@ -368,7 +368,8 @@ MathQuizApp/
             │   ├── QuestionResult.java    # Per-answer record (time, correct flag)
             │   └── QuizSession.java       # Full session lifecycle & grade logic
             ├── resources/
-            │   └── logo.png              # 1024×1024 brand logo (Archie the Owl)
+            │   ├── archie.png            # Archie the Owl (transparent) — Help, Analytics, report
+            │   └── icons/app-16…256.png  # window/app icon in five sizes (build input for logo.ico)
             ├── service/
             │   ├── AchievementService.java      # 10 dynamic badge calculations
             │   ├── AdaptiveDifficultyEngine.java # Live difficulty recommendation
@@ -726,7 +727,7 @@ See [DEPLOYMENT.md](DEPLOYMENT.md) for the full guide. Summary:
 
 1. **Verify tools** — checks `JAVA_HOME`, confirms `javac`, `jar` and `jpackage` (which runs `jlink` internally) are available, and detects WiX
 2. **Compile** — `javac` with the SQLite classpath
-3. **Icon conversion** — compiles and runs `IcoConverter.java` to translate `logo.png` → `logo.ico`
+3. **Icon conversion** — compiles and runs `IcoConverter.java` to pack the five icon PNGs (16–256 px) into one multi-size `logo.ico`
 4. **Custom JRE (`jlink`)** — links a stripped runtime (~46 MB in the Java 21.0.1 build) from only the required modules:
    `java.base, java.desktop, java.sql, java.xml, java.naming, jdk.charsets`
 5. **Native launcher (`jpackage`)** — bundles the JRE + JAR into `dist/AtelierArithmetic/AtelierArithmetic.exe`
@@ -763,7 +764,7 @@ See [DEPLOYMENT.md](DEPLOYMENT.md) for the full guide. Summary:
 ## Technical Highlights
 
 ### Base64-Embedded Report Export
-The HTML report exporter reads `logo.png` at runtime, converts it to a Base64 data URI, and writes it inline into the exported HTML file. Reports are self-contained — they display the branding correctly when shared across machines with no broken image links.
+The HTML report exporter reads `archie.png` at runtime, converts it to a Base64 data URI, and writes it inline into the exported HTML file. Reports are self-contained — they display the branding correctly when shared across machines with no broken image links.
 
 ### Seeded Daily Challenge
 `QuestionGenerator.generateSeeded(difficulty, category, dateSeed, questionIndex)` accepts a `long` date seed derived from today's date. This guarantees that all children using the app on the same day get the exact same set of daily challenge questions, making the daily challenge shareable and comparable.

@@ -36,7 +36,7 @@ powershell -File package.ps1
 The script performs the following phases automatically:
 1. **Tool Verification**: Checks for local compiler elements and locates WiX (`candle.exe`/`light.exe`).
 2. **Artifact Clean**: Removes any old `/build` or `/dist` output folders.
-3. **Asset Conversion**: Compiles and runs [IcoConverter.java](file:///d:/MathQuizApp/src/com/mathquiz/util/IcoConverter.java) to dynamically translate the high-res 1024x1024 `logo.png` into a standard Microsoft `logo.ico` file.
+3. **Asset Conversion**: Compiles and runs [IcoConverter.java](file:///d:/MathQuizApp/src/com/mathquiz/util/IcoConverter.java) to pack the five icon PNGs in `src/com/mathquiz/resources/icons/` (16, 24, 32, 48 and 256 px) into one multi-size Microsoft `logo.ico` file.
 4. **App Compilation**: Compiles all Java files, copies the logo resource, and bundles them into an executable JAR (`dist/atelier-arithmetic.jar`).
 5. **Runtime Linking (`jlink`)**: Invokes the modular `jlink` utility to link a lightweight custom JRE (containing only `java.base, java.desktop, java.sql, java.xml, java.naming, jdk.charsets`), optimized with `--strip-debug --no-man-pages --no-header-files` and compressed using maximum `zip-9` compression. This keeps the bundled runtime to roughly 46 MB (measured with Java 21.0.1) instead of shipping a full JDK.
 6. **Native Executable Launcher (`jpackage`)**: Bundles the JRE and JARs into a native Windows launcher directory structure (`dist/AtelierArithmetic/`).

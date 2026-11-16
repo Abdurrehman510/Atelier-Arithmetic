@@ -90,14 +90,10 @@ public class QuizFrame extends JFrame implements QuizNavigator {
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLocationRelativeTo(null);
 
-        // Load Application Icon
-        try {
-            java.net.URL iconUrl = QuizFrame.class.getResource("/com/mathquiz/resources/logo.png");
-            if (iconUrl != null) {
-                setIconImage(new ImageIcon(iconUrl).getImage());
-            }
-        } catch (Exception e) {
-            System.err.println("Could not load application icon: " + e.getMessage());
+        // Application icon: every size, so the title bar and taskbar get a crisp one (FEAT-12)
+        java.util.List<Image> icons = BrandAssets.windowIcons();
+        if (!icons.isEmpty()) {
+            setIconImages(icons);
         }
 
         // Initialize AppTheme with saved config value

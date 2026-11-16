@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" width="32" height="32" role="img" aria-label="Atelier Arithmetic">
+<title>Atelier Arithmetic</title>
+<rect width="32" height="32" rx="7" fill="#1C1917"/>
+<path fill="#B97D3E" d="M4 3 L12 8.5 L7.5 12 Z M28 3 L24.5 12 L20 8.5 Z"/>
+<circle cx="16" cy="18" r="11.5" fill="#B97D3E"/>
+<circle cx="11.5" cy="16.5" r="4.6" fill="#FFFDF7"/>
+<circle cx="20.5" cy="16.5" r="4.6" fill="#FFFDF7"/>
+<circle cx="12.2" cy="16.3" r="2.3" fill="#1C1917"/>
+<circle cx="21.2" cy="16.3" r="2.3" fill="#1C1917"/>
+<path fill="#E9A63A" d="M14.4 21.6 L17.6 21.6 L16 24.6 Z"/>
+</svg>
