@@ -238,7 +238,7 @@ public class ResultsPanel extends JPanel {
     private JPanel buildHeader() {
         JPanel header = new JPanel(new BorderLayout());
         header.setOpaque(false);
-        header.setBorder(new EmptyBorder(25, 40, 5, 40));
+        header.setBorder(new EmptyBorder(16, 40, 5, 40));   // 25 → 16: Archie is ~9 px taller than the titles
 
         JPanel left = new JPanel();
         left.setOpaque(false);
@@ -257,7 +257,8 @@ public class ResultsPanel extends JPanel {
         header.add(left, BorderLayout.WEST);
 
         // Archie, wearing the child's shop item, reacts to the score (the tour promises he celebrates);
-        // a little smaller than elsewhere so the header stays about as tall as before
+        // a little smaller than elsewhere, and the top padding is trimmed, so the header (and the cards
+        // below it) keep their old height
         archie = new ArchieView(TourStep.MascotExpression.HAPPY);
         archie.setFont(new Font("SansSerif", Font.PLAIN, 11));
         header.add(archie, BorderLayout.EAST);

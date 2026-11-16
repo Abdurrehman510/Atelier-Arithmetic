@@ -31,7 +31,7 @@
 |---|---|
 | Name | **Atelier Arithmetic**; Home title "Royal Mathematics Quiz"; window title "Atelier Arithmetic · Royal Math Quiz" |
 | Tagline (README) | "Where every question is a step forward." |
-| Mascot | **Archie the Owl** — logo image (`logo.png`, 1024×1024) in headers/help/analytics; Java2D vector Archie in the tour; 🦉 emoji in text. Equipped shop item emoji is appended to 🦉 on Home. |
+| Mascot | **Archie the Owl** — logo image (`logo.png`, 1024×1024) for the window icon and report; Java2D vector Archie (`MascotPainter`) in the tour, and via `ArchieView` — wearing the child's equipped shop item — on Home (header), Game (beside the card), Results (header) and as a preview on every shop card; 🦉 emoji in text. |
 | Voice | Friendly guide, second person, short sentences, light enthusiasm. Archie "speaks" in quotes: *Archie says: "Ready for a math adventure?…"* |
 | Emoji | One or two per message; always paired with words; wrapped in `Segoe UI Emoji` inside HTML labels. |
 | Eyebrow labels | Small gold UPPERCASE text above titles (e.g. "ANALYTICS", "SMART PRACTICE MODE", "TEACHER & PARENT ZONE", "ARCHIE'S SHOP"). |
@@ -207,7 +207,7 @@ Base steps used: **4 · 6 · 8 · 10 · 12 · 14 · 16 · 18 · 20 · 25 · 30 �
 | **Card** | See §5.4; title row (bold 11–13) above content. |
 | **Stat card** | Left icon (26 pt emoji, gold), right column: LABEL (9 bold caps muted) / VALUE (22 serif bold) / subtitle (10 muted). |
 | **Category card** | Icon 26 pt → NAME (12 bold gold caps) → description (11 muted, centred HTML) → START button (dark, 11 bold, padding 6 × 22). Hover/focus: 2 px gold border + hover bg. Focusable for keyboard use. |
-| **Shop item card** | Emoji 34 pt (padding 12/0/4/0 to avoid clipping) → CATEGORY (9 caps muted) → name (serif 14 bold) → description (10 muted) → price `★ n` (12 bold; gold if purchasable, muted if owned) + action button (11 bold, 1 px border, padding 4 × 10). Equipped card = 2 px gold border. |
+| **Shop item card** | Archie wearing the item (`ArchieView`, 13 pt → 60 px tall at 100 %) → CATEGORY (9 caps muted) → name (serif 14 bold) → description (10 muted) → price `★ n` (12 bold; gold if purchasable, muted if owned) + action button (11 bold, 1 px border, padding 4 × 10). Equipped card = 2 px gold border. |
 | **Badge card** | Emoji 28 pt (🔒 when locked) + name (13 bold) + description (11 muted, width 180). Unlocked = 1.5 px rounded gold outline. |
 | **Progress bar** | 8 px high, ≈ 180 px preferred, fill gold, track `(230,227,220)`, no border. |
 | **Text field** | See §5.4; answer field is 8 columns wide, 18 pt bold. |
@@ -239,9 +239,9 @@ Wireframes are schematic (proportions approximate).
 ┌ top bar (right-aligned chips) ──────────────────────────────────────────────────┐
 │                               ★ 42  [👤 Guest] [🔍 Scale: 125%] [🔊 Sound] [🌙 Dark] │
 ├───────────────────────────────────────────────┬──────────────────────────────────┤
-│ [logo 60px]  ATELIER ARITHMETIC               │ ┌ 📅 Daily Quest      🔥 3 Day Streak ┐│
+│ [ Archie  ]  ATELIER ARITHMETIC               │ ┌ 📅 Daily Quest      🔥 3 Day Streak ┐│
 │              Royal Mathematics Quiz           │ │ [📅 Daily Challenge]  M T W T F S S ││
-│              🦉 Archie says: "Ready for…"      │ │                       ○ ● ● ○ ● ● ● ││
+│              Archie says: "Ready for…"         │ │                       ○ ● ● ○ ● ● ● ││
 │ ┌ config card ─────────────────────────────┐  │ └─────────────────────────────────────┘│
 │ │ NUMBER OF QUESTIONS:  [ 10      ]        │  │ ┌ 📊 Performance & Badges ─────────────┐│
 │ │ DIFFICULTY LEVEL:     [ Easy  ▾ ]        │  │ │ 💾 12 Sessions completed             ││
@@ -249,7 +249,7 @@ Wireframes are schematic (proportions approximate).
 │ │                                          │  │ │ [📊 Analytics]   [🏆 Badges]         ││
 │ │        [ CHOOSE CATEGORY  → ]            │  │ └─────────────────────────────────────┘│
 │ └──────────────────────────────────────────┘  │ ┌ 🛍️ Archie's Shop            ★ 42 ───┐│
-│                                               │ │ Spend stars to unlock… / 🎩 Equipped ││
+│                                               │ │ Dress Archie up… / Wearing 🎩 Top Hat││
 │                                               │ │ [🛍️ Open Mascot Shop]               ││
 │                                               │ └─────────────────────────────────────┘│
 │                                               │ ┌ 🎯 Smart Practice & Guide ──────────┐│
@@ -287,6 +287,8 @@ Icons in order: ➕ ➖ ✖️ ➗ 🔀 ⭐ 📊 📈 ⚖️ 📏. Descriptions:
 ```
 Keys: Enter = submit/next · Esc = exit prompt · F1 / Ctrl+H = hint.
 
+Archie (`ArchieView`, wearing the child's shop item) stands at the card's lower-left: HAPPY on each new question, EXCITED after a right answer, THINKING after a wrong one (BUG-22).
+
 ### 7.4 Results (`results`)
 ```
  BESPOKE LEARNING METRICS
@@ -305,6 +307,8 @@ Keys: Enter = submit/next · Esc = exit prompt · F1 / Ctrl+H = hint.
         [❓ Guide] [📋 Review Answers] [📄 Export Report] [🔄  PLAY AGAIN]
 ```
 Star tooltip lines: `★ +<total> Stars Earned!`, `Base: +5`, then only non-zero: `Correct answers`, `Perfect score bonus`, `Grade bonus`, `Daily challenge`, `Streak bonus`.
+
+Archie (`ArchieView` at 11 pt, wearing the child's shop item) sits at the header's right: EXCITED at 80 % or more, HAPPY at 50 % or more, THINKING below. Header top padding is 16 so the cards keep their height (BUG-22).
 
 ### 7.5 Review (`review`)
 Title "ANSWER REVIEW — Every question, your answer, and the correct answer"; table per §6; footer [← Back to Results] [🏠 Play Again].
@@ -334,7 +338,7 @@ Title "ANSWER REVIEW — Every question, your answer, and the correct answer"; t
 Eyebrow "ACHIEVEMENTS", title "Milestones & Badges", 2-column grid of badge cards; locked cards show 🔒.
 
 ### 7.8 Mascot Shop (`mascot_shop`)
-Eyebrow "ARCHIE'S SHOP", title "Mascot Accessories 🦉", hint "Spend your ★ Stars to unlock cool looks for Archie!", right: `★ n Stars` + [← Back]; 3-column grid of 12 item cards (§6).
+Eyebrow "ARCHIE'S SHOP", title "Mascot Accessories 🦉", hint "Spend your ★ Stars to unlock cool looks for Archie!", right: `★ n Stars` + [← Back]; 3-column grid of 12 item cards (§6), each previewing Archie wearing that item.
 
 ### 7.9 Smart Practice (`smart_practice`)
 Centered card: big emoji (🎯 with history / 🌱 without), prompt line, target "Category (Difficulty)" in 28 pt serif bold, italic note "This practice session generates 10 tailored questions.", primary button.
@@ -418,6 +422,8 @@ Body = circle with gradient `(210,150,80)→(160,100,45)`, outline `(120,70,20)`
 | EXCITED | Smile + pupils shifted up-left by `eyeR/4` |
 | THINKING | Raised left brow line + slight smirk line instead of a smile |
 | POINTING | Smile + extended wing with a gold finger dot |
+
+**Shop items (BUG-22).** `draw(…, itemId)` adds the equipped item, drawn in "body space" (origin at the body centre, body Ø 100): hats on the head top (Top Hat tilted −8°, Royal Crown with pearls and gems, Wizard Hat with stars and a floppy tip, striped Party Hat tilted 12°), glasses over the eyes (Nerd Glasses with tape, Cool Shades, Star Frames), colours (Golden Archie = gold palette + sparkles; Rainbow Glow = six rainbow rings behind him) and a medal on the chest for badges (Scholar, Star Champion, Kind Heart). `ArchieView` reserves x ±72, y −100…70 in body space, which holds every item with the HAPPY / EXCITED / THINKING expressions (`ArchieLookTest`).
 
 ### 10.3 Tour content map (24 steps)
 | # | Screen | Target | Bubble | Mascot |

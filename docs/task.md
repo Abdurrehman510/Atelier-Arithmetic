@@ -199,6 +199,15 @@
 * **Fix:** one shared `PrimaryButtonStyle.apply` used at all 17 places that styled a dark button (creation and theme switch).
 * **Accept / tests:** `DarkButtonContrastTest` paints every dark button under the system look-and-feel, at rest and on hover, in light and dark mode, and requires WCAG AA text contrast (4.5 : 1). Visually checked.
 
+#### BUG-22 — Shop purchases were barely visible; the tour promised mascot feedback that never appeared · `P1 · M` · **Done 2026-11-16**
+* **Evidence:** a bought item only added an emoji after 🦉 in the Home greeting; Golden Archie / Rainbow Glow did not change Archie; the Home shop card promised "themes" that do not exist; the tour said the quiz gives "visual mascot feedback" and results "animate the owl mascot", but neither screen showed Archie.
+* **Fix:** `MascotPainter` draws all 12 items; `ArchieView` shows Archie wearing the equipped item on Home (replacing the small logo), beside the quiz card (HAPPY / EXCITED when right / THINKING when wrong) and in the results header (by score); every shop card previews Archie wearing that item; the shop card says what he is wearing. `test.ps1` now copies resources so tests see the logo as the real app does.
+* **Accept / tests:** `ArchieLookTest` (every item visible, no two alike, all within the reserved box, gold and rainbow checks), `ArchieOnScreensTest` (Home / quiz / results / shop, reactions, not clipped, shop fits 720 × 550 at 125 % and 150 %). Visually checked in light and dark mode.
+
+#### BUG-23 — "Archie's Insights" text cut off on the right of the results screen · `P2 · S` · *open*
+* **Evidence:** at 900 × 640 and 125 % the advice text ends mid-word ("strong co…"); found while checking BUG-22, not caused by it.
+* **Fix:** let the advice label wrap to its card width (as BUG-18 did for the Home greeting) and add the results screen to the layout tests.
+
 ### 4.2 Documentation
 
 | ID | Pri · Size | Task | Acceptance |
