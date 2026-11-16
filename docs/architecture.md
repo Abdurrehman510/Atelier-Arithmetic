@@ -121,6 +121,7 @@ Root: `D:\MathQuizApp`. Source root: `src/com/mathquiz/`.
 | `sign.ps1` | Code-signing wrapper around `signtool.exe` |
 | `lib/sqlite-jdbc-3.42.0.0.jar` | Committed dependency (the `.gitignore` allows `lib/*.jar`) |
 | `src/com/mathquiz/resources/logo.png` | 1024×1024 brand image (**file content is JPEG** despite the `.png` name; `ImageIO` reads it by content) |
+| `brand/` | Logo master artwork (SVG, text outlined) and usage guide `brand/README.md`; not compiled or packaged — the app needs PNG/ICO exports (DEBT-13) |
 | `bin/`, `build/`, `dist/`, `logo.ico` | Generated, git-ignored |
 | `.gitignore` | Ignores class files, build outputs, IDE files, logs |
 | `docs/` | This documentation set |

@@ -254,8 +254,9 @@
 #### DEBT-12 — Remove deprecated `Date` constructor usage · `P3 · S`
 * `AnalyticsService.parseDate` uses `new Date(y-1900, m-1, d)`; replace with `LocalDate` (folds into DEBT-06). **Accept:** build shows no deprecation notes.
 
-#### DEBT-13 — Real PNG logo · `P3 · S`
-* `logo.png` is JPEG data. Re-export as true PNG (consider transparency) at 1024² and 256² (+ ICO sizes 16–256). **Accept:** `file` reports PNG; ICO contains multiple sizes.
+#### DEBT-13 — Real PNG logo · `P3 · S` · *new design ready 2026-11-16*
+* `logo.png` is JPEG data. Re-export as true PNG (consider transparency) at 1024² and 256² (+ ICO sizes 16–256).
+* **2026-11-16:** a new logo set exists as SVG in `brand/` (FEAT-12). Remaining: export `app-icon.svg` to PNG 1024/256/48 and `app-icon-small.svg` to 16/24/32, build a multi-size ICO (extend `IcoConverter`), and replace `logo.png` for the window icon, Help, Analytics and the report (report header: `logo-wide.svg` as PNG). **Accept:** `file` reports PNG; ICO contains multiple sizes.
 
 #### DEBT-14 — Externalise UI strings for localisation · `P3 · L` (prerequisite for FEAT-07)
 
@@ -286,6 +287,7 @@
 | FEAT-09 | P3 | Heatmap intensity + tooltips; trend chart tooltips | |
 | FEAT-10 | P3 | Optional parent PIN instead of / in addition to the math puzzle | Decision on gate strength |
 | FEAT-11 | P2 | Premium (Family Plus) track: foundation (task model, skill tags, richer session data), Thinking Profile, parent insights | Not committed scope; see [premium-roadmap.md](premium-roadmap.md). Phase 0 plans: `docs/superpowers/plans/2026-11-08-phase0a-*.md` and `…-phase0b-*.md`. Phase 0 needs DEBT-01, DEBT-02 (encoding), DEBT-11; DEBT-04/DEBT-14 come later (Phase 1 UI, localisation) |
+| FEAT-12 | P2 | Brand identity: new logo — Archie mark, Fraunces wordmark, warm palette, light/dark lockups, app icon for ≥ 48 px and a simplified one for 16–32 px | **Design done 2026-11-16** (`brand/`, usage rules in `brand/README.md`); putting it into the app is DEBT-13 |
 
 ---
 
