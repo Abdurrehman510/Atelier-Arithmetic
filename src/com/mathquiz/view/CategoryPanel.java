@@ -153,8 +153,7 @@ public class CategoryPanel extends JPanel {
         gbc.insets = new Insets(8, 0, 0, 0);
         JButton btn = new JButton("START");
         btn.setFont(new Font("SansSerif", Font.BOLD, 11));
-        btn.setBackground(TEXT_DARK);
-        btn.setForeground(Color.WHITE);
+        PrimaryButtonStyle.apply(btn);
         btn.setFocusPainted(false);
         btn.setFocusable(false);
         btn.setBorder(new EmptyBorder(6, 22, 6, 22));
@@ -281,8 +280,7 @@ public class CategoryPanel extends JPanel {
                             }
                         } else if (inner instanceof JButton) {
                             JButton btn = (JButton) inner;
-                            btn.setBackground(AppTheme.getTextDark());
-                            btn.setForeground(AppTheme.getBgCard());
+                            PrimaryButtonStyle.apply(btn);
                         }
                     }
                 }

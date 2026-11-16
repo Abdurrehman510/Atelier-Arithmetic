@@ -107,34 +107,29 @@ public class WelcomePanel extends JPanel {
         add(topBarPanel, BorderLayout.NORTH);
 
         // Dashboard main grid (2-Column)
-        JPanel mainContent = new JPanel(new GridBagLayout());
+        // Left (58 %) and right (42 %) columns side by side when both fit; otherwise the right column
+        // moves below the left one instead of either being clipped (TwoColumnLayout).
+        JPanel mainContent = new ViewportFitPanel(new TwoColumnLayout(0.58, 16));
+        mainContent.setName("homeContent");
         mainContent.setOpaque(false);
-        mainContent.setBorder(new EmptyBorder(10, 30, 20, 30));
+        mainContent.setBorder(new EmptyBorder(10, 20, 20, 20));
+        mainContent.add(buildLeftColumn());
+        mainContent.add(buildRightColumn());
 
-        GridBagConstraints gbc = new GridBagConstraints();
-        gbc.fill = GridBagConstraints.BOTH;
-        gbc.weighty = 1.0;
-
-        // Left Column (width ~58%)
-        gbc.gridx = 0;
-        gbc.gridy = 0;
-        gbc.weightx = 0.58;
-        gbc.insets = new Insets(0, 0, 0, 20);
-        mainContent.add(buildLeftColumn(), gbc);
-
-        // Right Column (width ~42%)
-        gbc.gridx = 1;
-        gbc.gridy = 0;
-        gbc.weightx = 0.42;
-        gbc.insets = new Insets(0, 0, 0, 0);
-        mainContent.add(buildRightColumn(), gbc);
-
-        add(mainContent, BorderLayout.CENTER);
+        // Scrolls only when the content cannot fit (small window, 150 % text) instead of clipping (R-UI-07)
+        JScrollPane mainScroll = new JScrollPane(mainContent);
+        mainScroll.setBorder(BorderFactory.createEmptyBorder());
+        mainScroll.setViewportBorder(null);
+        mainScroll.setOpaque(false);
+        mainScroll.getViewport().setOpaque(false);
+        mainScroll.getVerticalScrollBar().setUnitIncrement(16);
+        add(mainScroll, BorderLayout.CENTER);
     }
 
     private JPanel buildLeftColumn() {
         JPanel panel = new JPanel(new GridBagLayout());
         panel.setOpaque(false);
+        panel.setName("homeLeftColumn");
 
         GridBagConstraints c = new GridBagConstraints();
         c.fill = GridBagConstraints.HORIZONTAL;
@@ -197,8 +192,8 @@ public class WelcomePanel extends JPanel {
         String equipped = config.getEquippedItem();
         String accessoryDisplay = "none".equals(equipped) ? "" : getEquippedEmoji(equipped);
         String archieText = accessoryDisplay.isEmpty()
-            ? "<html><body><font face='Segoe UI Emoji'>\ud83e\udd89</font> <b>Archie says:</b> \"Ready for a math adventure? Configure below and select a category!\"</body></html>"
-            : "<html><body><font face='Segoe UI Emoji'>\ud83e\udd89" + accessoryDisplay + "</font> <b>Archie says:</b> \"Looking great today! Ready for math?\"</body></html>";
+            ? "<html><body style='width: 210px'><font face='Segoe UI Emoji'>\ud83e\udd89</font> <b>Archie says:</b> \"Ready for a math adventure? Configure below and select a category!\"</body></html>"
+            : "<html><body style='width: 210px'><font face='Segoe UI Emoji'>\ud83e\udd89" + accessoryDisplay + "</font> <b>Archie says:</b> \"Looking great today! Ready for math?\"</body></html>";
         taglineLabel = new JLabel(archieText);
         taglineLabel.setFont(new Font("SansSerif", Font.PLAIN, 11));
         taglineLabel.setForeground(TEXT_MUTED);
@@ -217,45 +212,41 @@ public class WelcomePanel extends JPanel {
         card.setOpaque(true);
         card.setBorder(BorderFactory.createCompoundBorder(
                 BorderFactory.createLineBorder(BORDER_CLR, 1),
-                new EmptyBorder(22, 30, 22, 30)));
+                new EmptyBorder(18, 24, 18, 24)));
 
+        // Labels sit above their controls and every row fills the card's width, so the card always fits
+        // its column — the old label-beside-control grid overflowed narrow windows at 125 %.
         GridBagConstraints c = new GridBagConstraints();
-        c.fill   = GridBagConstraints.HORIZONTAL;
-        c.insets = new Insets(10, 10, 10, 10);
+        c.gridx   = 0;
+        c.weightx = 1.0;
+        c.fill    = GridBagConstraints.HORIZONTAL;
+        Insets labelGap = new Insets(0, 0, 4, 0);
+        Insets groupGap = new Insets(0, 0, 12, 0);
 
-        // Row 0: Question count
-        c.gridx = 0; c.gridy = 0;
-        c.weightx = 0.4;
+        // Question count
+        c.gridy = 0; c.insets = labelGap;
         countLabel = makeLabel("NUMBER OF QUESTIONS:");
         card.add(countLabel, c);
-
-        c.gridx = 1;
-        c.weightx = 0.6;
+        c.gridy = 1; c.insets = groupGap;
         qCountField = new JTextField("10", 8);
         styleTextField(qCountField);
         card.add(qCountField, c);
 
-        // Row 1: Difficulty
-        c.gridx = 0; c.gridy = 1;
-        c.weightx = 0.4;
+        // Difficulty
+        c.gridy = 2; c.insets = labelGap;
         diffLabel = makeLabel("DIFFICULTY LEVEL:");
         card.add(diffLabel, c);
-
-        c.gridx = 1;
-        c.weightx = 0.6;
+        c.gridy = 3; c.insets = groupGap;
         diffCombo = new JComboBox<>(new String[]{"Easy", "Medium", "Hard"});
         diffCombo.setFont(new Font("SansSerif", Font.PLAIN, 13));
         card.add(diffCombo, c);
 
-        // Row 2: Custom Quiz
-        c.gridx = 0; c.gridy = 2;
-        c.weightx = 0.4;
+        // Custom quizzes: two equal-width buttons, both always visible
+        c.gridy = 4; c.insets = labelGap;
         customLabel = makeLabel("CUSTOM QUIZZES:");
         card.add(customLabel, c);
 
-        c.gridx = 1;
-        c.weightx = 0.6;
-        JPanel customBtnsPanel = new JPanel(new FlowLayout(FlowLayout.LEFT, 10, 0));
+        JPanel customBtnsPanel = new JPanel(new GridLayout(1, 2, 10, 0));
         customBtnsPanel.setOpaque(false);
 
         customBuilderBtn = new JButton("🛠️ Quiz Builder");
@@ -272,17 +263,20 @@ public class WelcomePanel extends JPanel {
         customLoadBtn.addActionListener(e -> handleLoadCustomQuiz(customLoadBtn));
         customBtnsPanel.add(customLoadBtn);
 
+        c.gridy = 5; c.insets = new Insets(0, 0, 18, 0);
         card.add(customBtnsPanel, c);
 
-        // Row 3: Start Button
-        c.gridx = 0; c.gridy = 3;
-        c.gridwidth = 2;
-        c.insets = new Insets(24, 10, 4, 10);
+        // Start
+        c.gridy = 6; c.insets = new Insets(0, 0, 0, 0);
         startButton = makePrimaryButton("CHOOSE CATEGORY  →");
         startButton.addActionListener(e -> handleStart());
         card.add(startButton, c);
 
-        outer.add(card);
+        GridBagConstraints fillWidth = new GridBagConstraints();
+        fillWidth.weightx = 1.0;
+        fillWidth.weighty = 1.0;
+        fillWidth.fill = GridBagConstraints.HORIZONTAL;
+        outer.add(card, fillWidth);
         return outer;
     }
 
@@ -602,10 +596,9 @@ public class WelcomePanel extends JPanel {
     private JButton makePrimaryButton(String text) {
         JButton btn = new JButton(text);
         btn.setFont(new Font("SansSerif", Font.BOLD, 13));
-        btn.setBackground(TEXT_DARK);
-        btn.setForeground(Color.WHITE);
+        PrimaryButtonStyle.apply(btn);
         btn.setFocusPainted(false);
-        btn.setBorder(new EmptyBorder(12, 36, 12, 36));
+        btn.setBorder(new EmptyBorder(12, 16, 12, 16));
         btn.setCursor(new Cursor(Cursor.HAND_CURSOR));
         return btn;
     }
@@ -1034,8 +1027,8 @@ public class WelcomePanel extends JPanel {
             String eqId = config.getEquippedItem();
             String accessory = "none".equals(eqId) ? "" : getEquippedEmoji(eqId);
             String archieText = accessory.isEmpty()
-                ? "<html><body><font face='Segoe UI Emoji'>\ud83e\udd89</font> <b>Archie says:</b> \"Ready for a math adventure? Configure below and select a category!\"</body></html>"
-                : "<html><body><font face='Segoe UI Emoji'>\ud83e\udd89" + accessory + "</font> <b>Archie says:</b> \"Looking great today! Ready for math?\"</body></html>";
+                ? "<html><body style='width: 210px'><font face='Segoe UI Emoji'>\ud83e\udd89</font> <b>Archie says:</b> \"Ready for a math adventure? Configure below and select a category!\"</body></html>"
+                : "<html><body style='width: 210px'><font face='Segoe UI Emoji'>\ud83e\udd89" + accessory + "</font> <b>Archie says:</b> \"Looking great today! Ready for math?\"</body></html>";
             taglineLabel.setText(archieText);
         }
 
@@ -1081,6 +1074,8 @@ public class WelcomePanel extends JPanel {
                     p.setBackground(AppTheme.getBgPrimary());
                 }
                 recolorTree(p);
+            } else if (c instanceof JScrollPane) {
+                recolorTree(((JScrollPane) c).getViewport());   // Home content sits in a scroll pane
             } else if (c instanceof JLabel) {
                 JLabel lbl = (JLabel) c;
                 if (lbl == subBrand) {
@@ -1093,8 +1088,7 @@ public class WelcomePanel extends JPanel {
             } else if (c instanceof JButton) {
                 JButton btn = (JButton) c;
                 if (btn == startButton) {
-                    btn.setBackground(AppTheme.getTextDark());
-                    btn.setForeground(AppTheme.getBgCard());
+                    PrimaryButtonStyle.apply(btn);
                 } else {
                     btn.setBackground(AppTheme.getBgCard());
                     btn.setForeground(AppTheme.getTextMuted());

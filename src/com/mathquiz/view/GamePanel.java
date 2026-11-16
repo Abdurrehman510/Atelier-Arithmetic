@@ -289,8 +289,7 @@ public class GamePanel extends JPanel {
 
         submitButton = new JButton("SUBMIT ANSWER");
         submitButton.setFont(new Font("SansSerif", Font.BOLD, 13));
-        submitButton.setBackground(TEXT_DARK);
-        submitButton.setForeground(Color.WHITE);
+        PrimaryButtonStyle.apply(submitButton);
         submitButton.setFocusPainted(false);
         submitButton.setBorder(new EmptyBorder(11, 32, 11, 32));
         submitButton.setCursor(new Cursor(Cursor.HAND_CURSOR));
@@ -455,8 +454,7 @@ public class GamePanel extends JPanel {
                     new EmptyBorder(6, 10, 6, 10)));
         }
         if (submitButton != null) {
-            submitButton.setBackground(AppTheme.getTextDark());
-            submitButton.setForeground(AppTheme.getBgCard());
+            PrimaryButtonStyle.apply(submitButton);
         }
         if (helpButton != null) {
             helpButton.setBackground(AppTheme.getBgPrimary());

@@ -152,8 +152,7 @@ public class QuizBuilderPanel extends JPanel {
         fc.insets = new Insets(14, 0, 0, 0);
         addBtn = new JButton("➕  ADD QUESTION");
         addBtn.setFont(new Font("SansSerif", Font.BOLD, 12));
-        addBtn.setBackground(AppTheme.getTextDark());
-        addBtn.setForeground(AppTheme.getBgCard());
+        PrimaryButtonStyle.apply(addBtn);
         addBtn.setFocusPainted(false);
         addBtn.setCursor(new Cursor(Cursor.HAND_CURSOR));
         addBtn.addActionListener(e -> handleAddQuestion());
@@ -338,8 +337,7 @@ public class QuizBuilderPanel extends JPanel {
         }
 
         if (addBtn != null) {
-            addBtn.setBackground(AppTheme.getTextDark());
-            addBtn.setForeground(AppTheme.getBgCard());
+            PrimaryButtonStyle.apply(addBtn);
         }
         if (removeBtn != null) {
             removeBtn.setBackground(AppTheme.getBgCard());
@@ -349,8 +347,7 @@ public class QuizBuilderPanel extends JPanel {
                     new EmptyBorder(10, 18, 10, 18)));
         }
         if (saveBtn != null) {
-            saveBtn.setBackground(AppTheme.getTextDark());
-            saveBtn.setForeground(AppTheme.getBgCard());
+            PrimaryButtonStyle.apply(saveBtn);
             saveBtn.setBorder(BorderFactory.createCompoundBorder(
                     BorderFactory.createLineBorder(AppTheme.getBorderClr(), 1),
                     new EmptyBorder(10, 18, 10, 18)));

@@ -363,8 +363,7 @@ public class HelpPanel extends JPanel {
             } else if (c instanceof JButton) {
                 JButton btn = (JButton) c;
                 if (btn.getText().contains("Back")) {
-                    btn.setBackground(AppTheme.getTextDark());
-                    btn.setForeground(AppTheme.getBgCard());
+                    PrimaryButtonStyle.apply(btn);
                 } else {
                     btn.setBackground(AppTheme.getBgPrimary());
                     btn.setForeground(AppTheme.getTextMuted());
