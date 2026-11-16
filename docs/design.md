@@ -258,6 +258,8 @@ Wireframes are schematic (proportions approximate).
 ```
 Behaviour: see PRD FR-SET-*. Greeting text changes when an accessory is equipped ("Looking great today! Ready for math?").
 
+**Responsive layout (2026-11-16, BUG-18).** The diagram shows the wide layout. The config card stacks each label *above* its control at full width, with Quiz Builder and Load Quiz sharing one row at equal width, and the card fills its column. The two columns sit side by side (58 % / 42 %) only while both fit at their minimum widths (about 780 px at 125 %, 850 px at 150 %); in narrower windows the right column's cards move below the left column and the screen scrolls (`TwoColumnLayout`, `ViewportFitPanel`). The greeting wraps at 210 px so every line stays visible. "CHOOSE CATEGORY" paints its own dark background so its white text stays readable under the Windows look-and-feel.
+
 ### 7.2 Categories (`categories`)
 ```
               Choose Your Arithmetic Discipline

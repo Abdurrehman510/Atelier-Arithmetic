@@ -180,6 +180,24 @@
 * **Fix:** suppress adaptive prompts in Daily Challenge sessions (or freeze the seed difficulty).
 * **Accept:** two runs with different prompt choices still produce identical question lists.
 
+#### BUG-18 — Home settings card clipped in smaller windows at 125 % · `P1 · M` · **Done 2026-11-16**
+* **Evidence (owner screenshot, ~805 × 610 at 125 %):** labels beside controls plus two side-by-side buttons made the card wider than its column; the text field, difficulty box and Start button ran past the edge, "Load Quiz" was hidden, and "NUMBER OF QUESTIONS" was cut to "NUMBER OF QUEST…". At 720 × 550 the two columns' minimum widths (313 + 386 px) cannot fit side by side at all.
+* **Fix:** stacked form (label above control, card fills its column); responsive columns (`TwoColumnLayout`: side by side only when both fit, else the right column moves below, inside a scroll pane via `ViewportFitPanel`); Archie's greeting wraps at 210 px so no line is hidden.
+* **Accept / tests:** `HomeLayoutTest` — nothing clipped or cut short anywhere in the Home content at 720 × 550 and 805 × 610 (125 %) and 800 × 600 (150 %); `TwoColumnLayoutTest`. Visually checked in light and dark mode.
+
+#### BUG-19 — Badge descriptions cut off at 125 % and 150 % · `P1 · S` · **Done 2026-11-16**
+* **Evidence (owner screenshot, maximised at 125 %):** each badge card was fixed at 85 px tall (`setPreferredSize(320, 85)`, rules R-UI-15); two-line descriptions ("…in under 2 seconds!", "…Multiplication quiz!") lost their second line.
+* **Fix:** no fixed card size; cards grow with their text.
+* **Accept / tests:** `AchievementsLayoutTest` at 1366 × 728 and 720 × 550 (125 %) and 1024 × 700 (150 %).
+
+#### BUG-20 — "CHOOSE CATEGORY" white text on light grey · `P1 · S` · **Done 2026-11-16**
+* **Evidence:** the Windows look-and-feel ignores `setBackground` on a filled button, so the dark primary button rendered light grey with white text (owner screenshot).
+* **Fix:** `makePrimaryButton` paints its own background (`setContentAreaFilled(false)`, opaque) with hover/press shading from the theme colours. Visually checked in light and dark mode.
+
+#### BUG-21 — Other dark buttons may have the same low-contrast look · `P2 · S` · *needs visual check*
+* **Evidence:** `GamePanel` "SUBMIT ANSWER" and `ResultsPanel` "Suggested path" use the same `setBackground(TEXT_DARK)` + white text pattern as BUG-20.
+* **Fix:** reuse the BUG-20 approach (a shared helper) after a visual check of those screens.
+
 ### 4.2 Documentation
 
 | ID | Pri · Size | Task | Acceptance |
