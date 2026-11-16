@@ -297,6 +297,7 @@
 | FEAT-10 | P3 | Optional parent PIN instead of / in addition to the math puzzle | Decision on gate strength |
 | FEAT-11 | P2 | Premium (Family Plus) track: foundation (task model, skill tags, richer session data), Thinking Profile, parent insights | Not committed scope; see [premium-roadmap.md](premium-roadmap.md). Phase 0 plans: `docs/superpowers/plans/2026-11-08-phase0a-*.md` and `…-phase0b-*.md`. Phase 0 needs DEBT-01, DEBT-02 (encoding), DEBT-11; DEBT-04/DEBT-14 come later (Phase 1 UI, localisation) |
 | FEAT-12 | P2 | Brand identity: new logo — Archie mark, Fraunces wordmark, warm palette, light/dark lockups, app icon for ≥ 48 px and a simplified one for 16–32 px | **Design done 2026-11-16** (`brand/`, usage rules in `brand/README.md`); putting it into the app is DEBT-13 |
+| FEAT-13 | P2 | Purchase celebration: after buying a shop item, a dialog shows a big, excited Archie wearing it (like the tour's Archie) with the item name and where it will show | **Done 2026-11-16** (`PurchaseCelebration`; `PurchaseCelebrationTest`: right item and expression, big, names the item, Enter closes, fits 720 × 550 at 125 % and 150 % for all 12 items; purchase flow spends, unlocks, equips and celebrates, and does nothing without enough stars). Not done, deliberately: sound (the unused `playAchievement` could be wired, BUG-06 / DEBT-10), animation, and Archie wearing the item in the guided tour |
 
 ---
 

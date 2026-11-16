@@ -184,7 +184,8 @@ Root: `D:\MathQuizApp`. Source root: `src/com/mathquiz/`.
 | `view` | `SmartPracticePanel` | 227 | Weakest-topic recommendation + launcher |
 | `view` | `AchievementsPanel` | 198 | Badge grid |
 | `view` | `QuizBuilderPanel` | 354 | Custom quiz editor |
-| `view` | `MascotShopPanel` | 327 | 12-item catalogue (`ShopItem`, `ALL_ITEMS`), buy/equip |
+| `view` | `MascotShopPanel` | 338 | 12-item catalogue (`ShopItem`, `ALL_ITEMS`), buy/equip; `completePurchase` spends, unlocks, equips, refreshes and hands over to the celebration |
+| `view` | `PurchaseCelebration` | 118 | Package-private: the modal "Item Unlocked!" dialog — big excited Archie wearing the new item (`create` builds it, `show` opens it) |
 | `view.tour` | `TourOverlay` | 268 | Glass pane: dimmed mask with spotlight hole, bubble, NEXT/SKIP |
 | `view.tour` | `TourStep` | 63 | Step data (screen, target component, message, bubble position, mascot expression) |
 | `view.tour` | `MascotPainter` | 510 | Draws Archie the Owl with Java2D (5 expressions) and the 12 shop items he can wear |
