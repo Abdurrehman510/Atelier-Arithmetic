@@ -65,6 +65,7 @@ public class MascotShopPanel extends JPanel {
 
     private final QuizNavigator nav;
     private final RewardService rewardService;
+    private java.util.function.Consumer<ShopItem> celebration = item -> PurchaseCelebration.show(this, item);
     private final AppConfig config;
     /** Runs after every rebuild, including Equip/Buy inside the shop (set by QuizFrame: rescale, BUG-14). */
     private Runnable afterRebuild = () -> { };
@@ -273,17 +274,27 @@ public class MascotShopPanel extends JPanel {
                 JOptionPane.YES_NO_OPTION);
         if (confirm != JOptionPane.YES_OPTION) return;
 
-        boolean success = rewardService.spendStars(item.price);
-        if (success) {
-            rewardService.unlockItem(item.id);
-            rewardService.equipItem(item.id);
-            JOptionPane.showMessageDialog(this,
-                    "🎉 " + item.emoji + " \"" + item.name + "\" unlocked and equipped!\n\n" +
-                    "Archie is wearing it right now on the Home screen!",
-                    "Item Unlocked!",
-                    JOptionPane.INFORMATION_MESSAGE);
-            refresh();
+        completePurchase(item);
+    }
+
+    /**
+     * Spends the stars, unlocks and equips the item, refreshes the shop and shows Archie wearing it.
+     * Called once the child has confirmed; false (and nothing changes) if the stars no longer suffice.
+     */
+    boolean completePurchase(ShopItem item) {
+        if (!rewardService.spendStars(item.price)) {
+            return false;
         }
+        rewardService.unlockItem(item.id);
+        rewardService.equipItem(item.id);
+        refresh();                    // the card behind the celebration already reads "Equipped"
+        celebration.accept(item);
+        return true;
+    }
+
+    /** Replaces what happens after a purchase (the tests record it instead of opening a dialog). */
+    void setCelebration(java.util.function.Consumer<ShopItem> celebration) {
+        this.celebration = celebration;
     }
 
     // ── Public API ────────────────────────────────────────────────────────────

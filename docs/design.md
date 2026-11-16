@@ -65,7 +65,7 @@
 | Reset | title `Reset History?` — "Are you sure you want to clear ‹profile›'s quiz history? This deletes every saved quiz, answer and time for ‹profile›. Charts, streaks and badges are worked out from that history, so they will start again from zero. ‹profile›'s stars and Archie's accessories are kept. This cannot be undone! 🦉" (BUG-13) |
 | Shop – insufficient | title `Not Enough Stars` — "You need <p> ★ stars to unlock this! You currently have <b> ★ stars. Complete more quizzes to earn stars!" |
 | Shop – confirm | title `Confirm Purchase` — `Unlock "<name>" for <p> ★ stars?` |
-| Shop – success | title `Item Unlocked!` — "🎉 <emoji> "<name>" unlocked and equipped! Archie is wearing it right now on the Home screen!" |
+| Shop – success | title `Item Unlocked!` — a celebration dialog (`PurchaseCelebration`, FEAT-13): big excited Archie wearing the new item, the item name (serif 24 bold), *Archie says: "Ta-da! How do I look?"*, "You will see him wearing it on Home, in your quizzes and on your results.", button `AWESOME!` (Enter or Esc also close it) |
 
 ---
 
@@ -339,7 +339,7 @@ Title "ANSWER REVIEW — Every question, your answer, and the correct answer"; t
 Eyebrow "ACHIEVEMENTS", title "Milestones & Badges", 2-column grid of badge cards; locked cards show 🔒.
 
 ### 7.8 Mascot Shop (`mascot_shop`)
-Eyebrow "ARCHIE'S SHOP", title "Mascot Accessories 🦉", hint "Spend your ★ Stars to unlock cool looks for Archie!", right: `★ n Stars` + [← Back]; 3-column grid of 12 item cards (§6), each previewing Archie wearing that item.
+Eyebrow "ARCHIE'S SHOP", title "Mascot Accessories 🦉", hint "Spend your ★ Stars to unlock cool looks for Archie!", right: `★ n Stars` + [← Back]; 3-column grid of 12 item cards (§6), each previewing Archie wearing that item. After a purchase the **celebration dialog** opens (FEAT-13): ~390–450 px wide, a gold 2 px border on the card colour, Archie 127 × 150 px (fixed — artwork does not grow with the text size, so the dialog still fits the 720 × 550 window at 150 %), centred column: name, quote, hint line, one primary button. Static — no animation, no sound.
 
 ### 7.9 Smart Practice (`smart_practice`)
 Centered card: big emoji (🎯 with history / 🌱 without), prompt line, target "Category (Difficulty)" in 28 pt serif bold, italic note "This practice session generates 10 tailored questions.", primary button.

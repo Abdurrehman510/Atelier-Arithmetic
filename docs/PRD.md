@@ -245,7 +245,7 @@ Rules in [BR-02](#82-star-rewards-br-02).
 | ID | Requirement | St |
 |---|---|:---:|
 | FR-SHP-01 | The shop shall list the 12 items in [BR-03](#83-mascot-shop-catalogue-br-03) in a 3-column scrollable grid, each with a preview of Archie wearing it, category, name, description, price and one action button. | I |
-| FR-SHP-02 | Button states: **Buy *n*★** (not owned) → if balance < price show "Not Enough Stars" info dialog; else confirm dialog → deduct → unlock **and auto-equip** → success dialog. **Equip** (owned, not equipped). **✅ Equipped** (clicking unequips). Only **one** item can be equipped at a time. | I |
+| FR-SHP-02 | Button states: **Buy *n*★** (not owned) → if balance < price show "Not Enough Stars" info dialog; else confirm dialog → deduct → unlock **and auto-equip** → refresh the shop → **celebration dialog**: a large Archie wearing the new item, its name and where it will show ("Item Unlocked!", `PurchaseCelebration`). **Equip** (owned, not equipped). **✅ Equipped** (clicking unequips). Only **one** item can be equipped at a time. | I |
 | FR-SHP-03 | Unlocked and equipped items are stored per profile. Archie is drawn wearing the equipped item on Home (header), on the quiz screen (where he also reacts to each answer) and on the results screen (where he celebrates 80 % or more); the Home shop card reads "Wearing: <emoji> <name>" or "Not wearing anything yet". Items are purely cosmetic. | I |
 
 ### 6.14 Achievements (`FR-ACH`)
